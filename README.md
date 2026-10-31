@@ -4,17 +4,17 @@ Cratebook is a component workshop for Rust. Build an interactive control with GP
 
 On phones, use the bottom bar to browse **Stories**, try the selected example in **Canvas**, or inspect **Rust source**. **Rust source** shows the actual story module and **Copy code** copies it. Switch **Theme: Base** to **Mint** to restyle the live example without resetting it. Light and dark appearance work with either theme.
 
-Start with the document tabs story. Open a long filename, mark it unsaved, close the active tab, then switch appearances to see how those states read in light and dark.
+Start with **Card & context menu**. Right-click the project card, open **Move to**, and choose **Archive**. The card updates immediately. Choose **Rust source** to see how the menu positions itself and how the command changes the view.
 
-[Open the live gallery](https://kahwee.github.io/cratebook/) · [Preview the document tab story](https://github.com/kahwee/cratebook/blob/main/preview.png)
+[Open the live gallery](https://kahwee.github.io/cratebook/) · [Explore the Rust API](https://kahwee.github.io/gpui-jig/api/gpui_jig/)
 
-Explore document tabs, buttons, radio groups, and disclosures. Both targets use the controls in `src/ui`, originally developed for Commonleaf.
+The gallery also includes settings, document tabs, sortable tables, buttons, radio groups, collapsibles, checkboxes, accordions, batch progress and a scrollable contributor list. Each story has a Rust source view.
 
-On macOS, run `cargo install --locked --path .` from the checkout, then launch `cratebook`. Use `cargo run --locked --release` during development, or `scripts/install.sh` for a Finder app in `~/Applications`. To produce a Rust source archive, run `cargo package --locked`.
+On macOS, run `cargo install --locked --path .` from the checkout, then launch `cratebook`. Use `cargo run --locked --release` during development, or `scripts/install.sh` for a Finder app in `~/Applications`.
 
 For the browser, run `pnpm install --frozen-lockfile`, `pnpm build`, then `pnpm start` (Rust/WASM prerequisites below). Choose a different port with `pnpm start --port 4174`. To distribute a ready-to-run browser gallery locally, run `pnpm pack`. In another project run `pnpm add /path/to/cratebook-0.1.0.tgz` and `pnpm exec cratebook`. The tarball includes the compiled gallery and requires only Node.js at runtime.
 
-The shared Button, Collapsible, and Radio Group primitives live in [GPUI Jig](https://github.com/kahwee/gpui-jig), the Rust-first UI component library.
+The shared unstyled primitives live in [GPUI Jig](https://github.com/kahwee/gpui-jig), the Rust-first UI component library.
 
 ## Headless tables
 
