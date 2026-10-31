@@ -38,7 +38,19 @@ jobs:
           tar -xzf "$archive"
           install -m755 "${archive%.tar.gz}/wasm-bindgen" "$HOME/.cargo/bin/wasm-bindgen"
       - run: scripts/build-web.sh
-      - run: node bin/cratebook.mjs --check
+      - name: Package and test the npm CLI
+        run: |
+          npm pack --pack-destination "$RUNNER_TEMP"
+          archive="$RUNNER_TEMP/cratebook-$(node -p "require('./package.json').version").tgz"
+          mkdir "$RUNNER_TEMP/consumer"
+          npm install --prefix "$RUNNER_TEMP/consumer" --no-audit --no-fund "$archive"
+          "$RUNNER_TEMP/consumer/node_modules/.bin/cratebook" --check
+          npm publish "$archive" --dry-run --access public
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cratebook-npm
+          path: ${{ runner.temp }}/cratebook-*.tgz
+          if-no-files-found: error
       - name: Include license notices
         run: |
           mkdir -p web/licenses
@@ -51,7 +63,7 @@ jobs:
   deploy:
     name: Publish gallery
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    needs: web
+    needs: [native, web]
     runs-on: ubuntu-latest
     permissions:
       pages: write

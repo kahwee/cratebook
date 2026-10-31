@@ -1592,7 +1592,7 @@ dependencies = [
 [[package]]
 name = "gpui-jig"
 version = "0.1.0"
-source = "git+https://github.com/kahwee/gpui-jig?rev=505628bf071139fbaf908cce2b69ecf175f166cd#505628bf071139fbaf908cce2b69ecf175f166cd"
+source = "git+https://github.com/kahwee/gpui-jig?rev=a40318a8e933caaf781e2150306fac1a1d58657b#a40318a8e933caaf781e2150306fac1a1d58657b"
 dependencies = [
  "gpui-pre",
 ]

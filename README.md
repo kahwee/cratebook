@@ -50,3 +50,7 @@ The local gpui-pre-web 0.3.10 patch adapts the canvas readback dimensions to the
 ## License
 
 Cratebook’s original code is available under the [MIT License](LICENSE). Bundled fonts and third-party code retain their own licenses. See [third-party notices](THIRD_PARTY.md).
+
+## Verify a release candidate
+
+The native and web jobs run in parallel. The web job builds the gallery, packs the npm CLI, installs the tarball into an empty project and runs its asset check. Pages waits for both jobs. For a registry release, download the **cratebook-npm** artifact from the successful run for the intended commit, extract the tarball and run `npm publish ./cratebook-VERSION.tgz --access public` with the publisher account. The GPUI Jig Rust library is packaged in its own repository.

@@ -1,8 +1,12 @@
 //! Each module constructs a named example and owns its live preview state.
+mod accordion;
 mod button;
 mod card_menu;
+mod checkbox;
 mod disclosure;
+mod progress;
 mod radio_group;
+mod scroll_area;
 mod settings;
 mod table;
 mod tabs;
@@ -26,5 +30,9 @@ pub(crate) fn catalog(cx: &mut App) -> Vec<Story> {
         button::story(cx),
         radio_group::story(cx),
         disclosure::story(cx),
+        accordion::story(cx),
+        checkbox::story(cx),
+        progress::story(cx),
+        scroll_area::story(cx),
     ]
 }
