@@ -22,6 +22,12 @@ jobs:
       - run: cargo fmt --check
       - run: cargo test --locked --release
       - run: cargo build --locked --release --bin cratebook
+      - name: Archive the tested native binary
+        run: tar -czf "$RUNNER_TEMP/cratebook-macos.tar.gz" -C target/release cratebook
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: cratebook-macos
+          path: ${{ runner.temp }}/cratebook-macos.tar.gz
 
   web:
     name: WebAssembly gallery

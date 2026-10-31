@@ -33,9 +33,9 @@ impl Gallery {
             theme_picker: ui::RadioGroup::new(cx),
         }
     }
-    fn story_cover(&self, compact: bool, p: Palette, tahoe: bool) -> Div {
+    fn story_cover(&self, compact: bool, p: Palette, tahoe: bool, editor: bool) -> Div {
         let story = &self.stories[self.selected];
-        if !compact {
+        if !compact || editor {
             return div()
                 .pb_3()
                 .child(
@@ -129,9 +129,16 @@ impl Gallery {
             )
     }
     fn library(&self, compact: bool, p: Palette, cx: &Context<Self>) -> Div {
+        let editor = *cx.global::<ui::Theme>() == ui::Theme::Editor;
         let rows = self.stories.iter().enumerate().map(|(index, story)| {
             ui::button(story.title, story.title)
-                .h(px(if compact { 54. } else { 32. }))
+                .h(px(if compact {
+                    54.
+                } else if editor {
+                    27.
+                } else {
+                    32.
+                }))
                 .rounded_md()
                 .gap_3()
                 .flex()
@@ -154,7 +161,12 @@ impl Gallery {
                 )
                 .child(story.title)
         });
-        let list = div().flex().flex_col().p_2().gap_1().children(rows);
+        let list = div()
+            .flex()
+            .flex_col()
+            .p_2()
+            .gap(px(if editor && !compact { 1. } else { 4. }))
+            .children(rows);
         div()
             .flex()
             .flex_col()
@@ -203,7 +215,10 @@ impl Gallery {
             )
     }
     fn phone_navigation(&self, p: Palette, cx: &Context<Self>) -> Div {
-        let active = if *cx.global::<ui::Theme>() == ui::Theme::Tahoe {
+        let active = if matches!(
+            *cx.global::<ui::Theme>(),
+            ui::Theme::Tahoe | ui::Theme::Editor
+        ) {
             p.text
         } else if p == Palette::LIGHT {
             0x23553d
@@ -383,7 +398,8 @@ impl Render for Gallery {
         let appearance = *cx.global::<Palette>();
         let selected_theme = *cx.global::<ui::Theme>();
         let tahoe = selected_theme == ui::Theme::Tahoe;
-        let p = if tahoe {
+        let editor = selected_theme == ui::Theme::Editor;
+        let p = if tahoe || editor {
             selected_theme.palette(appearance)
         } else {
             appearance
@@ -397,6 +413,7 @@ impl Render for Gallery {
             .min_w_0()
             .rounded_lg()
             .when(tahoe, |s| s.rounded_xl().shadow_sm())
+            .when(editor, |s| s.rounded_sm())
             .overflow_hidden()
             .border_1()
             .border_color(rgb(theme.border))
@@ -411,7 +428,7 @@ impl Render for Gallery {
             .flex()
             .flex_col()
             .gap_3()
-            .child(self.story_cover(compact, p, tahoe))
+            .child(self.story_cover(compact, p, tahoe, editor))
             .child(
                 div()
                     .flex()
@@ -486,8 +503,8 @@ impl Render for Gallery {
                     div()
                         .rounded_lg()
                         .p_4()
-                        .bg(rgb(0x192722))
-                        .text_color(rgb(0xe0eee4))
+                        .bg(rgb(if editor { 0x232326 } else { 0x192722 }))
+                        .text_color(rgb(if editor { 0xe4e4e6 } else { 0xe0eee4 }))
                         .child(
                             div()
                                 .flex()
@@ -529,6 +546,22 @@ impl Render for Gallery {
             })
             .when(!compact || self.panel != Panel::Stories, |s| {
                 s.child(content)
+            })
+            .when(editor && !compact, |s| {
+                s.child(
+                    div()
+                        .h(px(24.))
+                        .flex_shrink_0()
+                        .flex()
+                        .items_center()
+                        .px_3()
+                        .border_t_1()
+                        .border_color(rgb(p.border))
+                        .bg(rgb(p.sidebar))
+                        .text_color(rgb(p.muted))
+                        .text_size(px(11.))
+                        .child(story.path),
+                )
             })
             .when(compact, |s| s.child(self.phone_navigation(p, cx)));
         let body = div()

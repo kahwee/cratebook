@@ -65,13 +65,12 @@ impl Render for Preview {
                             ),
                         )
                         .on_key_down(cx.listener(|s, e: &KeyDownEvent, w, cx| {
-                            match e.keystroke.key.as_str() {
-                                "left" | "down" => s.zoom.step(-10.),
-                                "right" | "up" => s.zoom.step(10.),
-                                "home" => s.zoom.set(50.),
-                                "end" => s.zoom.set(200.),
-                                _ => return,
+                            if e.keystroke.modifiers.modified()
+                                || !slider::apply_key(&mut s.zoom, &e.keystroke.key, 10.)
+                            {
+                                return;
                             }
+                            cx.stop_propagation();
                             w.prevent_default();
                             cx.notify();
                         })),

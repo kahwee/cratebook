@@ -32,15 +32,17 @@ impl Palette {
 }
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Theme {
+    Editor,
     Base,
     Mint,
     Tahoe,
 }
 impl Global for Theme {}
 impl Theme {
-    pub const ALL: &'static [Self] = &[Self::Base, Self::Mint, Self::Tahoe];
+    pub const ALL: &'static [Self] = &[Self::Editor, Self::Base, Self::Mint, Self::Tahoe];
     pub fn name(self) -> &'static str {
         match self {
+            Self::Editor => "Editor",
             Self::Base => "Base",
             Self::Mint => "Mint",
             Self::Tahoe => "Tahoe",
@@ -49,6 +51,27 @@ impl Theme {
     pub fn palette(self, p: Palette) -> Palette {
         match self {
             Self::Base => return p,
+            Self::Editor => {
+                return if p == Palette::LIGHT {
+                    Palette {
+                        canvas: 0xfafafa,
+                        sidebar: 0xf0f0f1,
+                        border: 0xd6d6d8,
+                        text: 0x262629,
+                        muted: 0x5e5e64,
+                        selected: 0xdcdce0,
+                    }
+                } else {
+                    Palette {
+                        canvas: 0x202023,
+                        sidebar: 0x28282b,
+                        border: 0x404045,
+                        text: 0xe4e4e6,
+                        muted: 0xaeafb5,
+                        selected: 0x414148,
+                    }
+                };
+            }
             Self::Tahoe => {
                 return if p == Palette::LIGHT {
                     Palette {
