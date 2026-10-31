@@ -38,13 +38,7 @@ pub enum Theme {
 }
 impl Global for Theme {}
 impl Theme {
-    pub fn next(self) -> Self {
-        match self {
-            Self::Base => Self::Mint,
-            Self::Mint => Self::Tahoe,
-            Self::Tahoe => Self::Base,
-        }
-    }
+    pub const ALL: &'static [Self] = &[Self::Base, Self::Mint, Self::Tahoe];
     pub fn name(self) -> &'static str {
         match self {
             Self::Base => "Base",

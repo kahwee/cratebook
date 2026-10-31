@@ -2,7 +2,7 @@
 
 Cratebook is a component workshop for Rust. Build an interactive control with GPUI, try it in a native macOS window, and share the same Rust view in a browser through WebAssembly.
 
-On phones, use the bottom bar to browse **Stories**, try the selected example in **Canvas**, or inspect **Rust source**. **Rust source** shows the actual story module and **Copy code** copies it. Click **Theme** to cycle through **Base → Mint → Tahoe → Base** without resetting the live story. Tahoe extends a cool blue palette across the window, with rounded controls and raised previews inspired by macOS Tahoe. The surfaces are drawn in GPUI on both native and web. The light/dark control works independently in all three themes.
+On phones, use the bottom bar to browse **Stories**, try the selected example in **Canvas**, or inspect **Rust source**. **Rust source** shows the actual story module and **Copy code** copies it. Choose **Base**, **Mint**, or **Tahoe** directly in the theme selector (or use its arrow keys) without resetting the live story. Tahoe extends a cool blue palette across the window, with rounded controls and raised previews inspired by macOS Tahoe. The surfaces are drawn in GPUI on both native and web. The light/dark control works independently in all three themes.
 
 Start with **Card & context menu**. Right-click the project card, open **Move to**, and choose **Archive**. The card updates immediately. Choose **Rust source** to see how the menu positions itself and how the command changes the view.
 
@@ -15,6 +15,10 @@ On macOS, run `cargo install --locked --path .` from the checkout, then launch `
 For the browser, run `pnpm install --frozen-lockfile`, `pnpm build`, then `pnpm start` (Rust/WASM prerequisites below). Choose a different port with `pnpm start --port 4174`. To distribute a ready-to-run browser gallery locally, run `pnpm pack`. In another project run `pnpm add /path/to/cratebook-0.1.0.tgz` and `pnpm exec cratebook`. The tarball includes the compiled gallery and requires only Node.js at runtime.
 
 The shared unstyled primitives live in [GPUI Jig](https://github.com/kahwee/gpui-jig), the Rust-first UI component library.
+
+## Add a theme
+
+Add a variant to `ui::Theme`, list it in `Theme::ALL`, and implement its name and palette. The selector generates its choices and keyboard focus handles from that list. Light/dark appearance is an independent setting.
 
 ## Headless tables
 

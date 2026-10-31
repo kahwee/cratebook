@@ -19,6 +19,7 @@ pub(crate) struct Gallery {
     panel: Panel,
     sidebar_visible: bool,
     split_titlebar: bool,
+    theme_picker: ui::RadioGroup<{ ui::Theme::ALL.len() }>,
 }
 
 impl Gallery {
@@ -29,6 +30,7 @@ impl Gallery {
             panel: Panel::Canvas,
             sidebar_visible: true,
             split_titlebar: false,
+            theme_picker: ui::RadioGroup::new(cx),
         }
     }
     fn story_cover(&self, compact: bool, p: Palette, tahoe: bool) -> Div {
@@ -201,7 +203,9 @@ impl Gallery {
             )
     }
     fn phone_navigation(&self, p: Palette, cx: &Context<Self>) -> Div {
-        let active = if p == Palette::LIGHT {
+        let active = if *cx.global::<ui::Theme>() == ui::Theme::Tahoe {
+            p.text
+        } else if p == Palette::LIGHT {
             0x23553d
         } else {
             0xc6eeb9
@@ -442,31 +446,37 @@ impl Render for Gallery {
                     })
                     .when(!compact || self.panel == Panel::Canvas, |s| {
                         s.child(
-                            ui::button(
-                                "theme",
-                                format!(
-                                    "Theme: {}. Switch to {}",
-                                    selected_theme.name(),
-                                    selected_theme.next().name()
-                                ),
-                            )
-                            .when(tahoe, |s| s.rounded_full().bg(rgb(p.selected)))
-                            .when(compact, |s| {
-                                s.rounded_md()
-                                    .border_1()
-                                    .border_color(rgb(p.border))
-                                    .text_size(px(14.))
-                            })
-                            .min_h(ui::control_height(window))
-                            .flex()
-                            .items_center()
-                            .px_2()
-                            .focus_visible(|s| s.underline())
-                            .on_click(cx.listener(move |_, _, _, cx| {
-                                cx.set_global(selected_theme.next());
-                                cx.refresh_windows();
-                            }))
-                            .child(format!("Theme: {}", selected_theme.name())),
+                            self.theme_picker
+                                .root("theme-picker", "Preview theme")
+                                .flex()
+                                .items_center()
+                                .rounded_lg()
+                                .border_1()
+                                .border_color(rgb(p.border))
+                                .p(px(2.))
+                                .children(ui::Theme::ALL.iter().enumerate().map(|(i, &option)| {
+                                    self.theme_picker
+                                        .item(
+                                            ("theme", i),
+                                            option.name(),
+                                            i,
+                                            selected_theme == option,
+                                            |index, _, cx| {
+                                                cx.set_global(ui::Theme::ALL[*index]);
+                                                cx.refresh_windows();
+                                            },
+                                        )
+                                        .min_h(ui::control_height(window))
+                                        .flex()
+                                        .items_center()
+                                        .px_2()
+                                        .rounded_md()
+                                        .when(selected_theme == option, |s| {
+                                            s.bg(rgb(p.selected)).font_weight(FontWeight::SEMIBOLD)
+                                        })
+                                        .focus_visible(|s| s.underline())
+                                        .child(option.name())
+                                })),
                         )
                     }),
             )

@@ -4,12 +4,14 @@ mod button;
 mod card_menu;
 mod checkbox;
 mod disclosure;
+mod meter;
 mod progress;
 mod radio_group;
 mod scroll_area;
 mod settings;
 mod table;
 mod tabs;
+mod toast;
 
 use gpui::{AnyView, App};
 
@@ -34,5 +36,7 @@ pub(crate) fn catalog(cx: &mut App) -> Vec<Story> {
         checkbox::story(cx),
         progress::story(cx),
         scroll_area::story(cx),
+        meter::story(cx),
+        toast::story(cx),
     ]
 }
