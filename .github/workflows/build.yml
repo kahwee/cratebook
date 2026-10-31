@@ -46,7 +46,7 @@ jobs:
           npm install --prefix "$RUNNER_TEMP/consumer" --no-audit --no-fund "$archive"
           "$RUNNER_TEMP/consumer/node_modules/.bin/cratebook" --check
           npm publish "$archive" --dry-run --access public
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: cratebook-npm
           path: ${{ runner.temp }}/cratebook-*.tgz
