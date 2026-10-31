@@ -37,7 +37,7 @@ impl Gallery {
         let story = &self.stories[self.selected];
         if !compact || editor {
             return div()
-                .pb_3()
+                .pb(px(4.))
                 .child(
                     div()
                         .text_size(px(12.))
@@ -46,7 +46,7 @@ impl Gallery {
                 )
                 .child(
                     div()
-                        .mt_2()
+                        .mt(px(6.))
                         .text_size(px(24.))
                         .font_weight(FontWeight::SEMIBOLD)
                         .child(story.title),
@@ -133,14 +133,14 @@ impl Gallery {
         let rows = self.stories.iter().enumerate().map(|(index, story)| {
             ui::button(story.title, story.title)
                 .h(px(if compact {
-                    54.
+                    48.
                 } else if editor {
                     27.
                 } else {
                     32.
                 }))
                 .rounded_md()
-                .gap_3()
+                .gap(px(8.))
                 .flex()
                 .items_center()
                 .px_2()
@@ -164,7 +164,8 @@ impl Gallery {
         let list = div()
             .flex()
             .flex_col()
-            .p_2()
+            .px(px(if compact { 0. } else { 8. }))
+            .py(px(6.))
             .gap(px(if editor && !compact { 1. } else { 4. }))
             .children(rows);
         div()
@@ -172,14 +173,14 @@ impl Gallery {
             .flex_col()
             .flex_shrink_0()
             .when(!compact, |s| s.w(px(SIDEBAR_WIDTH)).border_r_1())
-            .when(compact, |s| s.flex_1().min_h_0().p_4())
+            .when(compact, |s| s.flex_1().min_h_0().px(px(16.)).py(px(12.)))
             .border_color(rgb(p.border))
             .bg(rgb(p.sidebar))
             .when(!compact, |s| {
                 s.child(
                     div()
                         .px_4()
-                        .pt_5()
+                        .pt(px(12.))
                         .text_color(rgb(p.muted))
                         .text_size(px(12.))
                         .child("Components"),
@@ -231,7 +232,8 @@ impl Gallery {
             .border_t_1()
             .border_color(rgb(p.border))
             .bg(rgb(p.canvas))
-            .p_2()
+            .px(px(12.))
+            .py(px(4.))
             .gap_1()
             .children(
                 [
@@ -293,7 +295,7 @@ impl Gallery {
         .aria_expanded(self.sidebar_visible)
         .w(px(32.))
         .h(px(32.))
-        .mr_2()
+        .mr(px(4.))
         .rounded_md()
         .flex()
         .items_center()
@@ -344,7 +346,7 @@ impl Gallery {
         ui::pane_header(p)
             .h(px(44.))
             .pl(px(0.))
-            .pr_3()
+            .pr(px(10.))
             .when(split, |s| s.bg(rgb(p.canvas)))
             .child(
                 div()
@@ -379,6 +381,7 @@ impl Gallery {
                         this.split_titlebar = !this.split_titlebar;
                         cx.notify();
                     }))
+                    .mr(px(4.))
                     .child("Split title bar"),
                 )
             })
@@ -424,10 +427,12 @@ impl Render for Gallery {
             .overflow_y_scroll()
             .w_full()
             .when(!compact, |s| s.max_w(px(800.)).mx_auto())
-            .p(if compact { px(14.) } else { px(36.) })
+            .px(px(if compact { 16. } else { 28. }))
+            .pt(px(if compact { 18. } else { 24. }))
+            .pb(px(if compact { 16. } else { 28. }))
             .flex()
             .flex_col()
-            .gap_3()
+            .gap(px(10.))
             .child(self.story_cover(compact, p, tahoe, editor))
             .child(
                 div()

@@ -144,7 +144,7 @@ pub(crate) fn action<V: 'static>(
         .text_size(px(13.))
         .flex()
         .items_center()
-        .px_2()
+        .px(px(10.))
         .border_1()
         .border_color(rgb(palette.border))
         .rounded_md()

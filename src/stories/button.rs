@@ -20,15 +20,16 @@ impl Render for Button {
     fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let theme = ui::preview_palette(cx);
         div()
-            .p_4()
+            .px(px(16.))
+            .py(px(12.))
             .flex()
             .items_center()
-            .gap_3()
+            .gap(px(8.))
             .child(
                 gpui_jig::button::root("run", "Run action")
                     .min_h(ui::control_height(window))
                     .text_size(px(13.))
-                    .px_3()
+                    .px(px(10.))
                     .flex()
                     .items_center()
                     .rounded_md()
