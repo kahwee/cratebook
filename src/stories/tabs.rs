@@ -74,8 +74,7 @@ impl Tabs {
 impl Render for Tabs {
     fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let palette = ui::preview_palette(cx);
-        let strip = div()
-            .id("tab-strip")
+        let strip = gpui_jig::tabs::list("tab-strip", "Open documents")
             .overflow_x_scroll()
             .flex()
             .h(ui::control_height(window))
@@ -84,15 +83,19 @@ impl Render for Tabs {
             .border_color(rgb(palette.border))
             .text_size(px(14.))
             .children(self.tabs.iter().map(|&index| self.tab(index, palette, cx)));
-        div()
+        gpui_jig::tabs::root("documents", "Documents")
             .flex()
             .flex_col()
             .child(strip)
-            .child(div().p_4().child(if self.tabs.is_empty() {
-                "No open documents"
-            } else {
-                TITLES[self.active]
-            }))
+            .child(
+                gpui_jig::tabs::panel("document-content", "Active document")
+                    .p_4()
+                    .child(if self.tabs.is_empty() {
+                        "No open documents"
+                    } else {
+                        TITLES[self.active]
+                    }),
+            )
             .child(
                 div()
                     .flex()

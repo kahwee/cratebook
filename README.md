@@ -24,6 +24,23 @@ Add a variant to `ui::Theme`, list it in `Theme::ALL`, and implement its name an
 
 Open **Stories → Data table** and select **Builds** to cycle through numeric ascending order, descending order, and the original order. The [table model](src/table.rs) works with borrowed rows. Define each column once with `ColumnDef::accessor`, then use `format_cell` when the displayed text should differ from the underlying sort value. The [GPUI example](src/stories/table.rs) owns the header controls, accessible roles, spacing, and colors.
 
+## Desktop patterns and component coverage
+
+The gallery covers all 37 Base UI families across 24 stories. Open **Rust source** for the currently displayed implementation.
+
+| Desktop task | Component families |
+| --- | --- |
+| Edit workspace preferences | Field, Fieldset, Select, Switch, Toggle, Toggle Group |
+| Choose notifications and reading modes | Checkbox, Checkbox Group, Radio Group |
+| Run commands and navigate sections | Button, Context Menu, Menu, Menubar, Navigation Menu, Toolbar, Separator |
+| Manage documents and inspect notes | Tabs, Accordion, Collapsible |
+| Create a project and find a workspace | Form, Input, OTP Field, Combobox, Autocomplete |
+| Adjust zoom and inspect usage | Number Field, Slider, Meter, Progress |
+| Inspect project details or confirm a command | Dialog, Alert Dialog, Drawer, Popover, Preview Card, Tooltip |
+| Browse contributors and confirm a save | Avatar, Scroll Area, Toast |
+
+Overlays are bounded canvas demonstrations. The modal examples demonstrate triggers, content and confirmation; production applications supply focus trapping and window-level modality. The form and search examples accept simple keyboard entry and backspace. Production text editors supply selection, clipboard and IME through GPUI’s input handler. The zoom example demonstrates stepper and keyboard slider input.
+
 ## Add a story
 
 A story owns its title, instructions, and a live GPUI preview. The [button story](src/stories/button.rs) is a complete example. Its counter belongs to the preview and keeps its value when you visit another story.

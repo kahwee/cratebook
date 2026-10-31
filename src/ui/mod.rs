@@ -15,7 +15,8 @@ pub fn document_tab(
     border: u32,
     focus: u32,
 ) -> Stateful<Div> {
-    button(id, label)
+    gpui_jig::tabs::tab(id, label, active)
+        .tab_stop(true)
         .focus_visible(move |style| style.bg(gpui::rgb(focus)))
         .flex()
         .items_center()

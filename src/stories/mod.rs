@@ -1,17 +1,27 @@
 //! Each module constructs a named example and owns its live preview state.
 mod accordion;
+mod alert_dialog;
 mod button;
 mod card_menu;
 mod checkbox;
+mod dialog;
 mod disclosure;
+mod drawer;
 mod meter;
+mod popover;
+mod preview_card;
 mod progress;
+mod project_form;
 mod radio_group;
 mod scroll_area;
+mod search;
 mod settings;
 mod table;
 mod tabs;
 mod toast;
+mod tool_hint;
+mod workspace_nav;
+mod zoom;
 
 use gpui::{AnyView, App};
 
@@ -24,6 +34,7 @@ pub(crate) struct Story {
 }
 
 pub(crate) fn catalog(cx: &mut App) -> Vec<Story> {
+    let [combobox, autocomplete] = search::stories(cx);
     vec![
         card_menu::story(cx),
         settings::story(cx),
@@ -38,5 +49,16 @@ pub(crate) fn catalog(cx: &mut App) -> Vec<Story> {
         scroll_area::story(cx),
         meter::story(cx),
         toast::story(cx),
+        workspace_nav::story(cx),
+        project_form::story(cx),
+        zoom::story(cx),
+        dialog::story(cx),
+        alert_dialog::story(cx),
+        drawer::story(cx),
+        popover::story(cx),
+        preview_card::story(cx),
+        tool_hint::story(cx),
+        combobox,
+        autocomplete,
     ]
 }
