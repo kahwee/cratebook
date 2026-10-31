@@ -11,8 +11,23 @@ fn open_gallery(cx: &mut App) {
             "../assets/NotoSans.ttf"
         ))])
         .expect("embedded gallery font");
-    cx.set_global(ui::Palette::LIGHT);
-    cx.set_global(ui::Theme::Editor);
+    let (mut theme, mut palette) = (ui::Theme::Editor, ui::Palette::LIGHT);
+    if !cfg!(target_family = "wasm") {
+        for arg in std::env::args().skip(1) {
+            if let Some(name) = arg.strip_prefix("--theme=") {
+                if let Some(choice) = ui::Theme::ALL
+                    .iter()
+                    .find(|choice| choice.name().eq_ignore_ascii_case(name))
+                {
+                    theme = *choice;
+                }
+            } else if arg == "--dark" {
+                palette = ui::Palette::DARK;
+            }
+        }
+    }
+    cx.set_global(palette);
+    cx.set_global(theme);
     let bounds = Bounds::centered(None, size(px(1120.), px(720.)), cx);
     cx.open_window(
         WindowOptions {

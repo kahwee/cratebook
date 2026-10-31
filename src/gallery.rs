@@ -29,7 +29,7 @@ impl Gallery {
             selected: 0,
             panel: Panel::Canvas,
             sidebar_visible: true,
-            split_titlebar: false,
+            split_titlebar: true,
             theme_picker: ui::RadioGroup::new(cx),
         }
     }
@@ -172,11 +172,11 @@ impl Gallery {
             .flex()
             .flex_col()
             .flex_shrink_0()
-            .when(!compact, |s| s.w(px(SIDEBAR_WIDTH)).border_r_1())
+            .when(!compact, |s| s.w(px(SIDEBAR_WIDTH)).border_l_1())
             .when(compact, |s| s.flex_1().min_h_0().px(px(16.)).py(px(12.)))
             .border_color(rgb(p.border))
             .bg(rgb(p.sidebar))
-            .when(!compact, |s| {
+            .when(!compact && !self.split_titlebar, |s| {
                 s.child(
                     div()
                         .px_4()
@@ -313,7 +313,7 @@ impl Gallery {
                 .rounded_sm()
                 .border_1()
                 .border_color(rgb(p.muted))
-                .child(div().ml(px(4.)).w(px(1.)).h_full().bg(rgb(p.muted))),
+                .child(div().ml(px(10.)).w(px(1.)).h_full().bg(rgb(p.muted))),
         );
         let title = div()
             .flex_1()
@@ -331,11 +331,10 @@ impl Gallery {
                     }
                 })
             })
-            .when(!compact && !split, |s| {
+            .when(!compact, |s| {
                 s.child(Self::brand())
                     .child(div().w(px(1.)).h(px(18.)).bg(rgb(p.border)))
             })
-            .when(split, |s| s.pl_3())
             .child(
                 div()
                     .min_w_0()
@@ -345,25 +344,9 @@ impl Gallery {
             );
         ui::pane_header(p)
             .h(px(44.))
-            .pl(px(0.))
-            .pr(px(10.))
+            .pl(px(inset))
+            .pr(px(if compact { 10. } else { 0. }))
             .when(split, |s| s.bg(rgb(p.canvas)))
-            .child(
-                div()
-                    .flex()
-                    .items_center()
-                    .h_full()
-                    .pl(px(inset))
-                    .when(split, |s| {
-                        s.w(px(SIDEBAR_WIDTH))
-                            .flex_shrink_0()
-                            .bg(rgb(p.sidebar))
-                            .border_r_1()
-                            .border_color(rgb(p.border))
-                    })
-                    .when(!compact, |s| s.child(sidebar_button))
-                    .when(split, |s| s.child(Self::brand())),
-            )
             .child(title)
             .when(!compact, |s| {
                 s.child(
@@ -393,6 +376,27 @@ impl Gallery {
                     .flex()
                     .items_center(),
             )
+            .when(!compact, |s| {
+                s.child(
+                    div()
+                        .h_full()
+                        .flex()
+                        .items_center()
+                        .justify_end()
+                        .pr_2()
+                        .when(split, |s| {
+                            s.w(px(SIDEBAR_WIDTH))
+                                .flex_shrink_0()
+                                .pl_4()
+                                .justify_between()
+                                .border_l_1()
+                                .border_color(rgb(p.border))
+                                .bg(rgb(p.sidebar))
+                                .child("Components")
+                        })
+                        .child(sidebar_button),
+                )
+            })
     }
 }
 impl Render for Gallery {
@@ -579,10 +583,10 @@ impl Render for Gallery {
             .bg(rgb(p.canvas))
             .text_color(rgb(p.text))
             .text_size(px(if compact { 16. } else { 13. }))
+            .child(workspace)
             .when(!compact && self.sidebar_visible, |s| {
                 s.child(self.library(false, p, cx))
-            })
-            .child(workspace);
+            });
         div()
             .size_full()
             .flex()

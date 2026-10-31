@@ -16,6 +16,8 @@ For the browser, run `pnpm install --frozen-lockfile`, `pnpm build`, then `pnpm 
 
 The shared unstyled primitives live in [GPUI Jig](https://github.com/kahwee/gpui-jig), the Rust-first UI component library.
 
+The desktop component sidebar docks on the right. Its heading and visibility control share the integrated title bar. Choose **Split title bar** to switch between split and unified chrome. Launch the native Tahoe theme with `cratebook --theme=tahoe`, or add `--dark` for its dark appearance.
+
 ## Add a theme
 
 Add a variant to `ui::Theme`, list it in `Theme::ALL`, and implement its name and palette. The selector generates its choices and keyboard focus handles from that list. Light/dark appearance is an independent setting.
