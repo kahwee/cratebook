@@ -18,7 +18,7 @@ name = "cratebook"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-gpui-jig = { git = "https://github.com/kahwee/gpui-jig", rev = "a40318a8e933caaf781e2150306fac1a1d58657b" }
+gpui-jig = { git = "https://github.com/kahwee/gpui-jig", rev = "8494e109dc067893e680f4279b5bc34b9e7568d9" }
 gpui = { package = "gpui-pre", version = "0.3.10" }
 [target.'cfg(target_family = "wasm")'.dependencies]
 wasm-bindgen = "0.2"

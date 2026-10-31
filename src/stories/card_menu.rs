@@ -149,10 +149,12 @@ impl Project {
         .bg(rgb(p.canvas))
         .shadow_md()
         .children(entries.into_iter().enumerate().map(|(i, (icon, label))| {
-            let entry = if !nested && i == 1 {
+            let entry = if nested {
+                menu::radio_item(("folder", i), label, self.folder == label)
+            } else if i == 1 {
                 menu::submenu_trigger("move", label, self.nested)
             } else {
-                menu::item(("command", i), label)
+                menu::checkbox_item("pin", label, self.pinned)
             };
             entry
                 .tab_stop(false)
@@ -172,6 +174,10 @@ impl Project {
                 }))
                 .child(icon.draw(p.muted))
                 .child(label)
+                .when(
+                    (nested && self.folder == label) || (!nested && i == 0 && self.pinned),
+                    |s| s.child(div().size(px(5.)).rounded_full().bg(rgb(p.text))),
+                )
         }))
     }
 }
