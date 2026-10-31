@@ -1,0 +1,56 @@
+name: Capture native Tahoe screenshots
+on:
+  workflow_dispatch:
+    inputs:
+      build:
+        description: Successful Cratebook build run ID
+        required: true
+permissions:
+  contents: read
+  actions: read
+jobs:
+  capture:
+    runs-on: macos-26
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: cratebook-macos
+          run-id: ${{ inputs.build }}
+          github-token: ${{ github.token }}
+      - name: Capture the app window in both appearances
+        shell: bash
+        run: |
+          set -eu
+          tar -xzf cratebook-macos.tar.gz
+          mkdir screenshots
+          sw_vers > screenshots/system.txt
+          cat > window.swift <<'SWIFT'
+          import CoreGraphics
+          import Foundation
+          let pid = Int(CommandLine.arguments[1])!
+          for _ in 0..<80 {
+              let windows = CGWindowListCopyWindowInfo([.optionOnScreenOnly], 0) as? [[String:Any]] ?? []
+              if let window = windows.first(where: { $0["kCGWindowOwnerPID"] as? Int == pid && $0["kCGWindowName"] as? String == "Cratebook" }) {
+                  print(window["kCGWindowNumber"]!)
+                  exit(0)
+              }
+              Thread.sleep(forTimeInterval: 0.25)
+          }
+          exit(1)
+          SWIFT
+          swiftc window.swift -o window-id
+          for appearance in light dark; do
+            args=(--theme=tahoe)
+            if [[ "$appearance" == dark ]]; then args+=(--dark); fi
+            ./cratebook "${args[@]}" &
+            pid=$!
+            id=$(./window-id "$pid")
+            sleep 1
+            screencapture -x -o -l "$id" "screenshots/tahoe-$appearance.png"
+            kill "$pid"
+            wait "$pid" || true
+          done
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: tahoe-screenshots
+          path: screenshots/
