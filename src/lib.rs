@@ -12,7 +12,7 @@ fn open_gallery(cx: &mut App) {
         ))])
         .expect("embedded gallery font");
     cx.set_global(ui::Palette::LIGHT);
-    cx.set_global(ui::Accent(false));
+    cx.set_global(ui::Theme::Base);
     let bounds = Bounds::centered(None, size(px(1120.), px(720.)), cx);
     cx.open_window(
         WindowOptions {

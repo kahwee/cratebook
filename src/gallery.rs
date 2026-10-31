@@ -31,7 +31,7 @@ impl Gallery {
             split_titlebar: false,
         }
     }
-    fn story_cover(&self, compact: bool, p: Palette) -> Div {
+    fn story_cover(&self, compact: bool, p: Palette, tahoe: bool) -> Div {
         let story = &self.stories[self.selected];
         if !compact {
             return div()
@@ -59,7 +59,7 @@ impl Gallery {
         }
         div()
             .rounded_xl()
-            .bg(rgb(0x173c34))
+            .bg(rgb(if tahoe { 0x254668 } else { 0x173c34 }))
             .text_color(rgb(0xf4fbef))
             .p(if compact { px(20.) } else { px(30.) })
             .child(
@@ -70,13 +70,13 @@ impl Gallery {
                     .child(
                         div()
                             .text_size(px(12.))
-                            .text_color(rgb(0xb6d9bf))
+                            .text_color(rgb(if tahoe { 0xc8e3ff } else { 0xb6d9bf }))
                             .child("GPUI JIG   /   COMPONENT LIBRARY"),
                     )
                     .child(
                         div()
                             .text_size(px(13.))
-                            .text_color(rgb(0xc4e8b0))
+                            .text_color(rgb(if tahoe { 0xc8e3ff } else { 0xc4e8b0 }))
                             .child(format!(
                                 "{:02} / {:02}",
                                 self.selected + 1,
@@ -96,7 +96,7 @@ impl Gallery {
                     .mt_1()
                     .max_w(px(520.))
                     .text_size(px(14.))
-                    .text_color(rgb(0xd2e6d9))
+                    .text_color(rgb(if tahoe { 0xdaeaff } else { 0xd2e6d9 }))
                     .child(story.description),
             )
     }
@@ -114,7 +114,7 @@ impl Gallery {
                     .items_center()
                     .justify_center()
                     .gap(px(2.))
-                    .bg(rgb(0x173c34))
+                    .bg(rgb(if tahoe { 0x254668 } else { 0x173c34 }))
                     .children([10., 16., 12.].map(|height| {
                         div().w(px(3.)).h(px(height)).rounded_sm().bg(rgb(0xbce6a3))
                     })),
@@ -247,7 +247,7 @@ impl Gallery {
             )
     }
     fn toolbar(&self, compact: bool, fullscreen: bool, p: Palette, cx: &Context<Self>) -> Div {
-        let light = p == Palette::LIGHT;
+        let light = *cx.global::<Palette>() == Palette::LIGHT;
         let label = if light { "Dark mode" } else { "Light mode" };
         let toggle = ui::button("appearance", label)
             .px_2()
@@ -376,16 +376,23 @@ impl Gallery {
 impl Render for Gallery {
     fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let compact = ui::compact_layout(window);
-        let p = *cx.global::<Palette>();
+        let appearance = *cx.global::<Palette>();
+        let selected_theme = *cx.global::<ui::Theme>();
+        let tahoe = selected_theme == ui::Theme::Tahoe;
+        let p = if tahoe {
+            selected_theme.palette(appearance)
+        } else {
+            appearance
+        };
         let story = &self.stories[self.selected];
         let theme = ui::preview_palette(cx);
-        let accent = cx.global::<ui::Accent>().0;
         let source = story.source;
         let preview = div()
             .bg(rgb(theme.canvas))
             .text_color(rgb(theme.text))
             .min_w_0()
             .rounded_lg()
+            .when(tahoe, |s| s.rounded_xl().shadow_sm())
             .overflow_hidden()
             .border_1()
             .border_color(rgb(theme.border))
@@ -400,7 +407,7 @@ impl Render for Gallery {
             .flex()
             .flex_col()
             .gap_3()
-            .child(self.story_cover(compact, p))
+            .child(self.story_cover(compact, p, tahoe))
             .child(
                 div()
                     .flex()
@@ -435,23 +442,31 @@ impl Render for Gallery {
                     })
                     .when(!compact || self.panel == Panel::Canvas, |s| {
                         s.child(
-                            ui::button("theme", "Switch preview theme")
-                                .when(compact, |s| {
-                                    s.rounded_md()
-                                        .border_1()
-                                        .border_color(rgb(p.border))
-                                        .text_size(px(14.))
-                                })
-                                .min_h(ui::control_height(window))
-                                .flex()
-                                .items_center()
-                                .px_2()
-                                .focus_visible(|s| s.underline())
-                                .on_click(cx.listener(move |_, _, _, cx| {
-                                    cx.set_global(ui::Accent(!accent));
-                                    cx.refresh_windows();
-                                }))
-                                .child(if accent { "Theme: Mint" } else { "Theme: Base" }),
+                            ui::button(
+                                "theme",
+                                format!(
+                                    "Theme: {}. Switch to {}",
+                                    selected_theme.name(),
+                                    selected_theme.next().name()
+                                ),
+                            )
+                            .when(tahoe, |s| s.rounded_full().bg(rgb(p.selected)))
+                            .when(compact, |s| {
+                                s.rounded_md()
+                                    .border_1()
+                                    .border_color(rgb(p.border))
+                                    .text_size(px(14.))
+                            })
+                            .min_h(ui::control_height(window))
+                            .flex()
+                            .items_center()
+                            .px_2()
+                            .focus_visible(|s| s.underline())
+                            .on_click(cx.listener(move |_, _, _, cx| {
+                                cx.set_global(selected_theme.next());
+                                cx.refresh_windows();
+                            }))
+                            .child(format!("Theme: {}", selected_theme.name())),
                         )
                     }),
             )

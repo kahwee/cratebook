@@ -30,8 +30,8 @@ pub fn document_tab(
 }
 
 mod chrome;
-pub use chrome::Palette;
-pub(crate) use chrome::{Accent, action, pane_header, preview_palette};
+pub use chrome::{Palette, Theme};
+pub(crate) use chrome::{action, pane_header, preview_palette};
 
 pub(crate) fn compact_layout(window: &gpui::Window) -> bool {
     window.viewport_size().width < gpui::px(680.)

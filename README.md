@@ -2,7 +2,7 @@
 
 Cratebook is a component workshop for Rust. Build an interactive control with GPUI, try it in a native macOS window, and share the same Rust view in a browser through WebAssembly.
 
-On phones, use the bottom bar to browse **Stories**, try the selected example in **Canvas**, or inspect **Rust source**. **Rust source** shows the actual story module and **Copy code** copies it. Switch **Theme: Base** to **Mint** to restyle the live example without resetting it. Light and dark appearance work with either theme.
+On phones, use the bottom bar to browse **Stories**, try the selected example in **Canvas**, or inspect **Rust source**. **Rust source** shows the actual story module and **Copy code** copies it. Click **Theme** to cycle through **Base → Mint → Tahoe → Base** without resetting the live story. Tahoe extends a cool blue palette across the window, with rounded controls and raised previews inspired by macOS Tahoe. The surfaces are drawn in GPUI on both native and web. The light/dark control works independently in all three themes.
 
 Start with **Card & context menu**. Right-click the project card, open **Move to**, and choose **Archive**. The card updates immediately. Choose **Rust source** to see how the menu positions itself and how the command changes the view.
 

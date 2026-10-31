@@ -30,32 +30,77 @@ impl Palette {
         selected: 0x41414a,
     };
 }
-pub(crate) struct Accent(pub bool);
-impl Global for Accent {}
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum Theme {
+    Base,
+    Mint,
+    Tahoe,
+}
+impl Global for Theme {}
+impl Theme {
+    pub fn next(self) -> Self {
+        match self {
+            Self::Base => Self::Mint,
+            Self::Mint => Self::Tahoe,
+            Self::Tahoe => Self::Base,
+        }
+    }
+    pub fn name(self) -> &'static str {
+        match self {
+            Self::Base => "Base",
+            Self::Mint => "Mint",
+            Self::Tahoe => "Tahoe",
+        }
+    }
+    pub fn palette(self, p: Palette) -> Palette {
+        match self {
+            Self::Base => return p,
+            Self::Tahoe => {
+                return if p == Palette::LIGHT {
+                    Palette {
+                        canvas: 0xf8fbff,
+                        sidebar: 0xe5effb,
+                        border: 0xbacde3,
+                        text: 0x172a41,
+                        muted: 0x496078,
+                        selected: 0xc3dfff,
+                    }
+                } else {
+                    Palette {
+                        canvas: 0x152133,
+                        sidebar: 0x1e3047,
+                        border: 0x425972,
+                        text: 0xf1f7ff,
+                        muted: 0xb0c6df,
+                        selected: 0x304f73,
+                    }
+                };
+            }
+            Self::Mint => {}
+        }
+        if p == Palette::LIGHT {
+            Palette {
+                canvas: 0xf4faf7,
+                sidebar: 0xe0f1e9,
+                selected: 0xa7dfc3,
+                border: 0x74ae91,
+                text: 0x153e30,
+                ..p
+            }
+        } else {
+            Palette {
+                canvas: 0x172f28,
+                sidebar: 0x233e33,
+                selected: 0x35694e,
+                border: 0x578568,
+                text: 0xe0f5ea,
+                ..p
+            }
+        }
+    }
+}
 pub(crate) fn preview_palette(cx: &App) -> Palette {
-    let p = *cx.global::<Palette>();
-    if !cx.global::<Accent>().0 {
-        return p;
-    }
-    if p == Palette::LIGHT {
-        Palette {
-            canvas: 0xf4faf7,
-            sidebar: 0xe0f1e9,
-            selected: 0xa7dfc3,
-            border: 0x74ae91,
-            text: 0x153e30,
-            ..p
-        }
-    } else {
-        Palette {
-            canvas: 0x172f28,
-            sidebar: 0x233e33,
-            selected: 0x35694e,
-            border: 0x578568,
-            text: 0xe0f5ea,
-            ..p
-        }
-    }
+    cx.global::<Theme>().palette(*cx.global::<Palette>())
 }
 pub(crate) fn pane_header(p: Palette) -> Div {
     div()
@@ -86,6 +131,9 @@ pub(crate) fn action<V: 'static>(
         .border_1()
         .border_color(rgb(palette.border))
         .rounded_md()
+        .when(*cx.global::<Theme>() == Theme::Tahoe, |s| {
+            s.rounded_full().bg(rgb(palette.sidebar))
+        })
         .hover(move |s| s.bg(rgb(palette.selected)))
         .focus_visible(|s| s.underline())
         .on_click(cx.listener(move |this, _, _, cx| {
