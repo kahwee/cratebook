@@ -1,0 +1,32 @@
+[package]
+name = "cratebook"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99.1"
+publish = false
+license = "MIT"
+repository = "https://github.com/kahwee/cratebook"
+include = ["src/**", "assets/**", "Cargo.lock", "README.md", "LICENSE", "THIRD_PARTY.md"]
+description = "An interactive component gallery for Rust and GPUI, on macOS and the web."
+
+[[bin]]
+name = "cratebook"
+path = "src/main.rs"
+
+[lib]
+name = "cratebook"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+gpui-jig = { git = "https://github.com/kahwee/gpui-jig", rev = "505628bf071139fbaf908cce2b69ecf175f166cd" }
+gpui = { package = "gpui-pre", version = "0.3.10" }
+[target.'cfg(target_family = "wasm")'.dependencies]
+wasm-bindgen = "0.2"
+gpui_platform = { package = "gpui-pre-platform", version = "=0.3.10", default-features = false }
+
+[target.'cfg(not(target_family = "wasm"))'.dependencies]
+gpui_platform = { package = "gpui-pre-platform", version = "0.3.10", features = ["font-kit", "runtime_shaders"] }
+
+[patch.crates-io]
+block = { path = "vendor/block" }
+gpui-pre-web = { path = "vendor/gpui-pre-web" }

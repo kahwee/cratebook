@@ -1,0 +1,96 @@
+use super::button;
+use gpui::{prelude::*, *};
+
+/// Workspace colors and dimensions follow the Commonleaf desktop shell.
+#[derive(Clone, Copy, PartialEq)]
+pub struct Palette {
+    pub canvas: u32,
+    pub sidebar: u32,
+    pub border: u32,
+    pub text: u32,
+    pub muted: u32,
+    pub selected: u32,
+}
+impl Global for Palette {}
+impl Palette {
+    pub const LIGHT: Self = Self {
+        canvas: 0xffffff,
+        sidebar: 0xf6f5f3,
+        border: 0xdedddb,
+        text: 0x292826,
+        muted: 0x65635f,
+        selected: 0xe7e5e2,
+    };
+    pub const DARK: Self = Self {
+        canvas: 0x202024,
+        sidebar: 0x27272b,
+        border: 0x3d3d43,
+        text: 0xe5e5e8,
+        muted: 0xaaaab4,
+        selected: 0x41414a,
+    };
+}
+pub(crate) struct Accent(pub bool);
+impl Global for Accent {}
+pub(crate) fn preview_palette(cx: &App) -> Palette {
+    let p = *cx.global::<Palette>();
+    if !cx.global::<Accent>().0 {
+        return p;
+    }
+    if p == Palette::LIGHT {
+        Palette {
+            canvas: 0xf4faf7,
+            sidebar: 0xe0f1e9,
+            selected: 0xa7dfc3,
+            border: 0x74ae91,
+            text: 0x153e30,
+            ..p
+        }
+    } else {
+        Palette {
+            canvas: 0x172f28,
+            sidebar: 0x233e33,
+            selected: 0x35694e,
+            border: 0x578568,
+            text: 0xe0f5ea,
+            ..p
+        }
+    }
+}
+pub(crate) fn pane_header(p: Palette) -> Div {
+    div()
+        .flex()
+        .items_center()
+        .justify_between()
+        .h(px(30.))
+        .flex_shrink_0()
+        .px_2()
+        .bg(rgb(p.sidebar))
+        .border_b_1()
+        .border_color(rgb(p.border))
+        .text_size(px(14.))
+}
+pub(crate) fn action<V: 'static>(
+    label: &'static str,
+    window: &Window,
+    cx: &Context<V>,
+    change: impl Fn(&mut V) + 'static,
+) -> Stateful<Div> {
+    let palette = preview_palette(cx);
+    button(label, label)
+        .min_h(super::control_height(window))
+        .text_size(px(13.))
+        .flex()
+        .items_center()
+        .px_2()
+        .border_1()
+        .border_color(rgb(palette.border))
+        .rounded_md()
+        .hover(move |s| s.bg(rgb(palette.selected)))
+        .focus_visible(|s| s.underline())
+        .on_click(cx.listener(move |this, _, _, cx| {
+            change(this);
+            cx.notify();
+        }))
+        .child(label)
+}

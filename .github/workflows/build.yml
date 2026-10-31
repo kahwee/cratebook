@@ -1,0 +1,65 @@
+name: Build Cratebook
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  native:
+    name: Native macOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - run: rustc --version --verbose
+      - run: cargo fmt --check
+      - run: cargo test --locked --release
+      - run: cargo build --locked --release --bin cratebook
+
+  web:
+    name: WebAssembly gallery
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - run: rustup target add wasm32-unknown-unknown
+      - name: Install matching wasm-bindgen CLI
+        run: |
+          archive=wasm-bindgen-0.2.130-x86_64-unknown-linux-musl.tar.gz
+          curl --fail --location --retry 3 "https://github.com/wasm-bindgen/wasm-bindgen/releases/download/0.2.130/$archive" -o "$RUNNER_TEMP/$archive"
+          cd "$RUNNER_TEMP"
+          echo "9687f3bb551b9f66f37ed32a40d7913a00f7962db653054e56857bc306c3227f  $archive" | sha256sum --check
+          tar -xzf "$archive"
+          install -m755 "${archive%.tar.gz}/wasm-bindgen" "$HOME/.cargo/bin/wasm-bindgen"
+      - run: scripts/build-web.sh
+      - run: node bin/cratebook.mjs --check
+      - name: Include license notices
+        run: |
+          mkdir -p web/licenses
+          cp LICENSE assets/OFL.txt vendor/gpui-pre-web/LICENSE-APACHE web/licenses/
+      - uses: actions/upload-pages-artifact@v5.0.0
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        with:
+          path: web
+
+  deploy:
+    name: Publish gallery
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: web
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: pages
+        uses: actions/deploy-pages@v5.0.1

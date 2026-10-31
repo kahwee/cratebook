@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cratebook</title>
+<style>html,body{margin:0;height:100%;overflow:hidden}#status{position:absolute;inset:12px auto auto 16px;font:16px system-ui}canvas{display:block}</style>
+</head><body><div id="status" role="status">Opening Cratebook…</div>
+<script type="module">
+const status = document.querySelector("#status");
+try {
+  const {default: init} = await import("./pkg/cratebook.js");
+  await init();
+  status.remove();
+} catch (error) {
+  status.textContent = "Could not open Cratebook. " + error.message;
+}
+</script></body></html>

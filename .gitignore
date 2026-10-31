@@ -1,0 +1,10 @@
+/target/
+/web/pkg/
+/.tools/
+
+.DS_Store
+.cargo-ok
+
+/node_modules/
+/*.tgz
+/dist/
