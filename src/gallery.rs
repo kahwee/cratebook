@@ -114,7 +114,7 @@ impl Gallery {
                     .items_center()
                     .justify_center()
                     .gap(px(2.))
-                    .bg(rgb(if tahoe { 0x254668 } else { 0x173c34 }))
+                    .bg(rgb(0x173c34))
                     .children([10., 16., 12.].map(|height| {
                         div().w(px(3.)).h(px(height)).rounded_sm().bg(rgb(0xbce6a3))
                     })),
