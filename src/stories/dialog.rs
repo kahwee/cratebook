@@ -11,7 +11,7 @@ pub(super) fn story(cx: &mut App) -> Story {
         source: include_str!("dialog.rs"),
         preview: cx
             .new(|_| Preview {
-                open: false,
+                open: crate::capture_mode(),
                 saved: "PDF",
                 draft: "PDF",
             })

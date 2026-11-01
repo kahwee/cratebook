@@ -8,7 +8,11 @@ pub(super) fn story(cx: &mut App) -> Story {
         description: "Advance a four-file batch and inspect the bounded progress value.",
         path: file!(),
         source: include_str!("progress.rs"),
-        preview: cx.new(|_| Batch(Range::new(0., 4., 0.).unwrap())).into(),
+        preview: cx
+            .new(|_| {
+                Batch(Range::new(0., 4., if crate::capture_mode() { 2. } else { 0. }).unwrap())
+            })
+            .into(),
     }
 }
 struct Batch(Range);

@@ -4,6 +4,16 @@ pub mod table;
 pub mod ui;
 use gallery::Gallery;
 use gpui::{prelude::*, *};
+
+/// Deterministic, native comparison fixture; ordinary app launches are unchanged.
+pub(crate) fn capture_mode() -> bool {
+    !cfg!(target_family = "wasm")
+        && (std::env::args().any(|arg| arg == "--capture")
+            || std::env::current_exe()
+                .ok()
+                .and_then(|p| p.file_stem().map(|s| s == "cratebook-capture"))
+                .unwrap_or(false))
+}
 fn open_gallery(cx: &mut App) {
     // A standalone Windows gallery should exit when its last window closes.
     #[cfg(target_os = "windows")]
@@ -37,7 +47,12 @@ fn open_gallery(cx: &mut App) {
     cx.set_global(palette);
     cx.set_global(theme);
     cx.set_global(ui::CornerStyle::default());
-    let bounds = Bounds::centered(None, size(px(1120.), px(720.)), cx);
+    let dimensions = if capture_mode() {
+        size(px(960.), px(640.))
+    } else {
+        size(px(1120.), px(720.))
+    };
+    let bounds = Bounds::centered(None, dimensions, cx);
     cx.open_window(
         WindowOptions {
             window_min_size: Some(size(px(360.), px(480.))),

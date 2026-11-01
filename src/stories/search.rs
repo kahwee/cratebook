@@ -18,7 +18,7 @@ pub(super) fn stories(cx: &mut App) -> [Story; 2] {
                 free,
                 query: String::new(),
                 chosen: String::new(),
-                open: false,
+                open: crate::capture_mode(),
             })
             .into(),
     })

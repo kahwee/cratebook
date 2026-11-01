@@ -11,7 +11,7 @@ pub(super) fn story(cx: &mut App) -> Story {
         source: include_str!("drawer.rs"),
         preview: cx
             .new(|_| Preview {
-                open: false,
+                open: crate::capture_mode(),
                 completed: false,
             })
             .into(),

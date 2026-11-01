@@ -30,7 +30,7 @@ jobs:
           mkdir screenshots
           sw_vers > screenshots/system.txt
           git rev-parse HEAD > screenshots/commit.txt
-          printf '%s\n' "theme=$GALLERY_THEME" "appearance=$GALLERY_APPEARANCE" "requested_bounds=1120x720 logical pixels" > screenshots/capture.txt
+          printf '%s\n' "theme=$GALLERY_THEME" "appearance=$GALLERY_APPEARANCE" "viewport=960x640 logical pixels" "profile=expanded examples" > screenshots/capture.txt
           cat > window.swift <<'SWIFT'
           import CoreGraphics
           import Foundation
@@ -48,7 +48,7 @@ jobs:
           swiftc window.swift -o window-id
           # Keep filenames aligned with the numbered 30-story catalog.
           for story in $(seq 1 30); do
-            args=("--theme=$GALLERY_THEME" "--story=$story")
+            args=(--capture "--theme=$GALLERY_THEME" "--story=$story")
             if [[ "$GALLERY_APPEARANCE" == dark ]]; then args+=(--dark); fi
             ./target/release/cratebook "${args[@]}" > "screenshots/story-$story.log" 2>&1 &
             pid=$!
@@ -58,6 +58,14 @@ jobs:
             kill "$pid"
             wait "$pid" || true
           done
+          python3 - <<'PY'
+          import struct
+          from pathlib import Path
+          for path in Path('screenshots').glob('*.png'):
+              size = struct.unpack('>II', path.read_bytes()[16:24])
+              assert size == (960, 640), f'{path}: expected 960x640, got {size}; never resize to pass'
+          assert len(list(Path('screenshots').glob('*.png'))) == 30
+          PY
       - uses: actions/upload-artifact@v7.0.2
         with:
           name: macos-gallery-${{ inputs.theme }}-${{ inputs.appearance }}

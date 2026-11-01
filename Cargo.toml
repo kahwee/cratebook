@@ -13,6 +13,10 @@ description = "An interactive component gallery for Rust and GPUI, on Windows, m
 name = "cratebook"
 path = "src/main.rs"
 
+[[bin]]
+name = "cratebook-capture"
+path = "src/capture.rs"
+
 [lib]
 name = "cratebook"
 crate-type = ["cdylib", "rlib"]

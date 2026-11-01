@@ -9,7 +9,19 @@ pub(super) fn story(cx: &mut App) -> Story {
         description: "Type a name and four demo digits, then create a local project. Backspace removes the last character.",
         path: file!(),
         source: include_str!("project_form.rs"),
-        preview: cx.new(|_| Project::default()).into(),
+        preview: cx
+            .new(|_| {
+                if crate::capture_mode() {
+                    Project {
+                        name: "Desktop workspace".into(),
+                        code: "1234".into(),
+                        message: String::new(),
+                    }
+                } else {
+                    Project::default()
+                }
+            })
+            .into(),
     }
 }
 #[derive(Default)]

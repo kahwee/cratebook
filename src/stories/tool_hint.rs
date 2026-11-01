@@ -52,7 +52,7 @@ impl Render for Preview {
                         "Sync workspace"
                     }),
             )
-            .when(self.hovered, |s| {
+            .when(self.hovered || crate::capture_mode(), |s| {
                 s.child(
                     tooltip::popup("hint", "Sync hint")
                         .p_2()

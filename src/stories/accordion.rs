@@ -8,7 +8,15 @@ pub(super) fn story(cx: &mut App) -> Story {
         description: "Explore one release-note section at a time.",
         path: file!(),
         source: include_str!("accordion.rs"),
-        preview: cx.new(|_| Notes(Accordion::new(false))).into(),
+        preview: cx
+            .new(|_| {
+                let mut state = Accordion::new(false);
+                if crate::capture_mode() {
+                    state.toggle(0);
+                }
+                Notes(state)
+            })
+            .into(),
     }
 }
 struct Notes(Accordion<usize>);

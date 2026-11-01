@@ -11,8 +11,8 @@ pub(super) fn story(cx: &mut App) -> Story {
         source: include_str!("card_menu.rs"),
         preview: cx
             .new(|cx| Project {
-                position: None,
-                nested: false,
+                position: crate::capture_mode().then(|| point(px(320.), px(300.))),
+                nested: crate::capture_mode(),
                 pinned: false,
                 folder: "Inbox",
                 focus: cx.focus_handle(),

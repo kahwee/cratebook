@@ -8,7 +8,11 @@ pub(super) fn story(cx: &mut App) -> Story {
         source: include_str!("disclosure.rs"),
         title: "Collapsible",
         description: "Expand or collapse the list of page references.",
-        preview: cx.new(|_| References { expanded: false }).into(),
+        preview: cx
+            .new(|_| References {
+                expanded: crate::capture_mode(),
+            })
+            .into(),
     }
 }
 

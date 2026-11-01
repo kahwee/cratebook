@@ -11,8 +11,8 @@ pub(super) fn story(cx: &mut App) -> Story {
         source: include_str!("toast.rs"),
         preview: cx
             .new(|_| Draft {
-                revision: 0,
-                visible: false,
+                revision: usize::from(crate::capture_mode()),
+                visible: crate::capture_mode(),
             })
             .into(),
     }
