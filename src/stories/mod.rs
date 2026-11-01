@@ -7,6 +7,7 @@ mod checkbox;
 mod dialog;
 mod disclosure;
 mod drawer;
+mod kitchen_sink;
 mod meter;
 mod popover;
 mod preview_card;
@@ -36,6 +37,7 @@ pub(crate) struct Story {
 pub(crate) fn catalog(cx: &mut App) -> Vec<Story> {
     let [combobox, autocomplete] = search::stories(cx);
     vec![
+        kitchen_sink::story(cx),
         card_menu::story(cx),
         settings::story(cx),
         tabs::story(cx),
