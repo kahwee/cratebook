@@ -81,10 +81,53 @@ jobs:
           cargo build --locked --release --bin cratebook --manifest-path "$RUNNER_TEMP/cratebook-$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -1)/Cargo.toml"
       - name: Archive the tested native binary
         run: tar -czf "$RUNNER_TEMP/cratebook-macos.tar.gz" -C target/release cratebook
+      - name: Build a Finder app and archive it with its architecture
+        run: |
+          sh scripts/bundle-macos.sh target/release/cratebook "$RUNNER_TEMP/Cratebook.app"
+          archive="$RUNNER_TEMP/cratebook-macos-$(uname -m).zip"
+          ditto -c -k --sequesterRsrc --keepParent "$RUNNER_TEMP/Cratebook.app" "$archive"
+          cd "$RUNNER_TEMP"
+          shasum -a 256 "$(basename "$archive")" > "$(basename "$archive").sha256"
+      - name: Launch the Finder app and observe its native window
+        run: |
+          bundle="$RUNNER_TEMP/Cratebook.app"
+          open -n "$bundle"
+          pid=''
+          for attempt in $(seq 1 50); do
+            pid=$(pgrep -x cratebook | head -1 || true)
+            if [ -n "$pid" ]; then break; fi
+            sleep 0.2
+          done
+          test -n "$pid"
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          window=$(swift - "$pid" <<'SWIFT'
+          import CoreGraphics
+          import Foundation
+          let pid = Int(CommandLine.arguments[1])!
+          for _ in 0..<100 {
+              let windows = CGWindowListCopyWindowInfo([.optionOnScreenOnly], 0) as? [[String:Any]] ?? []
+              if let window = windows.first(where: { $0["kCGWindowOwnerPID"] as? Int == pid && $0["kCGWindowName"] as? String == "Cratebook" }) {
+                  print(window["kCGWindowNumber"]!)
+                  exit(0)
+              }
+              Thread.sleep(forTimeInterval: 0.1)
+          }
+          exit(1)
+          SWIFT
+          )
+          sw_vers > "$RUNNER_TEMP/macos-app-metadata.txt"
+          file "$bundle/Contents/MacOS/cratebook" >> "$RUNNER_TEMP/macos-app-metadata.txt"
+          printf 'Native Finder app window observed: pid=%s window=%s\n' "$pid" "$window" >> "$RUNNER_TEMP/macos-app-metadata.txt"
+          screencapture -x -o -l "$window" "$RUNNER_TEMP/macos-app-window.png" || true
       - uses: actions/upload-artifact@v7.0.2
         with:
           name: cratebook-macos
-          path: ${{ runner.temp }}/cratebook-macos.tar.gz
+          path: |
+            ${{ runner.temp }}/cratebook-macos.tar.gz
+            ${{ runner.temp }}/cratebook-macos-*.zip
+            ${{ runner.temp }}/cratebook-macos-*.zip.sha256
+            ${{ runner.temp }}/macos-app-metadata.txt
+            ${{ runner.temp }}/macos-app-window.png
 
   web:
     name: WebAssembly gallery
