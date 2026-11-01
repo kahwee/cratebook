@@ -414,6 +414,7 @@ impl Render for Gallery {
         let story = &self.stories[self.selected];
         let source = story.source;
         let preview = card::root("story-preview", "Live preview")
+            .flex_shrink_0()
             .bg(rgb(p.canvas))
             .text_color(rgb(p.text))
             .min_w_0()
@@ -436,10 +437,11 @@ impl Render for Gallery {
                 .flex()
                 .flex_col()
                 .gap(px(10.))
-                .child(self.story_cover(compact, p, editor))
+                .child(self.story_cover(compact, p, editor).flex_shrink_0())
                 .child(
                     div()
                         .flex()
+                        .flex_shrink_0()
                         .gap_2()
                         .flex_wrap()
                         .items_center()
@@ -553,6 +555,7 @@ impl Render for Gallery {
                     s.child(
                         div()
                             .rounded(px(p.corners.card as f32))
+                            .flex_shrink_0()
                             .p_4()
                             .bg(rgb(p.sidebar))
                             .text_color(rgb(p.text))

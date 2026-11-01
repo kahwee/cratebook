@@ -65,7 +65,12 @@ impl Render for Search {
             } else {
                 self.query.clone()
             })
-            .on_click(cx.listener(|s, _, _, cx| {
+            .on_click(cx.listener(|s, event, _, cx| {
+                // Enter commits on keydown. Its synthetic keyboard click on
+                // keyup must not reopen the suggestions immediately afterward.
+                if matches!(event, ClickEvent::Keyboard(_)) {
+                    return;
+                }
                 s.open = true;
                 cx.notify();
             }))
