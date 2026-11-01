@@ -29,6 +29,8 @@ For the browser, run `pnpm install --frozen-lockfile`, `pnpm build`, then `pnpm 
 
 Many bundled stories use the shared unstyled primitives in [GPUI Jig](https://github.com/kahwee/gpui-jig). A story can also render ordinary GPUI elements or use a different component library; the [button story](src/stories/button.rs) uses GPUI directly. Jig is a dependency of this gallery build, not a requirement for the components you bring into your own stories.
 
+Cratebook and GPUI Jig use [`gpui-pre`](https://crates.io/crates/gpui-pre), a published snapshot of [Zed's GPUI framework](https://github.com/zed-industries/zed/tree/main/crates/gpui) maintained by the [Longbridge GPUI Kit project](https://github.com/longbridge/gpui-component). Zed also publishes an official [`gpui` crate](https://crates.io/crates/gpui), but its published releases can lag behind the GPUI code Zed uses directly from its repository. The snapshot lets Cratebook use a more recent GPUI version from crates.io; it is not published by Zed.
+
 The desktop component sidebar docks on the right. Its heading and visibility control share the integrated title bar. Choose **Split title bar** to switch between split and unified chrome. Launch the native Tahoe theme with `cratebook --theme=tahoe`, or add `--dark` for its dark appearance.
 
 ## Add a theme
