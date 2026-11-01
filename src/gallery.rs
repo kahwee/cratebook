@@ -450,32 +450,51 @@ impl Render for Gallery {
                         .flex()
                         .gap_2()
                         .flex_wrap()
-                        .when(self.panel != Panel::Source, |s| {
-                            s.items_center().child(
+                        .items_center()
+                        .when(compact && self.panel == Panel::Canvas, |s| {
+                            s.child(
                                 div()
                                     .flex_1()
-                                    .text_size(px(14.))
                                     .font_weight(FontWeight::SEMIBOLD)
                                     .child("Live preview"),
                             )
                         })
                         .when(!compact, |s| {
-                            s.child(ui::action(
-                                if self.panel == Panel::Source {
-                                    "Show preview"
-                                } else {
-                                    "Rust source"
-                                },
-                                window,
-                                cx,
-                                |s: &mut Gallery| {
-                                    s.panel = if s.panel == Panel::Source {
-                                        Panel::Canvas
-                                    } else {
-                                        Panel::Source
-                                    }
-                                },
-                            ))
+                            let views =
+                                [(Panel::Canvas, "Preview"), (Panel::Source, "Rust source")];
+                            s.child(
+                                gpui_jig::toggle_group::root("story-view", "Story view")
+                                    .flex()
+                                    .rounded_lg()
+                                    .bg(rgb(p.sidebar))
+                                    .p(px(2.))
+                                    .children(views.into_iter().map(|(panel, label)| {
+                                        let current = if panel == Panel::Canvas {
+                                            self.panel != Panel::Source
+                                        } else {
+                                            self.panel == panel
+                                        };
+                                        gpui_jig::toggle_group::item(
+                                            ("story-view", panel as usize),
+                                            label,
+                                            current,
+                                        )
+                                        .min_h(ui::control_height(window))
+                                        .px_2()
+                                        .rounded_md()
+                                        .flex()
+                                        .items_center()
+                                        .when(current, |s| {
+                                            s.bg(rgb(p.selected)).font_weight(FontWeight::SEMIBOLD)
+                                        })
+                                        .focus_visible(|s| s.underline())
+                                        .on_click(cx.listener(move |this, _, _, cx| {
+                                            this.panel = panel;
+                                            cx.notify();
+                                        }))
+                                        .child(label)
+                                    })),
+                            )
                         })
                         .when(!compact || self.panel == Panel::Canvas, |s| {
                             s.child(

@@ -865,7 +865,7 @@ dependencies = [
 
 [[package]]
 name = "cratebook"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "gpui-jig",
  "gpui-pre",
@@ -1591,9 +1591,9 @@ dependencies = [
 
 [[package]]
 name = "gpui-jig"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "44507c9dc1969a0bdd0f9edb21e11aa089836961e1cb00ba7eedc91971009d41"
+checksum = "fdc653bcff323c544c66a5d91236d2acbe419887828748caa4c83a1f392bea36"
 dependencies = [
  "gpui-pre",
 ]
