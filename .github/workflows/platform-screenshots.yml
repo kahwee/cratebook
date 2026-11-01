@@ -74,6 +74,7 @@ jobs:
           assert len(list(Path('screenshots').glob('*.png'))) == 31
           PY
       - uses: actions/upload-artifact@v7.0.2
+        if: always()
         with:
           name: macos-gallery-${{ inputs.theme }}-${{ inputs.appearance }}
           path: screenshots/

@@ -11,6 +11,8 @@ used for screenshots rather than silently mixing builds from different commits.
   Every published comparison PNG must be **exactly 960 × 640 physical pixels**
   on Windows and macOS. Reject a size mismatch. Never stretch, shrink, pad, or
   silently crop app content to make mismatched viewports appear equivalent.
+  Use fixed integer window origin `(32, 32)`; fractional centered placement can
+  add an unwanted raster row on macOS. Verify the resulting dimensions anyway.
 - Launch `cargo run --locked --release --bin cratebook -- --capture --story=N`
   on macOS. The `cratebook-capture` binary selects the same profile for native
   Windows Computer Use, whose launch API does not take CLI arguments.
@@ -23,10 +25,8 @@ used for screenshots rather than silently mixing builds from different commits.
   pictured state for each story; a trigger alone is not sufficient evidence of
   its hidden component. Keep ordinary launch defaults unchanged.
 - Save untouched native screenshots under `native/` before extracting client
-  images. On Windows, a verified 962 × 669 native window at 1× has a 960 × 640
-  client rectangle at `(1, 28, 961, 668)`. Remove only this native border/title
-  bar. The current host measures 962 × 672 with client rectangle
-  `(1, 31, 961, 671)`; use that measured framing for this set. Reject other
+  images. The current Windows host measures 962 × 672 at 1×, with client rectangle
+  `(1, 31, 961, 671)`. Remove only this verified native border/title bar. Reject other
   native dimensions and investigate DPI/viewport settings.
   macOS transparent-titlebar captures must already be 960 × 640. Preserve its
   traffic lights and intentional platform toolbar inset. Keep native font

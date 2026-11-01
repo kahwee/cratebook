@@ -52,7 +52,12 @@ fn open_gallery(cx: &mut App) {
     } else {
         size(px(1120.), px(720.))
     };
-    let bounds = Bounds::centered(None, dimensions, cx);
+    let mut bounds = Bounds::centered(None, dimensions, cx);
+    if capture_mode() {
+        // Fractional centered origins can make macOS captures one pixel taller.
+        // An integer origin keeps native client bounds pixel-aligned at 1x.
+        bounds.origin = point(px(32.), px(32.));
+    }
     cx.open_window(
         WindowOptions {
             window_min_size: Some(size(px(360.), px(480.))),
