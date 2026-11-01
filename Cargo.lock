@@ -1592,9 +1592,9 @@ dependencies = [
 
 [[package]]
 name = "gpui-jig"
-version = "0.1.4"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1ee25ce647863f1bbabe1ff7135cfbdf71d19df5c59aece9b1dcdda4dcfe8320"
+checksum = "a079fa980fb5e8c958962f74b7755179a22331d9321a1a3553fdee3021d3e4bf"
 dependencies = [
  "chrono",
  "gpui-pre",

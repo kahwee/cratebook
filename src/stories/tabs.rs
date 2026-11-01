@@ -1,11 +1,17 @@
 use super::Story;
 use crate::ui;
 use gpui::{prelude::*, *};
+use gpui_jig::tabs;
 
 const TITLES: [&str; 3] = [
     "Field notes.md",
     "Reading list.md",
     "An unusually long working title for a draft.md",
+];
+const EXCERPTS: [&str; 3] = [
+    "The studio was quiet before the first interview. On the table: a recorder, a notebook, and three questions.",
+    "A short shelf of books on observation, drawing, and the everyday details of working places.",
+    "An early outline for the next issue. Start with the workshop visit, then return to the open questions.",
 ];
 
 pub(super) fn story(cx: &mut App) -> Story {
@@ -13,103 +19,224 @@ pub(super) fn story(cx: &mut App) -> Story {
         path: file!(),
         source: include_str!("tabs.rs"),
         title: "Document tabs",
-        description: "Switch and close documents, or mark the first tab unsaved.",
+        description: "Browse the notebook. Use the arrow keys to switch documents or close a tab to continue reading.",
         preview: cx
-            .new(|_| Tabs {
+            .new(|cx| Tabs {
                 tabs: vec![0, 1, 2],
                 active: 0,
                 dirty: false,
+                handles: std::array::from_fn(|_| cx.focus_handle()),
+                restore: cx.focus_handle(),
             })
             .into(),
     }
 }
-
 struct Tabs {
     tabs: Vec<usize>,
     active: usize,
     dirty: bool,
+    handles: [FocusHandle; 3],
+    restore: FocusHandle,
 }
-
 impl Tabs {
-    fn tab(&self, index: usize, palette: ui::Palette, cx: &Context<Self>) -> Stateful<Div> {
+    fn tab(&self, index: usize, pos: usize, p: ui::Palette, w: &Window, cx: &Context<Self>) -> Div {
+        let active = self.active == index;
+        let compact = ui::compact_layout(w);
         let title = TITLES[index];
-        ui::document_tab(
-            ("tab", index),
-            format!("Open {title}"),
-            self.active == index,
-            palette.canvas,
-            palette.sidebar,
-            palette.border,
-            palette.selected,
-        )
-        .on_click(cx.listener(move |this, _, _, cx| {
-            this.active = index;
-            cx.notify();
-        }))
-        .child(
-            div()
-                .max_w(px(180.))
-                .overflow_hidden()
-                .text_ellipsis()
-                .child(format!(
-                    "{}{title}",
-                    if index == 0 && self.dirty { "● " } else { "" }
-                )),
-        )
-        .child(
-            ui::button(("close", index), format!("Close {title}"))
+        div()
+            .flex()
+            .items_center()
+            .when(compact, |s| {
+                s.flex_1().min_w_0().when(active, |s| s.flex_basis(px(44.)))
+            })
+            .when(!compact, |s| s.flex_shrink_0())
+            .h_full()
+            .px_1()
+            .rounded_t(px(p.corners.control as f32))
+            .border_b_2()
+            .border_color(rgb(if active { p.text } else { p.sidebar }))
+            .when(active, |s| s.bg(rgb(p.canvas)))
+            .child(
+                tabs::tab(
+                    ("tab", index),
+                    if index == 0 && self.dirty {
+                        format!("{title}, unsaved")
+                    } else {
+                        title.to_owned()
+                    },
+                    active,
+                )
+                .track_focus(&self.handles[index])
+                .h_full()
+                .flex()
+                .items_center()
+                .gap_2()
                 .px_1()
-                .on_click(cx.listener(move |this, _, _, cx| {
-                    cx.stop_propagation();
-                    this.tabs.retain(|v| *v != index);
-                    if this.active == index {
-                        this.active = this.tabs.first().copied().unwrap_or(0);
-                    }
+                .max_w(px(if compact { 136. } else { 196. }))
+                .min_w_0()
+                .text_color(rgb(if active { p.text } else { p.muted }))
+                .when(active, |s| s.font_weight(FontWeight::SEMIBOLD))
+                .focus_visible(|s| s.underline())
+                .when(!compact, |s| {
+                    s.child(
+                        div()
+                            .w(px(10.))
+                            .h(px(13.))
+                            .flex_shrink_0()
+                            .border_1()
+                            .border_color(rgb(p.muted))
+                            .rounded(px(2.))
+                            .flex()
+                            .items_center()
+                            .justify_center()
+                            .child(div().w(px(4.)).h(px(1.)).bg(rgb(p.muted))),
+                    )
+                })
+                .when(index == 0 && self.dirty, |s| {
+                    s.child(
+                        div()
+                            .size(px(5.))
+                            .flex_shrink_0()
+                            .rounded_full()
+                            .bg(rgb(p.text)),
+                    )
+                })
+                .when(compact, |s| s.flex_1())
+                .child(div().min_w_0().truncate().child(if compact {
+                    title.trim_end_matches(".md")
+                } else {
+                    title
+                }))
+                .on_click(cx.listener(move |s, _, w, cx| {
+                    s.active = index;
+                    w.focus(&s.handles[index], cx);
                     cx.notify();
                 }))
-                .child("×"),
-        )
+                .on_key_down(cx.listener(move |s, e: &KeyDownEvent, w, cx| {
+                    if e.keystroke.modifiers.modified() {
+                        return;
+                    }
+                    if let Some(next) = tabs::destination(&e.keystroke.key, pos, s.tabs.len()) {
+                        s.active = s.tabs[next];
+                        w.focus(&s.handles[s.active], cx);
+                        w.prevent_default();
+                        cx.stop_propagation();
+                        cx.notify();
+                    }
+                })),
+            )
+            .when(!compact || active, |s| {
+                s.child(
+                    tabs::close(("close", index), format!("Close {title}"))
+                        .flex_shrink_0()
+                        .w(px(if compact { 44. } else { 24. }))
+                        .h_full()
+                        .flex()
+                        .items_center()
+                        .justify_center()
+                        .text_color(rgb(p.muted))
+                        .focus_visible(|s| s.underline())
+                        .hover(move |s| s.bg(rgb(p.selected)))
+                        .child("×")
+                        .on_click(cx.listener(move |s, _, w, cx| {
+                            s.tabs.remove(pos);
+                            if s.active == index && !s.tabs.is_empty() {
+                                s.active = s.tabs[pos.min(s.tabs.len() - 1)];
+                            }
+                            if !s.tabs.is_empty() {
+                                w.focus(&s.handles[s.active], cx);
+                            } else {
+                                w.focus(&s.restore, cx);
+                            }
+                            cx.notify();
+                        })),
+                )
+            })
     }
 }
 impl Render for Tabs {
-    fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
-        let palette = ui::preview_palette(cx);
-        let strip = gpui_jig::tabs::list("tab-strip", "Open documents")
+    fn render(&mut self, w: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+        let p = ui::preview_palette(cx);
+        let strip = tabs::list("tab-strip", "Open documents")
             .overflow_x_scroll()
             .flex()
-            .h(ui::control_height(window))
-            .bg(rgb(palette.sidebar))
-            .border_b_1()
-            .border_color(rgb(palette.border))
-            .text_size(px(14.))
-            .children(self.tabs.iter().map(|&index| self.tab(index, palette, cx)));
-        gpui_jig::tabs::root("documents", "Documents")
+            .h(px(if ui::compact_layout(w) { 44. } else { 36. }))
+            .pt(px(3.))
+            .px_1()
+            .gap(px(1.))
+            .bg(rgb(p.sidebar))
+            .text_size(px(13.))
+            .children(
+                self.tabs
+                    .iter()
+                    .enumerate()
+                    .map(|(pos, &i)| self.tab(i, pos, p, w, cx)),
+            );
+        tabs::root("documents", "Notebook")
             .flex()
             .flex_col()
-            .child(strip)
+            .when(!self.tabs.is_empty(), |s| s.child(strip))
             .child(
-                gpui_jig::tabs::panel("document-content", "Active document")
+                tabs::panel("document-content", "Active document")
+                    .flex()
+                    .flex_col()
+                    .gap_2()
                     .p_4()
-                    .child(if self.tabs.is_empty() {
-                        "No open documents"
-                    } else {
-                        TITLES[self.active]
+                    .when(!self.tabs.is_empty(), |s| {
+                        s.child(
+                            div()
+                                .text_size(px(12.))
+                                .text_color(rgb(p.muted))
+                                .child("Studio notebook  /  Manuscripts"),
+                        )
+                        .child(
+                            div()
+                                .text_size(px(20.))
+                                .font_weight(FontWeight::SEMIBOLD)
+                                .child(TITLES[self.active].trim_end_matches(".md")),
+                        )
+                        .child(
+                            div()
+                                .max_w(px(460.))
+                                .text_color(rgb(p.muted))
+                                .child(EXCERPTS[self.active]),
+                        )
+                    })
+                    .when(self.tabs.is_empty(), |s| {
+                        s.child("No open documents")
+                            .child("Restore the notebook to reopen its three documents.")
                     }),
             )
             .child(
                 div()
+                    .px_3()
+                    .py_2()
+                    .border_t_1()
+                    .border_color(rgb(p.border))
                     .flex()
+                    .items_center()
                     .flex_wrap()
                     .gap_2()
-                    .p_3()
-                    .child(ui::action("Toggle unsaved mark", window, cx, |s| {
-                        s.dirty = !s.dirty
-                    }))
-                    .child(ui::action("Restore tabs", window, cx, |s| {
-                        s.tabs = vec![0, 1, 2];
-                        s.active = 0;
-                        s.dirty = false;
-                    })),
+                    .when(self.tabs.contains(&0), |s| {
+                        s.child(ui::action(
+                            if self.dirty {
+                                "Mark saved"
+                            } else {
+                                "Mark notes unsaved"
+                            },
+                            w,
+                            cx,
+                            |s: &mut Tabs| s.dirty = !s.dirty,
+                        ))
+                    })
+                    .child(
+                        ui::action("Restore tabs", w, cx, |s: &mut Tabs| {
+                            s.tabs = vec![0, 1, 2];
+                            s.active = 0;
+                            s.dirty = false;
+                        })
+                        .track_focus(&self.restore),
+                    ),
             )
     }
 }
