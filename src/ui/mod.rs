@@ -41,3 +41,5 @@ pub(crate) fn compact_layout(window: &gpui::Window) -> bool {
 pub(crate) fn control_height(window: &gpui::Window) -> gpui::Pixels {
     gpui::px(if compact_layout(window) { 44. } else { 28. })
 }
+mod month_picker;
+pub(crate) use month_picker::month_picker;

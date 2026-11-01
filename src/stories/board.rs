@@ -12,6 +12,8 @@ const TASKS: [(&str, &str); 5] = [
     ("Collect field notes", "Research"),
 ];
 struct Board {
+    grid: gpui_jig::date_grid::DateGrid,
+    due: [chrono::NaiveDate; 5],
     lanes: [usize; 5],
     selected: Option<usize>,
 }
@@ -22,7 +24,9 @@ pub(super) fn story(cx: &mut App) -> Story {
         path: file!(),
         source: include_str!("board.rs"),
         preview: cx
-            .new(|_| Board {
+            .new(|cx| Board {
+                grid: gpui_jig::date_grid::DateGrid::new(cx),
+                due: [chrono::NaiveDate::from_ymd_opt(2026, 10, 12).unwrap(); 5],
                 lanes: [0, 1, 0, 1, 2],
                 selected: None,
             })
@@ -139,6 +143,22 @@ impl Render for Board {
                                         }))
                                 })),
                         )
+                        .child(
+                            div()
+                                .py_2()
+                                .child(format!("Due · {}", self.due[i].format("%B %-d, %Y"))),
+                        )
+                        .child(ui::month_picker(
+                            &self.grid,
+                            self.due[i],
+                            p,
+                            h,
+                            |_| false,
+                            cx.listener(move |s, date, _, cx| {
+                                s.due[i] = *date;
+                                cx.notify();
+                            }),
+                        ))
                         .child(ui::action("Close details", w, cx, |s: &mut Board| {
                             s.selected = None
                         })),

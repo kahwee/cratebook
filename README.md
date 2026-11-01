@@ -77,3 +77,9 @@ Cratebook’s original code is available under the [MIT License](LICENSE). Bundl
 ## Verify a release candidate
 
 Native tests, the packaged macOS executable build, and the web build run in parallel. The web job builds the gallery, packs the npm CLI, installs the tarball into an empty project and runs its asset check. Pages waits for all three jobs. For a registry release, download the **cratebook-npm** artifact from the successful run for the intended commit, extract the tarball and run `npm publish ./cratebook-VERSION.tgz --access public` with the publisher account. The GPUI Jig Rust library is packaged in its own repository.
+
+Calendar and Project board share the same [month picker](src/ui/month_picker.rs).
+In Calendar, a selected date opens its agenda. In Project board, select a task
+and choose its due date. Tab into the grid once, then use arrow keys to move by
+day or week, Home and End for week boundaries, and Page Up or Page Down for
+months. The Previous and Next controls also work with pointer and touch input.
