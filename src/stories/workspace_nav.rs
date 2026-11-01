@@ -2,6 +2,7 @@ use super::Story;
 use crate::ui;
 use gpui::{prelude::*, *};
 use gpui_jig::{menu, menubar, navigation_menu, separator, toolbar};
+use std::{cell::Cell, rc::Rc};
 
 pub(super) fn story(cx: &mut App) -> Story {
     Story {
@@ -16,6 +17,7 @@ pub(super) fn story(cx: &mut App) -> Story {
                 dense: false,
                 menu_focus: cx.focus_handle(),
                 opener: cx.focus_handle(),
+                menu_anchor: Rc::new(Cell::new(Bounds::default())),
             })
             .into(),
     }
@@ -26,6 +28,7 @@ struct Preview {
     dense: bool,
     menu_focus: FocusHandle,
     opener: FocusHandle,
+    menu_anchor: Rc<Cell<Bounds<Pixels>>>,
 }
 impl Preview {
     fn close_menu(&mut self, w: &mut Window, cx: &mut Context<Self>) {
@@ -38,6 +41,8 @@ impl Render for Preview {
     fn render(&mut self, w: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let p = ui::preview_palette(cx);
         let sections = ["Overview", "Documents", "Activity"];
+        let menu_anchor = self.menu_anchor.clone();
+        let entity_id = cx.entity_id();
         div()
             .p_4()
             .flex()
@@ -46,42 +51,57 @@ impl Render for Preview {
             .child(
                 menubar::root("bar", "Application menu")
                     .relative()
+                    .flex()
+                    .items_start()
                     .child(
-                        menu::trigger("view", "View", self.menu_open)
-                            .track_focus(&self.opener)
-                            .min_h(ui::control_height(w))
-                            .flex()
-                            .items_center()
-                            .px_2()
-                            .rounded(px(p.corners.control as f32))
-                            .bg(rgb(p.sidebar))
-                            .hover(move |s| s.bg(rgb(p.selected)))
-                            .focus_visible(|s| s.underline())
-                            .child("View ▾")
-                            .on_click(cx.listener(|s, _, w, cx| {
-                                s.menu_open = !s.menu_open;
-                                if s.menu_open {
-                                    w.focus(&s.menu_focus, cx);
-                                } else {
-                                    w.focus(&s.opener, cx);
+                        div()
+                            .child(
+                                menu::trigger("view", "View", self.menu_open)
+                                    .track_focus(&self.opener)
+                                    .min_h(ui::control_height(w))
+                                    .flex()
+                                    .items_center()
+                                    .px_2()
+                                    .rounded(px(p.corners.control as f32))
+                                    .bg(rgb(p.sidebar))
+                                    .hover(move |s| s.bg(rgb(p.selected)))
+                                    .focus_visible(|s| s.underline())
+                                    .child("View ▾")
+                                    .on_click(cx.listener(|s, _, w, cx| {
+                                        s.menu_open = !s.menu_open;
+                                        if s.menu_open {
+                                            w.focus(&s.menu_focus, cx);
+                                        } else {
+                                            w.focus(&s.opener, cx);
+                                        }
+                                        cx.notify();
+                                    }))
+                                    .on_key_down(cx.listener(|s, e: &KeyDownEvent, w, cx| {
+                                        if e.keystroke.key == "down" {
+                                            s.menu_open = true;
+                                            w.focus(&s.menu_focus, cx);
+                                            w.prevent_default();
+                                            cx.stop_propagation();
+                                            cx.notify();
+                                        }
+                                    })),
+                            )
+                            .on_children_prepainted(move |bounds, _, cx| {
+                                if let Some(bounds) = bounds.first() {
+                                    let anchor = *bounds;
+                                    if menu_anchor.get() != anchor {
+                                        menu_anchor.set(anchor);
+                                        cx.notify(entity_id);
+                                    }
                                 }
-                                cx.notify();
-                            }))
-                            .on_key_down(cx.listener(|s, e: &KeyDownEvent, w, cx| {
-                                if e.keystroke.key == "down" {
-                                    s.menu_open = true;
-                                    w.focus(&s.menu_focus, cx);
-                                    w.prevent_default();
-                                    cx.stop_propagation();
-                                    cx.notify();
-                                }
-                            })),
+                            }),
                     )
                     .when(self.menu_open, |s| {
                         s.child(deferred(
                             anchored()
-                                .position_mode(AnchoredPositionMode::Local)
-                                .position(point(px(0.), ui::control_height(w) + px(4.)))
+                                .position(
+                                    self.menu_anchor.get().bottom_left() + point(px(0.), px(4.)),
+                                )
                                 .snap_to_window_with_margin(px(8.))
                                 .child(
                                     menu::popup("view-menu", "View options")
@@ -94,9 +114,13 @@ impl Render for Preview {
                                         .bg(rgb(p.canvas))
                                         .shadow_lg()
                                         .occlude()
-                                        .on_mouse_down_out(
-                                            cx.listener(|s, _, w, cx| s.close_menu(w, cx)),
-                                        )
+                                        .on_mouse_down_out(cx.listener(
+                                            |s, event: &MouseDownEvent, w, cx| {
+                                                if !s.menu_anchor.get().contains(&event.position) {
+                                                    s.close_menu(w, cx);
+                                                }
+                                            },
+                                        ))
                                         .on_key_down(cx.listener(|s, e: &KeyDownEvent, w, cx| {
                                             match e.keystroke.key.as_str() {
                                                 "escape" | "tab" => s.close_menu(w, cx),
