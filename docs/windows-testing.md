@@ -64,6 +64,10 @@ Use the extracted release executable on an unlocked Windows desktop. Record the 
 
 ## Automated coverage
 
+The [native Windows menu review](windows-menu-review.md) records right-click,
+hover submenus, keyboard navigation, focus restoration, outside dismissal and
+light/dark examples for the current menu implementation.
+
 `cargo test --locked --release` checks the table model. GPUI Jig separately tests state navigation, ranges, accordion state, calendar behavior and documentation examples on Windows and macOS. CI also builds the portable Windows package.
 
 The packaging script targets x86-64 MSVC. ARM64 and signing are not part of this distribution.
