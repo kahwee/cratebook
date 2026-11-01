@@ -14,7 +14,7 @@ On Windows or macOS, install from [crates.io](https://crates.io/crates/cratebook
 
 ## Windows desktop
 
-Download the Windows x86-64 ZIP from [GitHub Releases](https://github.com/kahwee/cratebook/releases), extract it, and open `cratebook.exe`. The portable app does not require Rust or Node.js. It uses the native Windows title bar, Segoe UI for controls and Consolas for Rust source. Closing the last window exits the app. The executable is unsigned.
+Download the Windows x86-64 ZIP from [GitHub Releases](https://github.com/kahwee/cratebook/releases), extract it, and open `cratebook.exe`. The portable app does not require Rust or Node.js. From 0.1.3, the portable package statically links the C runtime so a separate Visual C++ runtime installation is not required. It uses the native Windows title bar, Segoe UI for controls and Consolas for Rust source. Closing the last window exits the app. The executable is unsigned.
 
 To build from source, install Rust 1.99.1 for `x86_64-pc-windows-msvc` and Visual Studio Build Tools with Desktop development with C++ and the Windows SDK. In PowerShell, run:
 
@@ -23,7 +23,7 @@ cargo test --locked --release
 ./scripts/package-windows.ps1
 ```
 
-The script creates `dist/cratebook-VERSION-windows-x86_64.zip` and a `.zip.sha256` checksum. Compare the checksum with `Get-FileHash -Algorithm SHA256` before distributing a downloaded archive. Windows CI runs native tests and uploads the ZIP on each build. Follow [the interactive checklist](docs/windows-testing.md) to validate rendering and input; automated tests do not cover every story.
+The script tests and builds the x86-64 MSVC target with a static C runtime, then creates `dist/cratebook-VERSION-windows-x86_64.zip` and a `.zip.sha256` checksum. Compare the checksum with `Get-FileHash -Algorithm SHA256` before distributing a downloaded archive. Windows CI runs native tests and uploads the ZIP on each build. Follow [the interactive checklist](docs/windows-testing.md) to validate rendering and input; automated tests do not cover every story.
 
 For the browser, run `pnpm install --frozen-lockfile`, `pnpm build`, then `pnpm start` (Rust/WASM prerequisites below). Choose a different port with `pnpm start --port 4174`. To distribute a ready-to-run browser gallery locally, run `pnpm pack`. In another project run `pnpm add /path/to/cratebook-0.1.0.tgz` and `pnpm exec cratebook`. The tarball includes the compiled gallery and requires only Node.js at runtime.
 
