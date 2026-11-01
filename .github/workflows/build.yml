@@ -21,14 +21,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  quick:
-    name: Quick format and manifest checks
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7.0.1
-      - run: cargo fmt --all --check
-      - run: cargo metadata --locked --no-deps --format-version 1 > /dev/null
-
   native:
     name: Native tests (${{ matrix.os }})
     strategy:
@@ -44,6 +36,8 @@ jobs:
           cache-bin: false
           save-if: ${{ github.ref == 'refs/heads/main' }}
       - run: rustc --version --verbose
+      - run: cargo fmt --all --check
+        if: runner.os == 'macOS'
       - run: cargo test --locked --release
   windows:
     name: Packaged Windows executable
@@ -137,7 +131,7 @@ jobs:
   deploy:
     name: Publish gallery
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    needs: [quick, native, windows, package, web]
+    needs: [native, windows, package, web]
     runs-on: ubuntu-latest
     permissions:
       pages: write
