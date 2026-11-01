@@ -22,6 +22,7 @@ pub(crate) struct Gallery {
     split_titlebar: bool,
     theme_picker: ui::RadioGroup<{ ui::Theme::ALL.len() }>,
     capture_scroll: ScrollHandle,
+    capture_focus: FocusHandle,
     capture_lower: bool,
 }
 
@@ -51,6 +52,7 @@ impl Gallery {
             split_titlebar: true,
             theme_picker: ui::RadioGroup::new(cx),
             capture_scroll: ScrollHandle::new(),
+            capture_focus: cx.focus_handle(),
             capture_lower: crate::capture_mode()
                 && std::env::args().any(|arg| arg == "--capture-lower"),
         }
@@ -672,28 +674,33 @@ impl Render for Gallery {
         div()
             .id("gallery")
             .when(crate::capture_mode(), |s| {
-                s.on_key_down(cx.listener(|s, event: &KeyDownEvent, _, cx| {
-                    match event.keystroke.key.as_str() {
-                        "f8" => s.selected = (s.selected + 1) % s.stories.len(),
-                        "f7" => s.selected = (s.selected + s.stories.len() - 1) % s.stories.len(),
-                        "f6" => {
-                            s.capture_lower = !s.capture_lower;
-                            if s.capture_lower {
-                                s.capture_scroll.scroll_to_bottom();
-                            } else {
-                                s.capture_scroll.set_offset(point(px(0.), px(0.)));
+                s.track_focus(&self.capture_focus).on_key_down(cx.listener(
+                    |s, event: &KeyDownEvent, window, cx| {
+                        match event.keystroke.key.as_str() {
+                            "f8" => s.selected = (s.selected + 1) % s.stories.len(),
+                            "f7" => {
+                                s.selected = (s.selected + s.stories.len() - 1) % s.stories.len()
                             }
-                            cx.stop_propagation();
-                            cx.notify();
-                            return;
+                            "f6" => {
+                                s.capture_lower = !s.capture_lower;
+                                if s.capture_lower {
+                                    s.capture_scroll.scroll_to_bottom();
+                                } else {
+                                    s.capture_scroll.set_offset(point(px(0.), px(0.)));
+                                }
+                                cx.stop_propagation();
+                                cx.notify();
+                                return;
+                            }
+                            _ => return,
                         }
-                        _ => return,
-                    }
-                    s.capture_lower = false;
-                    s.capture_scroll.set_offset(point(px(0.), px(0.)));
-                    cx.stop_propagation();
-                    cx.notify();
-                }))
+                        s.capture_lower = false;
+                        s.capture_scroll.set_offset(point(px(0.), px(0.)));
+                        window.focus(&s.capture_focus, cx);
+                        cx.stop_propagation();
+                        cx.notify();
+                    },
+                ))
             })
             .size_full()
             .when(cfg!(target_os = "windows"), |s| s.font_family("Segoe UI"))
