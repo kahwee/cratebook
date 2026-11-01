@@ -8,7 +8,42 @@ const MONTHS: [&str; 6] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
 const REGIONS: [&str; 4] = ["North", "South", "East", "West"];
 const GREEN: u32 = 0x198358;
 
+#[derive(Clone, Copy)]
+struct DragMonth(usize);
+
+impl Render for DragMonth {
+    fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+        let p = ui::preview_palette(cx);
+        div()
+            .px_2()
+            .py_1()
+            .rounded_md()
+            .shadow_sm()
+            .bg(rgb(p.canvas))
+            .text_color(rgb(p.text))
+            .child(MONTHS[self.0])
+    }
+}
+
+// Month IDs stay fixed in the data model. Only their worksheet positions move.
+fn move_month(order: &mut [usize; 6], month: usize, target: usize) -> bool {
+    let Some(from) = order.iter().position(|&id| id == month) else {
+        return false;
+    };
+    let Some(to) = order.iter().position(|&id| id == target) else {
+        return false;
+    };
+    if from < to {
+        order[from..=to].rotate_left(1);
+    } else if from > to {
+        order[to..=from].rotate_right(1);
+    }
+    from != to
+}
+
 struct Worksheet {
+    order: [usize; 6],
+    moved: Option<(usize, usize)>,
     sales: [[u16; 6]; 4],
     row: usize,
     col: usize,
@@ -18,11 +53,13 @@ struct Worksheet {
 pub(super) fn story(cx: &mut App) -> Story {
     Story {
         title: "Sales worksheet",
-        description: "Select a monthly sales cell, edit its value, and apply the change to the workbook and charts.",
+        description: "Drag a month header onto another month to move its column. Select a cell to edit its sales value.",
         path: file!(),
         source: include_str!("worksheet.rs"),
         preview: cx
             .new(|_| Worksheet {
+                order: [0, 1, 2, 3, 4, 5],
+                moved: None,
                 sales: [
                     [32, 38, 35, 47, 51, 64],
                     [54, 48, 53, 42, 44, 39],
@@ -96,7 +133,16 @@ impl Render for Worksheet {
             .sales
             .map(|row| row.into_iter().map(u32::from).sum::<u32>());
         let largest = totals.into_iter().max().unwrap_or(1).max(1);
-        let addr = format!("{}{}", (b'B' + self.col as u8) as char, self.row + 2);
+        let selected_position = self
+            .order
+            .iter()
+            .position(|&month| month == self.col)
+            .unwrap();
+        let addr = format!(
+            "{}{}",
+            (b'B' + selected_position as u8) as char,
+            self.row + 2
+        );
         let parsed = self.draft.trim().parse::<u16>().ok();
         let grid = div()
             .w_full()
@@ -121,7 +167,36 @@ impl Render for Worksheet {
                     .font_weight(FontWeight::SEMIBOLD)
                     .child(label("1", 28., p))
                     .child(label("Region", 84., p))
-                    .children(MONTHS.map(|m| label(m, 53., p)))
+                    .children(self.order.map(|month| {
+                        let header = label(MONTHS[month], 53., p)
+                            .id(("month", month))
+                            .cursor_move()
+                            .hover(move |s| s.bg(rgb(p.selected)))
+                            .drag_over::<DragMonth>(move |s, _, _, _| {
+                                s.border_l_2().border_color(rgb(accent)).bg(rgb(p.selected))
+                            })
+                            .on_drag(DragMonth(month), |drag, _, _, cx| cx.new(|_| *drag))
+                            .on_drop(cx.listener(move |s, drag: &DragMonth, _, cx| {
+                                if move_month(&mut s.order, drag.0, month) {
+                                    let revision = s.moved.map_or(1, |(_, rev)| rev + 1);
+                                    s.moved = Some((drag.0, revision));
+                                    cx.notify();
+                                }
+                            }));
+                        if let Some((id, rev)) = self.moved
+                            && id == month
+                        {
+                            header
+                                .with_animation(
+                                    ("drop-highlight", rev),
+                                    Animation::new(std::time::Duration::from_millis(180)),
+                                    move |s, t| s.bg(rgb(accent).opacity(0.24 * (1. - t))),
+                                )
+                                .into_any_element()
+                        } else {
+                            header.into_any_element()
+                        }
+                    }))
                     .child(label("Trend", 88., p)),
             )
             .children(self.sales.iter().enumerate().map(|(r, values)| {
@@ -135,7 +210,8 @@ impl Render for Worksheet {
                         label(REGIONS[r], 84., p)
                             .when(self.row == r, |s| s.font_weight(FontWeight::SEMIBOLD)),
                     )
-                    .children(values.iter().enumerate().map(|(c, &value)| {
+                    .children(self.order.map(|c| {
+                        let value = values[c];
                         button::root(
                             ("cell", r * 6 + c),
                             format!("{} {}, {value} thousand dollars", REGIONS[r], MONTHS[c]),
@@ -276,5 +352,19 @@ impl Render for Worksheet {
                             ),
                     ),
             )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::move_month;
+    #[test]
+    fn moving_months_preserves_identity_and_relative_order() {
+        let mut order = [0, 1, 2, 3, 4, 5];
+        assert!(move_month(&mut order, 0, 3));
+        assert_eq!(order, [1, 2, 3, 0, 4, 5]);
+        assert!(move_month(&mut order, 0, 1));
+        assert_eq!(order, [0, 1, 2, 3, 4, 5]);
+        assert!(!move_month(&mut order, 2, 2));
     }
 }
