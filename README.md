@@ -111,6 +111,6 @@ Cratebook’s original code is available under the [MIT License](LICENSE). Bundl
 
 ## Verify a release candidate
 
-The independent **Quick feedback** workflow checks formatting, the locked Cargo manifest and the source highlighter's focused tests. It can finish before the full build. Platform-specific caches speed up later builds; the first build and builds after dependency or toolchain changes can be cold. Changes limited to informational screenshot reports do not start a release build.
+The independent **Quick feedback** workflow checks formatting, the locked Cargo manifest and the source highlighter's focused tests. It can finish before the full build. Platform-specific caches speed up later builds; the first build and builds after dependency or toolchain changes can be cold. Changes limited to documentation or screenshot tooling do not start a release build; packaged documentation is refreshed on the next build.
 
 Native tests on macOS and Windows, packaged macOS and Windows builds, and the web build run in parallel. The web job builds the gallery, packs the npm CLI, installs the tarball into an empty project and runs its asset check. Pages waits for all of these jobs. For a registry release, download the **cratebook-npm** artifact from the successful run for the intended commit, extract the tarball and run `npm publish ./cratebook-VERSION.tgz --access public` with the publisher account. The npm package is not yet published. The GPUI Jig Rust library is packaged in its own repository.

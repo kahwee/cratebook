@@ -3,13 +3,15 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - 'docs/visual-comparison/**'
-      - 'docs/visual-specifications.md'
+      - 'docs/**'
+      - 'scripts/visual-report.py'
+      - '.github/workflows/platform-screenshots.yml'
       - 'AGENTS.md'
   pull_request:
     paths-ignore:
-      - 'docs/visual-comparison/**'
-      - 'docs/visual-specifications.md'
+      - 'docs/**'
+      - 'scripts/visual-report.py'
+      - '.github/workflows/platform-screenshots.yml'
       - 'AGENTS.md'
   workflow_dispatch:
 
