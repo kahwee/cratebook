@@ -91,3 +91,9 @@ Switch thumbs, event dots and other circular indicators keep their shape.
 For custom GPUI themes, override individual fields of
 `gpui_jig::corners::Corners::STANDARD`. Aligned nested controls can use
 `Corners::inset(parent_radius, padding)` to keep their corners concentric.
+
+The **Contacts** and **Task planner** kitchen sinks use the same responsive
+[navigation and detail layout](src/stories/workbench.rs). In Contacts, search
+by name or team, mark favorites, and copy a work email. In Task planner, add a
+to-do to Inbox, schedule it for Today, check it off, then reopen it in Logbook.
+Both stories keep their fixture data in memory for the gallery session.

@@ -6,11 +6,13 @@ mod button;
 mod calendar;
 mod card_menu;
 mod checkbox;
+mod contacts;
 mod dialog;
 mod disclosure;
 mod drawer;
 mod kitchen_sink;
 mod meter;
+mod planner;
 mod popover;
 mod preview_card;
 mod progress;
@@ -23,6 +25,7 @@ mod table;
 mod tabs;
 mod toast;
 mod tool_hint;
+mod workbench;
 mod workspace_nav;
 mod zoom;
 
@@ -40,6 +43,8 @@ pub(crate) fn catalog(cx: &mut App) -> Vec<Story> {
     let [combobox, autocomplete] = search::stories(cx);
     vec![
         kitchen_sink::story(cx),
+        contacts::story(cx),
+        planner::story(cx),
         board::story(cx),
         calendar::story(cx),
         card_menu::story(cx),
