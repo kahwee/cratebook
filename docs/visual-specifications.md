@@ -1,8 +1,10 @@
 # Native gallery visual specifications
 
-The [captured comparison](visual-comparison/comparison.html) contains all 30 initial views from each platform, with [findings](visual-comparison/findings.txt), original PNGs and per-image dimensions. Download this directory and open the HTML locally for the interactive paired view. The images use source commit `0817caf`; later documentation commits do not change the pictured UI. Windows originals measure 1122 × 749 pixels; macOS originals measure 1024 × 674–677 because the runner constrained its windows. This set compares appearance at those recorded sizes and is not a size-matched pixel regression baseline.
+The canonical [Markdown comparison](visual-comparison/README.md) uses **960 × 640 client viewports at 1× on both platforms**. Every comparison image must be exactly 960 × 640 pixels, with no scaling or padding. See [AGENTS.md](../AGENTS.md#native-screenshot-comparison-standard) for the mandatory capture procedure. The normal app default remains 1120 × 720 logical pixels; the explicit capture profile uses 960 × 640 at fixed integer origin (32, 32).
 
-Use the same source commit, initial story state, theme and requested logical window bounds when comparing Windows with macOS. The reference capture set uses all 30 stories, Editor/light, Standard corners, Preview, the visible sidebar and the split title bar. Native builds accept `--story=1` through `--story=30` to select a fresh story at launch. The existing `--theme=editor` and `--dark` flags select appearance.
+The earlier [unmatched comparison](visual-comparison/comparison.html) is historical evidence only. Its 1122 × 749 Windows and 1024 × 674–677 macOS images do not meet the canonical standard.
+
+Use the same source commit, example state, theme and actual logical client bounds when comparing Windows with macOS. The canonical set uses all 30 stories, Editor/light, Standard corners, Preview, visible sidebar at its top and split title bar. `--capture` selects deterministic expanded examples; native builds accept `--story=1` through `--story=30`. `--capture-lower --story=2` adds the worksheet's lower viewport without changing dimensions. The `cratebook-capture` binary selects this same profile without launch arguments. Ordinary app launches keep their normal initial states.
 
 The `Capture macOS gallery comparison` workflow builds and captures the selected commit on `macos-26`. It records the commit and `sw_vers` output with the images. A browser screenshot is not a substitute for a native macOS capture.
 
