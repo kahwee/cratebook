@@ -10,7 +10,7 @@ Start with **Card & context menu**. Right-click the project card, open **Move to
 
 The gallery also includes settings, document tabs, sortable tables, buttons, radio groups, collapsibles, checkboxes, accordions, batch progress and a scrollable contributor list. Each story has a Rust source view.
 
-On macOS, run `cargo install --locked --path .` from the checkout, then launch `cratebook`. Use `cargo run --locked --release` during development, or `scripts/install.sh` for a Finder app in `~/Applications`.
+On macOS, install from [crates.io](https://crates.io/crates/cratebook) with `cargo install --locked cratebook`, then launch `cratebook`. Use `cargo run --locked --release` during development, or `scripts/install.sh` for a Finder app in `~/Applications`.
 
 For the browser, run `pnpm install --frozen-lockfile`, `pnpm build`, then `pnpm start` (Rust/WASM prerequisites below). Choose a different port with `pnpm start --port 4174`. To distribute a ready-to-run browser gallery locally, run `pnpm pack`. In another project run `pnpm add /path/to/cratebook-0.1.0.tgz` and `pnpm exec cratebook`. The tarball includes the compiled gallery and requires only Node.js at runtime.
 
@@ -76,4 +76,4 @@ Cratebook’s original code is available under the [MIT License](LICENSE). Bundl
 
 ## Verify a release candidate
 
-The native and web jobs run in parallel. The web job builds the gallery, packs the npm CLI, installs the tarball into an empty project and runs its asset check. Pages waits for both jobs. For a registry release, download the **cratebook-npm** artifact from the successful run for the intended commit, extract the tarball and run `npm publish ./cratebook-VERSION.tgz --access public` with the publisher account. The GPUI Jig Rust library is packaged in its own repository.
+Native tests, the packaged macOS executable build, and the web build run in parallel. The web job builds the gallery, packs the npm CLI, installs the tarball into an empty project and runs its asset check. Pages waits for all three jobs. For a registry release, download the **cratebook-npm** artifact from the successful run for the intended commit, extract the tarball and run `npm publish ./cratebook-VERSION.tgz --access public` with the publisher account. The GPUI Jig Rust library is packaged in its own repository.
