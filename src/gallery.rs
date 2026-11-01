@@ -34,7 +34,7 @@ impl Gallery {
             theme_picker: ui::RadioGroup::new(cx),
         }
     }
-    fn story_cover(&self, compact: bool, p: Palette, tahoe: bool, editor: bool) -> Div {
+    fn story_cover(&self, compact: bool, p: Palette, editor: bool) -> Div {
         let story = &self.stories[self.selected];
         if !compact || editor {
             return div()
@@ -62,8 +62,8 @@ impl Gallery {
         }
         div()
             .rounded_xl()
-            .bg(rgb(if tahoe { 0x254668 } else { 0x173c34 }))
-            .text_color(rgb(0xf4fbef))
+            .bg(rgb(p.sidebar))
+            .text_color(rgb(p.text))
             .p(if compact { px(20.) } else { px(30.) })
             .child(
                 div()
@@ -73,13 +73,13 @@ impl Gallery {
                     .child(
                         div()
                             .text_size(px(12.))
-                            .text_color(rgb(if tahoe { 0xc8e3ff } else { 0xb6d9bf }))
+                            .text_color(rgb(p.muted))
                             .child("GPUI JIG   /   COMPONENT LIBRARY"),
                     )
                     .child(
                         div()
                             .text_size(px(13.))
-                            .text_color(rgb(if tahoe { 0xc8e3ff } else { 0xc4e8b0 }))
+                            .text_color(rgb(p.muted))
                             .child(format!(
                                 "{:02} / {:02}",
                                 self.selected + 1,
@@ -99,7 +99,7 @@ impl Gallery {
                     .mt_1()
                     .max_w(px(520.))
                     .text_size(px(14.))
-                    .text_color(rgb(if tahoe { 0xdaeaff } else { 0xd2e6d9 }))
+                    .text_color(rgb(p.text))
                     .child(story.description),
             )
     }
@@ -217,16 +217,6 @@ impl Gallery {
             )
     }
     fn phone_navigation(&self, p: Palette, cx: &Context<Self>) -> Stateful<Div> {
-        let active = if matches!(
-            *cx.global::<ui::Theme>(),
-            ui::Theme::Tahoe | ui::Theme::Editor
-        ) {
-            p.text
-        } else if p == Palette::LIGHT {
-            0x23553d
-        } else {
-            0xc6eeb9
-        };
         navigation_menu::root("phone-navigation", "Gallery views")
             .flex()
             .flex_shrink_0()
@@ -255,7 +245,7 @@ impl Gallery {
                         .rounded_md()
                         .when(current, |s| {
                             s.bg(rgb(p.selected))
-                                .text_color(rgb(active))
+                                .text_color(rgb(p.text))
                                 .font_weight(FontWeight::SEMIBOLD)
                         })
                         .focus_visible(|s| s.underline())
@@ -408,28 +398,22 @@ impl Gallery {
 impl Render for Gallery {
     fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let compact = ui::compact_layout(window);
-        let appearance = *cx.global::<Palette>();
         let selected_theme = *cx.global::<ui::Theme>();
         let tahoe = selected_theme == ui::Theme::Tahoe;
         let editor = selected_theme == ui::Theme::Editor;
-        let p = if tahoe || editor {
-            selected_theme.palette(appearance)
-        } else {
-            appearance
-        };
+        let p = ui::preview_palette(cx);
         let story = &self.stories[self.selected];
-        let theme = ui::preview_palette(cx);
         let source = story.source;
         let preview = card::root("story-preview", "Live preview")
-            .bg(rgb(theme.canvas))
-            .text_color(rgb(theme.text))
+            .bg(rgb(p.canvas))
+            .text_color(rgb(p.text))
             .min_w_0()
             .rounded_lg()
             .when(tahoe, |s| s.rounded_xl().shadow_sm())
             .when(editor, |s| s.rounded_sm())
             .overflow_hidden()
             .border_1()
-            .border_color(rgb(theme.border))
+            .border_color(rgb(p.border))
             .child(story.preview.clone());
         let content =
             scroll_area::viewport((story.title, usize::from(self.panel == Panel::Source)))
@@ -444,7 +428,7 @@ impl Render for Gallery {
                 .flex()
                 .flex_col()
                 .gap(px(10.))
-                .child(self.story_cover(compact, p, tahoe, editor))
+                .child(self.story_cover(compact, p, editor))
                 .child(
                     div()
                         .flex()
@@ -499,7 +483,7 @@ impl Render for Gallery {
                         .when(!compact || self.panel == Panel::Canvas, |s| {
                             s.child(
                                 self.theme_picker
-                                    .root("theme-picker", "Preview theme")
+                                    .root("theme-picker", "Gallery theme")
                                     .flex()
                                     .items_center()
                                     .rounded_lg()
@@ -541,8 +525,8 @@ impl Render for Gallery {
                         div()
                             .rounded_lg()
                             .p_4()
-                            .bg(rgb(if editor { 0x232326 } else { 0x192722 }))
-                            .text_color(rgb(if editor { 0xe4e4e6 } else { 0xe0eee4 }))
+                            .bg(rgb(p.sidebar))
+                            .text_color(rgb(p.text))
                             .child(
                                 div()
                                     .flex()
