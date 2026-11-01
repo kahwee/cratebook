@@ -21,7 +21,7 @@ The packaging script targets x86-64 MSVC. ARM64 and signing are not part of this
 ## Windows preview 0.1.2 validation, 2026-10-31
 
 - Native Windows MSVC release build and the existing Cratebook table test passed.
-- GPUI Jig 0.1.3 passed 5 state/calendar tests and 10 documentation examples on Windows.
+- GPUI Jig 0.1.4 passed 5 state/calendar tests and 10 documentation examples on Windows. The preview includes the updated corner presets and Contacts/Tasks stories.
 - The PowerShell package script produced a ZIP with the executable, documentation and license notices. ZIP integrity, SHA-256, the x86-64 PE header and GUI subsystem were checked.
 - The executable extracted into a separate directory launched with `--theme=tahoe --dark`. Windows reported a responding `Cratebook` window, and the launch log was empty.
 - Interactive checks above remain pending. The available Computer Use runtime exposed no native app-control API, so rendering, resizing, keyboard input, clipboard and close behavior were not visually verified. Treat this release as a Windows preview.
