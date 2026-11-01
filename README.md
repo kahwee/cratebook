@@ -31,6 +31,8 @@ Many bundled stories use the shared unstyled primitives in [GPUI Jig](https://gi
 
 Cratebook and GPUI Jig use [`gpui-pre`](https://crates.io/crates/gpui-pre), a published snapshot of [Zed's GPUI framework](https://github.com/zed-industries/zed/tree/main/crates/gpui) maintained by the [Longbridge GPUI Kit project](https://github.com/longbridge/gpui-component). Zed also publishes an official [`gpui` crate](https://crates.io/crates/gpui), but its published releases can lag behind the GPUI code Zed uses directly from its repository. The snapshot lets Cratebook use a more recent GPUI version from crates.io; it is not published by Zed.
 
+Cratebook also uses [`gpui-pre-platform`](https://crates.io/crates/gpui-pre-platform) to select the appropriate platform backends for native windows and the browser. It is Longbridge's published snapshot of Zed's [`gpui_platform`](https://github.com/zed-industries/zed/tree/main/crates/gpui_platform), from the same versioned snapshot family as `gpui-pre`. Both are currently at 0.3.10 in Cratebook.
+
 The desktop component sidebar docks on the right. Its heading and visibility control share the integrated title bar. Choose **Split title bar** to switch between split and unified chrome. Launch the native Tahoe theme with `cratebook --theme=tahoe`, or add `--dark` for its dark appearance.
 
 ## Add a theme
