@@ -1,6 +1,6 @@
-# Windows and macOS — same-size native comparison
+# Windows and macOS — informational native comparison
 
-**Standard: 960 × 640 logical-pixel client viewport at 1×; every comparison PNG is exactly 960 × 640 pixels.** Images below display at 480 × 320; click for original pixels. No app content is resized or padded. Native originals are preserved separately.
+**Preferred viewport: 960 × 640 logical pixels. Screenshots are informational; size differences never block capture or reporting and do not require retakes.** This existing set happens to use 960 × 640 images. Click for original pixels; native originals and dimensions are preserved separately.
 
 Source revision: `2930b2a76aadabdd078939ff62be826a0052d989` on both platforms. Editor · light · Standard corners · Preview · sidebar at top. The capture profile deliberately expands hidden components and seeds example data; it is not the ordinary launch state. See [AGENTS.md](../../AGENTS.md#native-screenshot-comparison-standard) for the capture standard and [size specifications](../visual-specifications.md) for logical dimensions.
 

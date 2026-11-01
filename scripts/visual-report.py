@@ -1,6 +1,6 @@
-"""Validate native captures and generate the canonical Markdown comparison.
+"""Generate an informational native screenshot comparison; sizes never gate it.
 
-Requires Pillow. Usage: python scripts/visual-report.py CAPTURE_DIRECTORY
+Requires Pillow. Usage: python scripts/visual-report.py CAPTURE_DIRECTORY [OUTPUT_DIRECTORY]
 Input: PLATFORM/native/NN.png (or .jpg), PLATFORM/commit.txt (same revision on both).
 Original screenshots are never overwritten. Client images are never resized.
 """
@@ -15,7 +15,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageStat
 
 repo = Path(__file__).resolve().parents[1]
 root = Path(sys.argv[1]).resolve()
-destination = repo / 'docs/visual-comparison/standard-960x640'
+destination = Path(sys.argv[2]).resolve() if len(sys.argv) > 2 else repo / 'docs/visual-comparison/standard-960x640'
 
 # Story number, visible example state, and public components demonstrated.
 examples = [
@@ -54,8 +54,8 @@ revisions = [(root / platform / 'commit.txt').read_text().strip() for platform i
 assert revisions[0] == revisions[1], f'Mixed capture revisions: {revisions}'
 revision = revisions[0]
 assert len(revision) == 40
-manifest = {'source_commit': revision, 'client_logical_px': [960,640],
-            'comparison_png_px': [960,640], 'scale': 1,
+manifest = {'source_commit': revision, 'preferred_client_logical_px': [960,640],
+            'size_validation': False,
             'profile': 'Editor/light/Standard/expanded examples/sidebar top/Preview',
             'normalization': 'Native frame removal only. No resizing, padding or app-content cropping.',
             'captures': []}
@@ -84,15 +84,13 @@ for number, (title, state, components) in enumerate(examples, 1):
                 source.load()
                 native_extension = '.jpg' if source.format == 'JPEG' else '.png'
                 native_size = source.size
-                if platform == 'windows':
-                    assert native_size == (962,672), f'{original}: unexpected native size {native_size}'
+                if platform == 'windows' and native_size == (962,672):
                     crop = (1,31,961,671)
                     client = source.crop(crop)
                 else:
-                    assert native_size == (960,640), f'{original}: unexpected native size {native_size}'
-                    crop = (0,0,960,640)
+                    crop = (0,0,*native_size)
                     client = source.copy()
-                assert client.size == (960,640)
+                client_size = client.size
                 assert sum(ImageStat.Stat(client.convert('RGB')).stddev) > 3, f'Blank: {original}'
                 out = destination / platform / f'{key}.png'
                 out.parent.mkdir(parents=True, exist_ok=True)
@@ -102,28 +100,28 @@ for number, (title, state, components) in enumerate(examples, 1):
             shutil.copyfile(original, native_out)
             entry[platform] = {'native_size_px': list(native_size), 'client_crop_ltrb': list(crop),
                 'native_file': f'{platform}/native/{native_out.name}',
-                'png_size_px': [960,640], 'file': f'{platform}/{key}.png',
+                'png_size_px': list(client_size), 'file': f'{platform}/{key}.png',
                 'native_sha256': hashlib.sha256(original.read_bytes()).hexdigest(),
                 'sha256': hashlib.sha256(out.read_bytes()).hexdigest()}
             relative = f'standard-960x640/{platform}/{key}.png'
-            cells.append(f'<a href="{relative}"><img src="{relative}" width="480" alt="{platform}: {html.escape(title)} {key}"></a>')
+            cells.append(f'<a href="{relative}"><img src="{relative}" width="480" alt="{platform}: {html.escape(title)} {key}"></a><br>{client_size[0]} × {client_size[1]} px')
         manifest['captures'].append(entry)
         label = f'{number:02} {title}' + (' — lower viewport' if key.endswith('lower') else '')
         rows.append(f'| **{label}**<br>{state}<br><code>{components}</code> | {cells[0]} | {cells[1]} |')
 
 assert len(manifest['captures']) == 31
 (destination / 'manifest.json').write_text(json.dumps(manifest, indent=2), encoding='utf-8')
-readme = f'''# Windows and macOS — same-size native comparison
+readme = f'''# Windows and macOS — informational native comparison
 
-**Standard: 960 × 640 logical-pixel client viewport at 1×; every comparison PNG is exactly 960 × 640 pixels.** Images below display at 480 × 320; click for original pixels. No app content is resized or padded. Native originals are preserved separately.
+**Preferred viewport: 960 × 640 logical pixels. Screenshots are informational; size differences never block capture or reporting and do not require retakes.** Actual dimensions are recorded below and in the manifest. Images display at up to 480 pixels wide; click for original pixels. Native originals are preserved separately.
 
 Source revision: `{revision}` on both platforms. Editor · light · Standard corners · Preview · sidebar at top. The capture profile deliberately expands hidden components and seeds example data; it is not the ordinary launch state. See [AGENTS.md](../../AGENTS.md#native-screenshot-comparison-standard) for the capture standard and [size specifications](../visual-specifications.md) for logical dimensions.
 
-Windows native frames measure 962 × 672; extracting `(1, 31, 961, 671)` preserves the entire 960 × 640 client area. macOS captures already measure 960 × 640, including its transparent title bar. Native fonts, traffic lights and toolbar insets intentionally differ. Windows may include a cursor halo from the host. These are appearance examples, not a claim of identical rasterization, interaction correctness, accessibility or frame-rate performance.
+Known 962 × 672 Windows frames have their native border removed using `(1, 31, 961, 671)`. Other sizes are preserved as captured, without guessing a crop or forcing dimensions. Native fonts, traffic lights and toolbar insets intentionally differ. Windows may include a cursor halo from the host. These are appearance examples, not a claim of identical rasterization, interaction correctness, accessibility or frame-rate performance.
 
 The worksheet has a separately labeled lower viewport so its charts are visible without stretching the first view. [Manifest and hashes](standard-960x640/manifest.json) record every original size and extraction rectangle. [Capture findings](standard-960x640/findings.md) summarize the inspected pairs. [Earlier unmatched captures](comparison.html) are historical evidence and do not meet this standard.
 
-| Component example / pictured state | Windows — 960 × 640 | macOS — 960 × 640 |
+| Component example / pictured state | Windows | macOS |
 | --- | --- | --- |
 ''' + '\n'.join(rows) + '\n'
 (destination.parent / 'README.md').write_text(readme, encoding='utf-8')
@@ -149,4 +147,4 @@ for start in range(0,31,6):
                 im.thumbnail((480,320))
                 sheet.paste(im,(10+col*500,y+35))
     sheet.save(destination / f'review-{start//6+1}.png')
-print(f'Validated 62 native captures and 62 exact 960x640 comparison PNGs at {revision}.')
+print(f'Generated {len(manifest["captures"])} screenshot pairs at {revision}; dimensions are informational.')

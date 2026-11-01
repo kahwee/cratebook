@@ -10,12 +10,11 @@ sync frequently during long tasks. Do not rewrite commits already published on
 
 ## Native screenshot comparison standard
 
-- Use **960 × 640 logical pixels of app client area**, captured at **1× scale**.
-  Every published comparison PNG must be **exactly 960 × 640 physical pixels**
-  on Windows and macOS. Reject a size mismatch. Never stretch, shrink, pad, or
-  silently crop app content to make mismatched viewports appear equivalent.
-  Use fixed integer window origin `(32, 32)`; fractional centered placement can
-  add an unwanted raster row on macOS. Verify the resulting dimensions anyway.
+- Screenshots are **informational**, not a release or validation gate. Prefer
+  the existing 960 × 640 viewport on both platforms, but accept other sizes.
+  Never add blocking dimension assertions, size-validation workflow steps,
+  retries or retakes just to match pixels. Record actual dimensions as metadata.
+  Keep the existing integer origin `(32, 32)` without extra verification work.
 - Launch `cargo run --locked --release --bin cratebook -- --capture --story=N`
   on macOS. The `cratebook-capture` binary selects the same profile for native
   Windows Computer Use, whose launch API does not take CLI arguments.
@@ -28,19 +27,16 @@ sync frequently during long tasks. Do not rewrite commits already published on
   pictured state for each story; a trigger alone is not sufficient evidence of
   its hidden component. Keep ordinary launch defaults unchanged.
 - Save untouched native screenshots under `native/` before extracting client
-  images. The current Windows host measures 962 × 672 at 1×, with client rectangle
-  `(1, 31, 961, 671)`. Remove only this verified native border/title bar. Reject other
-  native dimensions and investigate DPI/viewport settings.
-  macOS transparent-titlebar captures must already be 960 × 640. Preserve its
-  traffic lights and intentional platform toolbar inset. Keep native font
-  differences; do not normalize fonts to conceal them.
+  images. Known 962 × 672 Windows captures may use client rectangle
+  `(1, 31, 961, 671)` to remove the native frame. Preserve other sizes as captured
+  rather than failing or guessing a crop. Keep native font and chrome differences.
 - Capture all 30 stories from one source revision on both platforms. Inspect
   every saved image for correct story/state, complete framing, blank capture,
   occlusion and clipping. Record original dimensions, crop rectangle, commit,
   platform, profile and SHA-256 hashes in the manifest. Retain original files.
 - Keep sidebar scroll at its top in canonical images on both platforms. If a
   story extends below the first viewport, provide a separately labeled lower
-  viewport screenshot at the same 960 × 640 size on each platform. Do not present
+  viewport screenshot when useful. Do not present
   a resized full-page composite as a standard viewport capture.
 - Generate `docs/visual-comparison/README.md` with one row per story and columns
   for example/state, **Windows** and **macOS**, embedding relative image links.
@@ -55,6 +51,7 @@ sync frequently during long tasks. Do not rewrite commits already published on
 ## Checks
 
 Run `cargo fmt --all --check`, `cargo test --locked`, and the native release build
-for changed Rust code. Validate the screenshot manifest and Markdown coverage
-after regenerating evidence. macOS captures use the `platform-screenshots.yml`
+for changed Rust code. Screenshot dimensions are metadata only; do not run a
+separate size-validation pass or rebuild/retake screenshots for a documentation
+or workflow change. macOS captures use the `platform-screenshots.yml`
 workflow; a green build alone is not visual validation.

@@ -1,6 +1,6 @@
 # Native gallery visual specifications
 
-The canonical [Markdown comparison](visual-comparison/README.md) uses **960 × 640 client viewports at 1× on both platforms**. Every comparison image must be exactly 960 × 640 pixels, with no scaling or padding. See [AGENTS.md](../AGENTS.md#native-screenshot-comparison-standard) for the mandatory capture procedure. The normal app default remains 1120 × 720 logical pixels; the explicit capture profile uses 960 × 640 at fixed integer origin (32, 32).
+The [Markdown comparison](visual-comparison/README.md) is informational. Prefer the existing **960 × 640 client viewport** on both platforms, but accept other image sizes and record actual dimensions. There is no blocking size validation or requirement to retake mismatched images. See [AGENTS.md](../AGENTS.md#native-screenshot-comparison-standard) for the capture guidance. The normal app default remains 1120 × 720 logical pixels; the capture profile uses 960 × 640 at integer origin (32, 32).
 
 The earlier [unmatched comparison](visual-comparison/comparison.html) is historical evidence only. Its 1122 × 749 Windows and 1024 × 674–677 macOS images do not meet the canonical standard.
 
