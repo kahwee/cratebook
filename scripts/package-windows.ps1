@@ -33,6 +33,7 @@ try {
     $licenses = Join-Path $stage "licenses"
     New-Item -ItemType Directory -Force -Path $licenses | Out-Null
     Copy-Item -LiteralPath assets/OFL.txt, vendor/gpui-pre-web/LICENSE-APACHE -Destination $licenses
+    Copy-Item -LiteralPath assets/phosphor/LICENSE -Destination (Join-Path $licenses "Phosphor-MIT.txt")
     $archive = Join-Path "dist" "$name.zip"
     Compress-Archive -Path "$stage/*" -DestinationPath $archive -Force
     $stream = [System.IO.File]::OpenRead((Resolve-Path -LiteralPath $archive).Path)

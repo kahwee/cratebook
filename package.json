@@ -8,7 +8,7 @@
   "packageManager": "pnpm@12.15.0",
   "engines": { "node": ">=20" },
   "bin": { "cratebook": "bin/cratebook.mjs" },
-  "files": ["bin", "web/index.html", "web/pkg/cratebook.js", "web/pkg/cratebook_bg.wasm", "assets/OFL.txt", "LICENSE", "THIRD_PARTY.md", "vendor/gpui-pre-web/LICENSE-APACHE"],
+  "files": ["bin", "web/index.html", "web/pkg/cratebook.js", "web/pkg/cratebook_bg.wasm", "assets/OFL.txt", "assets/phosphor/LICENSE", "LICENSE", "THIRD_PARTY.md", "vendor/gpui-pre-web/LICENSE-APACHE"],
   "scripts": {
     "build": "sh scripts/build-web.sh",
     "start": "node bin/cratebook.mjs",

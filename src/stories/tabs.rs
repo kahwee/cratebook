@@ -79,17 +79,11 @@ impl Tabs {
                 .focus_visible(|s| s.underline())
                 .when(!compact, |s| {
                     s.child(
-                        div()
-                            .w(px(10.))
-                            .h(px(13.))
+                        svg()
+                            .path("phosphor/file-text.svg")
+                            .size(px(15.))
                             .flex_shrink_0()
-                            .border_1()
-                            .border_color(rgb(p.muted))
-                            .rounded(px(2.))
-                            .flex()
-                            .items_center()
-                            .justify_center()
-                            .child(div().w(px(4.)).h(px(1.)).bg(rgb(p.muted))),
+                            .text_color(rgb(p.muted)),
                     )
                 })
                 .when(index == 0 && self.dirty, |s| {
@@ -137,7 +131,12 @@ impl Tabs {
                         .text_color(rgb(p.muted))
                         .focus_visible(|s| s.underline())
                         .hover(move |s| s.bg(rgb(p.selected)))
-                        .child("×")
+                        .child(
+                            svg()
+                                .path("phosphor/x.svg")
+                                .size(px(12.))
+                                .text_color(rgb(p.muted)),
+                        )
                         .on_click(cx.listener(move |s, _, w, cx| {
                             s.tabs.remove(pos);
                             if s.active == index && !s.tabs.is_empty() {

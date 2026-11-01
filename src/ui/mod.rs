@@ -43,3 +43,4 @@ pub(crate) fn control_height(window: &gpui::Window) -> gpui::Pixels {
 }
 mod month_picker;
 pub(crate) use month_picker::month_picker;
+pub(crate) mod icons;

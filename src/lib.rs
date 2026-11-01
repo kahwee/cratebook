@@ -57,12 +57,16 @@ fn open_gallery(cx: &mut App) {
 }
 #[cfg(not(target_family = "wasm"))]
 pub fn run_native() {
-    gpui_platform::application().run(open_gallery);
+    gpui_platform::application()
+        .with_assets(ui::icons::Icons)
+        .run(open_gallery);
 }
 
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn run_web() {
     gpui_platform::web_init();
-    gpui_platform::single_threaded_web().run(open_gallery);
+    gpui_platform::single_threaded_web()
+        .with_assets(ui::icons::Icons)
+        .run(open_gallery);
 }
