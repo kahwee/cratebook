@@ -163,7 +163,7 @@ impl Render for Tabs {
         let strip = tabs::list("tab-strip", "Open documents")
             .overflow_x_scroll()
             .flex()
-            .h(px(if ui::compact_layout(w) { 52. } else { 40. }))
+            .h(px(if ui::compact_layout(w) { 54. } else { 40. }))
             .py_1()
             .px_1()
             .gap(px(3.))
