@@ -26,6 +26,7 @@ mod tabs;
 mod toast;
 mod tool_hint;
 mod workbench;
+mod worksheet;
 mod workspace_nav;
 mod zoom;
 
@@ -43,6 +44,7 @@ pub(crate) fn catalog(cx: &mut App) -> Vec<Story> {
     let [combobox, autocomplete] = search::stories(cx);
     vec![
         kitchen_sink::story(cx),
+        worksheet::story(cx),
         contacts::story(cx),
         planner::story(cx),
         board::story(cx),
