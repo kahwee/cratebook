@@ -1,7 +1,7 @@
 """Validate native captures and generate the canonical Markdown comparison.
 
 Requires Pillow. Usage: python scripts/visual-report.py CAPTURE_DIRECTORY
-Input: PLATFORM/native/NN.png, PLATFORM/commit.txt (same revision on both).
+Input: PLATFORM/native/NN.png (or .jpg), PLATFORM/commit.txt (same revision on both).
 Original screenshots are never overwritten. Client images are never resized.
 """
 from pathlib import Path
@@ -60,6 +60,16 @@ manifest = {'source_commit': revision, 'client_logical_px': [960,640],
             'normalization': 'Native frame removal only. No resizing, padding or app-content cropping.',
             'captures': []}
 destination.mkdir(parents=True, exist_ok=True)
+manifest['platform_metadata'] = {}
+for platform in ('windows', 'macos'):
+    manifest['platform_metadata'][platform] = {}
+    for name in ('commit.txt', 'system.txt', 'capture.txt'):
+        metadata = root / platform / name
+        if metadata.exists():
+            target = destination / platform / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(metadata, target)
+            manifest['platform_metadata'][platform][name] = metadata.read_text().strip()
 rows = []
 for number, (title, state, components) in enumerate(examples, 1):
     variants = [f'{number:02}'] + (['02-lower'] if number == 2 else [])
@@ -68,8 +78,11 @@ for number, (title, state, components) in enumerate(examples, 1):
         cells = []
         for platform in ('windows', 'macos'):
             original = root / platform / 'native' / f'{key}.png'
+            if not original.exists():
+                original = original.with_suffix('.jpg')
             with Image.open(original) as source:
                 source.load()
+                native_extension = '.jpg' if source.format == 'JPEG' else '.png'
                 native_size = source.size
                 if platform == 'windows':
                     assert native_size == (962,672), f'{original}: unexpected native size {native_size}'
@@ -84,10 +97,11 @@ for number, (title, state, components) in enumerate(examples, 1):
                 out = destination / platform / f'{key}.png'
                 out.parent.mkdir(parents=True, exist_ok=True)
                 client.save(out)
-            native_out = destination / platform / 'native' / original.name
+            native_out = destination / platform / 'native' / f'{key}{native_extension}'
             native_out.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(original, native_out)
             entry[platform] = {'native_size_px': list(native_size), 'client_crop_ltrb': list(crop),
+                'native_file': f'{platform}/native/{native_out.name}',
                 'png_size_px': [960,640], 'file': f'{platform}/{key}.png',
                 'native_sha256': hashlib.sha256(original.read_bytes()).hexdigest(),
                 'sha256': hashlib.sha256(out.read_bytes()).hexdigest()}

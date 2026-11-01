@@ -4,6 +4,9 @@ Pull the latest `main` before starting work and before pushing. Preserve other
 contributors' changes. Push completed, validated changes to `main` when the user
 has authorized that workflow; never force push. Record the exact source revision
 used for screenshots rather than silently mixing builds from different commits.
+Rebase local unpushed commits onto the latest `origin/main` before each push;
+sync frequently during long tasks. Do not rewrite commits already published on
+`main`. Freeze a shared source revision while capturing a comparison set.
 
 ## Native screenshot comparison standard
 
