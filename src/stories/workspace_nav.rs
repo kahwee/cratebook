@@ -12,7 +12,7 @@ pub(super) fn story(cx: &mut App) -> Story {
         preview: cx
             .new(|_| Preview {
                 section: 0,
-                menu_open: false,
+                menu_open: crate::capture_mode(),
                 dense: false,
             })
             .into(),

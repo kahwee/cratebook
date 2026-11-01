@@ -231,12 +231,19 @@ impl Gallery {
                 )
             })
             .child(
-                scroll_area::viewport("library-list")
-                    .flex_1()
-                    .overflow_x_hidden()
-                    .min_h_0()
-                    .overflow_y_scroll()
-                    .child(list),
+                scroll_area::viewport((
+                    "library-list",
+                    if crate::capture_mode() {
+                        self.selected
+                    } else {
+                        0
+                    },
+                ))
+                .flex_1()
+                .overflow_x_hidden()
+                .min_h_0()
+                .overflow_y_scroll()
+                .child(list),
             )
     }
     fn phone_navigation(&self, p: Palette, cx: &Context<Self>) -> Stateful<Div> {
@@ -652,6 +659,18 @@ impl Render for Gallery {
                 s.child(self.library(false, p, cx))
             });
         div()
+            .id("gallery")
+            .when(crate::capture_mode(), |s| {
+                s.on_key_down(cx.listener(|s, event: &KeyDownEvent, _, cx| {
+                    match event.keystroke.key.as_str() {
+                        "f8" => s.selected = (s.selected + 1) % s.stories.len(),
+                        "f7" => s.selected = (s.selected + s.stories.len() - 1) % s.stories.len(),
+                        _ => return,
+                    }
+                    cx.stop_propagation();
+                    cx.notify();
+                }))
+            })
             .size_full()
             .when(cfg!(target_os = "windows"), |s| s.font_family("Segoe UI"))
             .flex()

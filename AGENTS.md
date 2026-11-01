@@ -14,6 +14,8 @@ used for screenshots rather than silently mixing builds from different commits.
 - Launch `cargo run --locked --release --bin cratebook -- --capture --story=N`
   on macOS. The `cratebook-capture` binary selects the same profile for native
   Windows Computer Use, whose launch API does not take CLI arguments.
+  In the capture profile, focus a gallery control once, then F8/F7 selects the
+  next/previous story and resets its sidebar viewport to the canonical top.
 - Use Editor, light, Standard corners, Preview, split toolbar and visible sidebar.
   The capture profile uses deterministic expanded examples: show popup contents,
   suggestions, a tooltip, an expanded disclosure and a saved toast. Document the
