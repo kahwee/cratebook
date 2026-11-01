@@ -54,7 +54,29 @@ The gallery covers all 37 Base UI families across 24 stories. Open **Rust source
 | Inspect project details or confirm a command | Dialog, Alert Dialog, Drawer, Popover, Preview Card, Tooltip |
 | Browse contributors and confirm a save | Avatar, Scroll Area, Toast |
 
-Overlays are bounded canvas demonstrations. The modal examples demonstrate triggers, content and confirmation; production applications supply focus trapping and window-level modality. The form and search examples accept simple keyboard entry and backspace. Production text editors supply selection, clipboard and IME through GPUI’s input handler. The zoom example demonstrates stepper and keyboard slider input.
+Overlays are bounded canvas demonstrations. The modal examples demonstrate triggers, content and confirmation; production applications supply focus trapping and window-level modality. The form and search examples demonstrate simple keyboard entry, backspace and clipboard paste. Production text editors supply selection, full editing and IME through GPUI’s input handler. The zoom example demonstrates stepper and keyboard slider input.
+
+## Calendar, corners and workbench examples
+
+Calendar and Project board share the same [month picker](src/ui/month_picker.rs).
+In Calendar, a selected date opens its agenda. In Project board, select a task
+and choose its due date. Tab into the grid once, then use arrow keys to move by
+day or week, Home and End for week boundaries, and Page Up or Page Down for
+months. The Previous and Next controls also work with pointer and touch input.
+
+Use **Corners** beside the theme selector to cycle through Standard, Round and
+Square. The setting applies across the current session. Standard uses logical
+pixel radii of 6 for controls, 10 for cards, 14 for dialogs and 10 for toasts.
+Switch thumbs, event dots and other circular indicators keep their shape.
+For custom GPUI themes, override individual fields of
+`gpui_jig::corners::Corners::STANDARD`. Aligned nested controls can use
+`Corners::inset(parent_radius, padding)` to keep their corners concentric.
+
+The **Contacts** and **Task planner** kitchen sinks use the same responsive
+[navigation and detail layout](src/stories/workbench.rs). In Contacts, search
+by name or team, mark favorites, and copy a work email. In Task planner, add a
+to-do to Inbox, schedule it for Today, check it off, then reopen it in Logbook.
+Both stories keep their fixture data in memory for the gallery session.
 
 ## Add a story
 
@@ -89,24 +111,4 @@ Cratebook’s original code is available under the [MIT License](LICENSE). Bundl
 
 ## Verify a release candidate
 
-Native tests, the packaged macOS executable build, and the web build run in parallel. The web job builds the gallery, packs the npm CLI, installs the tarball into an empty project and runs its asset check. Pages waits for all three jobs. For a registry release, download the **cratebook-npm** artifact from the successful run for the intended commit, extract the tarball and run `npm publish ./cratebook-VERSION.tgz --access public` with the publisher account. The GPUI Jig Rust library is packaged in its own repository.
-
-Calendar and Project board share the same [month picker](src/ui/month_picker.rs).
-In Calendar, a selected date opens its agenda. In Project board, select a task
-and choose its due date. Tab into the grid once, then use arrow keys to move by
-day or week, Home and End for week boundaries, and Page Up or Page Down for
-months. The Previous and Next controls also work with pointer and touch input.
-
-Use **Corners** beside the theme selector to cycle through Standard, Round and
-Square. The setting applies across the current session. Standard uses logical
-pixel radii of 6 for controls, 10 for cards, 14 for dialogs and 10 for toasts.
-Switch thumbs, event dots and other circular indicators keep their shape.
-For custom GPUI themes, override individual fields of
-`gpui_jig::corners::Corners::STANDARD`. Aligned nested controls can use
-`Corners::inset(parent_radius, padding)` to keep their corners concentric.
-
-The **Contacts** and **Task planner** kitchen sinks use the same responsive
-[navigation and detail layout](src/stories/workbench.rs). In Contacts, search
-by name or team, mark favorites, and copy a work email. In Task planner, add a
-to-do to Inbox, schedule it for Today, check it off, then reopen it in Logbook.
-Both stories keep their fixture data in memory for the gallery session.
+Native tests on macOS and Windows, packaged macOS and Windows builds, and the web build run in parallel. The web job builds the gallery, packs the npm CLI, installs the tarball into an empty project and runs its asset check. Pages waits for all of these jobs. For a registry release, download the **cratebook-npm** artifact from the successful run for the intended commit, extract the tarball and run `npm publish ./cratebook-VERSION.tgz --access public` with the publisher account. The npm package is not yet published. The GPUI Jig Rust library is packaged in its own repository.
