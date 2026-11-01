@@ -25,9 +25,25 @@ pub(crate) struct Gallery {
 
 impl Gallery {
     pub(crate) fn new(cx: &mut Context<Self>) -> Self {
+        let stories = stories::catalog(cx);
+        let selected = if cfg!(target_family = "wasm") {
+            0
+        } else {
+            std::env::args()
+                .find_map(|arg| arg.strip_prefix("--story=").map(str::to_owned))
+                .map(|number| {
+                    let number: usize = number.parse().expect("--story must be a one-based number");
+                    assert!(
+                        (1..=stories.len()).contains(&number),
+                        "--story is outside the catalog"
+                    );
+                    number - 1
+                })
+                .unwrap_or(0)
+        };
         Self {
-            stories: stories::catalog(cx),
-            selected: 0,
+            stories,
+            selected,
             panel: Panel::Canvas,
             sidebar_visible: true,
             split_titlebar: true,

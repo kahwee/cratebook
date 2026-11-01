@@ -1,0 +1,65 @@
+name: Capture macOS gallery comparison
+on:
+  workflow_dispatch:
+    inputs:
+      theme:
+        description: Gallery theme
+        type: choice
+        options: [editor, tahoe, base, mint]
+        default: editor
+      appearance:
+        description: Appearance
+        type: choice
+        options: [light, dark]
+        default: light
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - run: cargo build --locked --release --bin cratebook
+      - name: Capture every story in its initial state
+        shell: bash
+        env:
+          GALLERY_THEME: ${{ inputs.theme }}
+          GALLERY_APPEARANCE: ${{ inputs.appearance }}
+        run: |
+          set -eu
+          mkdir screenshots
+          sw_vers > screenshots/system.txt
+          git rev-parse HEAD > screenshots/commit.txt
+          printf '%s\n' "theme=$GALLERY_THEME" "appearance=$GALLERY_APPEARANCE" "requested_bounds=1120x720 logical pixels" > screenshots/capture.txt
+          cat > window.swift <<'SWIFT'
+          import CoreGraphics
+          import Foundation
+          let pid = Int(CommandLine.arguments[1])!
+          for _ in 0..<100 {
+              let windows = CGWindowListCopyWindowInfo([.optionOnScreenOnly], 0) as? [[String:Any]] ?? []
+              if let window = windows.first(where: { $0["kCGWindowOwnerPID"] as? Int == pid && $0["kCGWindowName"] as? String == "Cratebook" }) {
+                  print(window["kCGWindowNumber"]!)
+                  exit(0)
+              }
+              Thread.sleep(forTimeInterval: 0.2)
+          }
+          exit(1)
+          SWIFT
+          swiftc window.swift -o window-id
+          # Keep filenames aligned with the numbered 30-story catalog.
+          for story in $(seq 1 30); do
+            args=("--theme=$GALLERY_THEME" "--story=$story")
+            if [[ "$GALLERY_APPEARANCE" == dark ]]; then args+=(--dark); fi
+            ./target/release/cratebook "${args[@]}" > "screenshots/story-$story.log" 2>&1 &
+            pid=$!
+            id=$(./window-id "$pid")
+            sleep 1
+            screencapture -x -o -l "$id" "screenshots/$(printf '%02d' "$story").png"
+            kill "$pid"
+            wait "$pid" || true
+          done
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: macos-gallery-${{ inputs.theme }}-${{ inputs.appearance }}
+          path: screenshots/
+          if-no-files-found: error
