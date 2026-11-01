@@ -58,13 +58,20 @@ jobs:
             kill "$pid"
             wait "$pid" || true
           done
+          ./target/release/cratebook --capture --capture-lower --story=2 --theme="$GALLERY_THEME" > screenshots/worksheet-lower.log 2>&1 &
+          pid=$!
+          id=$(./window-id "$pid")
+          sleep 1
+          screencapture -x -o -l "$id" screenshots/02-lower.png
+          kill "$pid"
+          wait "$pid" || true
           python3 - <<'PY'
           import struct
           from pathlib import Path
           for path in Path('screenshots').glob('*.png'):
               size = struct.unpack('>II', path.read_bytes()[16:24])
               assert size == (960, 640), f'{path}: expected 960x640, got {size}; never resize to pass'
-          assert len(list(Path('screenshots').glob('*.png'))) == 30
+          assert len(list(Path('screenshots').glob('*.png'))) == 31
           PY
       - uses: actions/upload-artifact@v7.0.2
         with:

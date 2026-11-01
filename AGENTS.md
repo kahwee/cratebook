@@ -16,6 +16,7 @@ used for screenshots rather than silently mixing builds from different commits.
   Windows Computer Use, whose launch API does not take CLI arguments.
   In the capture profile, focus a gallery control once, then F8/F7 selects the
   next/previous story and resets its sidebar viewport to the canonical top.
+  F6 toggles the lower viewport; `--capture-lower` selects it at launch on macOS.
 - Use Editor, light, Standard corners, Preview, split toolbar and visible sidebar.
   The capture profile uses deterministic expanded examples: show popup contents,
   suggestions, a tooltip, an expanded disclosure and a saved toast. Document the
@@ -24,7 +25,9 @@ used for screenshots rather than silently mixing builds from different commits.
 - Save untouched native screenshots under `native/` before extracting client
   images. On Windows, a verified 962 × 669 native window at 1× has a 960 × 640
   client rectangle at `(1, 28, 961, 668)`. Remove only this native border/title
-  bar. Reject other native dimensions and investigate DPI/viewport settings.
+  bar. The current host measures 962 × 672 with client rectangle
+  `(1, 31, 961, 671)`; use that measured framing for this set. Reject other
+  native dimensions and investigate DPI/viewport settings.
   macOS transparent-titlebar captures must already be 960 × 640. Preserve its
   traffic lights and intentional platform toolbar inset. Keep native font
   differences; do not normalize fonts to conceal them.

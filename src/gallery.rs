@@ -21,6 +21,8 @@ pub(crate) struct Gallery {
     sidebar_visible: bool,
     split_titlebar: bool,
     theme_picker: ui::RadioGroup<{ ui::Theme::ALL.len() }>,
+    capture_scroll: ScrollHandle,
+    capture_lower: bool,
 }
 
 impl Gallery {
@@ -48,6 +50,9 @@ impl Gallery {
             sidebar_visible: true,
             split_titlebar: true,
             theme_picker: ui::RadioGroup::new(cx),
+            capture_scroll: ScrollHandle::new(),
+            capture_lower: crate::capture_mode()
+                && std::env::args().any(|arg| arg == "--capture-lower"),
         }
     }
     fn story_cover(&self, compact: bool, p: Palette, editor: bool) -> Div {
@@ -429,6 +434,9 @@ impl Gallery {
 }
 impl Render for Gallery {
     fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+        if self.capture_lower {
+            self.capture_scroll.scroll_to_bottom();
+        }
         let compact = ui::compact_layout(window);
         let selected_theme = *cx.global::<ui::Theme>();
         let tahoe = selected_theme == ui::Theme::Tahoe;
@@ -449,6 +457,9 @@ impl Render for Gallery {
             .child(story.preview.clone());
         let content =
             scroll_area::viewport((story.title, usize::from(self.panel == Panel::Source)))
+                .when(crate::capture_mode(), |s| {
+                    s.track_scroll(&self.capture_scroll)
+                })
                 .overflow_x_hidden()
                 .flex_1()
                 .overflow_y_scroll()
@@ -665,8 +676,21 @@ impl Render for Gallery {
                     match event.keystroke.key.as_str() {
                         "f8" => s.selected = (s.selected + 1) % s.stories.len(),
                         "f7" => s.selected = (s.selected + s.stories.len() - 1) % s.stories.len(),
+                        "f6" => {
+                            s.capture_lower = !s.capture_lower;
+                            if s.capture_lower {
+                                s.capture_scroll.scroll_to_bottom();
+                            } else {
+                                s.capture_scroll.set_offset(point(px(0.), px(0.)));
+                            }
+                            cx.stop_propagation();
+                            cx.notify();
+                            return;
+                        }
                         _ => return,
                     }
+                    s.capture_lower = false;
+                    s.capture_scroll.set_offset(point(px(0.), px(0.)));
                     cx.stop_propagation();
                     cx.notify();
                 }))
