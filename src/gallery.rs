@@ -5,6 +5,31 @@ use crate::{
 use gpui::{prelude::*, *};
 use gpui_jig::{card, navigation_menu, scroll_area, toggle};
 
+mod syntax;
+
+fn syntax_style(kind: syntax::Kind, dark: bool) -> HighlightStyle {
+    let color = match (kind, dark) {
+        (syntax::Kind::Keyword, false) => 0x7d3c98,
+        (syntax::Kind::Keyword, true) => 0xcba6e8,
+        (syntax::Kind::String, false) => 0x276940,
+        (syntax::Kind::String, true) => 0xa6d189,
+        (syntax::Kind::Comment, false) => 0x686d75,
+        (syntax::Kind::Comment, true) => 0x9ca4ad,
+        (syntax::Kind::Number, false) => 0x9a512b,
+        (syntax::Kind::Number, true) => 0xefb17b,
+        (syntax::Kind::Type, false) => 0x8a5a18,
+        (syntax::Kind::Type, true) => 0xe4c17c,
+        (syntax::Kind::Macro, false) => 0x245e98,
+        (syntax::Kind::Macro, true) => 0x8dbfea,
+        (syntax::Kind::Function, false) => 0x245e98,
+        (syntax::Kind::Function, true) => 0x8dbfea,
+    };
+    HighlightStyle {
+        color: Some(rgb(color).into()),
+        ..Default::default()
+    }
+}
+
 #[derive(Clone, Copy, PartialEq)]
 enum Panel {
     Stories,
@@ -24,6 +49,7 @@ pub(crate) struct Gallery {
     capture_scroll: ScrollHandle,
     capture_focus: FocusHandle,
     capture_lower: bool,
+    source_tokens: Vec<Option<Vec<syntax::Token>>>,
 }
 
 impl Gallery {
@@ -44,6 +70,7 @@ impl Gallery {
                 })
                 .unwrap_or(0)
         };
+        let source_tokens = vec![None; stories.len()];
         Self {
             stories,
             selected,
@@ -55,6 +82,7 @@ impl Gallery {
             capture_focus: cx.focus_handle(),
             capture_lower: crate::capture_mode()
                 && std::env::args().any(|arg| arg == "--capture-lower"),
+            source_tokens,
         }
     }
     fn story_cover(&self, compact: bool, p: Palette, editor: bool) -> Div {
@@ -446,6 +474,19 @@ impl Render for Gallery {
         let p = ui::preview_palette(cx);
         let story = &self.stories[self.selected];
         let source = story.source;
+        let source_view = if self.panel == Panel::Source {
+            let dark = *cx.global::<ui::Palette>() == ui::Palette::DARK;
+            Some(
+                StyledText::new(source).with_highlights(
+                    self.source_tokens[self.selected]
+                        .get_or_insert_with(|| syntax::tokenize(source))
+                        .iter()
+                        .map(|token| (token.range.clone(), syntax_style(token.kind, dark))),
+                ),
+            )
+        } else {
+            None
+        };
         let preview = card::root("story-preview", "Live preview")
             .flex_shrink_0()
             .bg(rgb(p.canvas))
@@ -624,7 +665,7 @@ impl Render for Gallery {
                                     })
                                     .when(cfg!(target_os = "macos"), |s| s.font_family("Menlo"))
                                     .text_size(px(13.))
-                                    .child(source),
+                                    .child(source_view.expect("source panel has styled text")),
                             ),
                     )
                 });
