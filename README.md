@@ -27,7 +27,7 @@ The script tests and builds the x86-64 MSVC target with a static C runtime, then
 
 For the browser, run `pnpm install --frozen-lockfile`, `pnpm build`, then `pnpm start` (Rust/WASM prerequisites below). Choose a different port with `pnpm start --port 4174`. To distribute a ready-to-run browser gallery locally, run `pnpm pack`. In another project run `pnpm add /path/to/cratebook-0.1.0.tgz` and `pnpm exec cratebook`. The tarball includes the compiled gallery and requires only Node.js at runtime.
 
-The shared unstyled primitives live in [GPUI Jig](https://github.com/kahwee/gpui-jig), the Rust-first UI component library.
+Many bundled stories use the shared unstyled primitives in [GPUI Jig](https://github.com/kahwee/gpui-jig). A story can also render ordinary GPUI elements or use a different component library; the [button story](src/stories/button.rs) uses GPUI directly. Jig is a dependency of this gallery build, not a requirement for the components you bring into your own stories.
 
 The desktop component sidebar docks on the right. Its heading and visibility control share the integrated title bar. Choose **Split title bar** to switch between split and unified chrome. Launch the native Tahoe theme with `cratebook --theme=tahoe`, or add `--dark` for its dark appearance.
 
@@ -86,7 +86,7 @@ A story owns its title, instructions, and a live GPUI preview. The [button story
 2. Declare the module and register its constructor in the [catalog](src/stories/mod.rs). The sidebar and preview header read the same metadata.
 3. Use the controls in [src/ui](src/ui) and check the interaction in both appearances. The [gallery shell](src/gallery.rs) owns navigation, layout and appearance.
 
-To build your own look, start with `ui::button`, `ui::collapsible_trigger`, or `ui::RadioGroup`. These provide interaction and focus behavior; the caller adds layout, colors, focus indicators, and content using GPUI style methods. The button story shows this directly.
+Build your own look with ordinary GPUI elements, or use `ui::button`, `ui::collapsible_trigger`, or `ui::RadioGroup` for shared Jig primitives. Add layout, colors, focus indicators, and content with GPUI style methods. The button story shows a plain GPUI control; the document tabs story shows Jig parts with gallery-owned styling and state.
 
 Contributions are welcome as GitHub issues or pull requests. For a new story, include the interaction it demonstrates and how to reproduce it.
 

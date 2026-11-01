@@ -59,7 +59,7 @@ impl Gallery {
                     div()
                         .text_size(px(12.))
                         .text_color(rgb(p.muted))
-                        .child("GPUI Jig  /  Components"),
+                        .child("Cratebook  /  Stories"),
                 )
                 .child(
                     div()
@@ -90,7 +90,7 @@ impl Gallery {
                         div()
                             .text_size(px(12.))
                             .text_color(rgb(p.muted))
-                            .child("GPUI JIG   /   COMPONENT LIBRARY"),
+                            .child("CRATEBOOK   /   STORIES"),
                     )
                     .child(
                         div()
@@ -214,7 +214,7 @@ impl Gallery {
                     div()
                         .text_size(px(12.))
                         .text_color(rgb(p.muted))
-                        .child("GPUI JIG"),
+                        .child("CRATEBOOK"),
                 )
                 .child(
                     div()

@@ -26,7 +26,12 @@ impl Render for Button {
             .items_center()
             .gap(px(8.))
             .child(
-                gpui_jig::button::root("run", "Run action")
+                div()
+                    .id("run")
+                    .role(Role::Button)
+                    .aria_label("Run action")
+                    .focusable()
+                    .tab_stop(true)
                     .min_h(ui::control_height(window))
                     .text_size(px(13.))
                     .px(px(10.))

@@ -52,10 +52,11 @@ impl Tabs {
             .when(!compact, |s| s.flex_shrink_0())
             .h_full()
             .px_1()
-            .rounded_t(px(p.corners.control as f32))
-            .border_b_2()
-            .border_color(rgb(if active { p.text } else { p.sidebar }))
+            .rounded(px(p.corners.control as f32))
+            .border_1()
+            .border_color(rgb(if active { p.border } else { p.sidebar }))
             .when(active, |s| s.bg(rgb(p.canvas)))
+            .when(!active, |s| s.hover(move |s| s.bg(rgb(p.selected))))
             .child(
                 tabs::tab(
                     ("tab", index),
@@ -123,12 +124,15 @@ impl Tabs {
                 s.child(
                     tabs::close(("close", index), format!("Close {title}"))
                         .flex_shrink_0()
-                        .w(px(if compact { 44. } else { 24. }))
+                        .w(px(if compact { 44. } else { 28. }))
                         .h_full()
                         .flex()
                         .items_center()
                         .justify_center()
                         .text_color(rgb(p.muted))
+                        .rounded(px(
+                            gpui_jig::corners::Corners::inset(p.corners.control, 1) as f32
+                        ))
                         .focus_visible(|s| s.underline())
                         .hover(move |s| s.bg(rgb(p.selected)))
                         .child(
@@ -159,10 +163,10 @@ impl Render for Tabs {
         let strip = tabs::list("tab-strip", "Open documents")
             .overflow_x_scroll()
             .flex()
-            .h(px(if ui::compact_layout(w) { 44. } else { 36. }))
-            .pt(px(3.))
+            .h(px(if ui::compact_layout(w) { 52. } else { 40. }))
+            .py_1()
             .px_1()
-            .gap(px(1.))
+            .gap(px(3.))
             .bg(rgb(p.sidebar))
             .text_size(px(13.))
             .children(
@@ -179,8 +183,11 @@ impl Render for Tabs {
                 tabs::panel("document-content", "Active document")
                     .flex()
                     .flex_col()
-                    .gap_2()
-                    .p_4()
+                    .gap_3()
+                    .min_h(px(200.))
+                    .px(px(if ui::compact_layout(w) { 16. } else { 24. }))
+                    .py(px(if ui::compact_layout(w) { 20. } else { 24. }))
+                    .bg(rgb(p.canvas))
                     .when(!self.tabs.is_empty(), |s| {
                         s.child(
                             div()
@@ -190,15 +197,27 @@ impl Render for Tabs {
                         )
                         .child(
                             div()
-                                .text_size(px(20.))
+                                .text_size(px(22.))
                                 .font_weight(FontWeight::SEMIBOLD)
                                 .child(TITLES[self.active].trim_end_matches(".md")),
                         )
                         .child(
                             div()
-                                .max_w(px(460.))
+                                .max_w(px(520.))
+                                .text_size(px(14.))
                                 .text_color(rgb(p.muted))
                                 .child(EXCERPTS[self.active]),
+                        )
+                        .child(
+                            div()
+                                .mt_2()
+                                .text_size(px(12.))
+                                .text_color(rgb(p.muted))
+                                .child(if self.active == 0 && self.dirty {
+                                    "Unsaved changes"
+                                } else {
+                                    "Ready to read"
+                                }),
                         )
                     })
                     .when(self.tabs.is_empty(), |s| {
@@ -212,10 +231,19 @@ impl Render for Tabs {
                     .py_2()
                     .border_t_1()
                     .border_color(rgb(p.border))
+                    .bg(rgb(p.sidebar))
                     .flex()
                     .items_center()
                     .flex_wrap()
                     .gap_2()
+                    .child(
+                        div()
+                            .flex_1()
+                            .min_w(px(100.))
+                            .text_size(px(12.))
+                            .text_color(rgb(p.muted))
+                            .child(format!("{} open", self.tabs.len())),
+                    )
                     .when(self.tabs.contains(&0), |s| {
                         s.child(ui::action(
                             if self.dirty {
