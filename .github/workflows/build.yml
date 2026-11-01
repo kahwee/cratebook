@@ -21,7 +21,12 @@ jobs:
       - run: rustc --version --verbose
       - run: cargo fmt --check
       - run: cargo test --locked --release
-      - run: cargo build --locked --release --bin cratebook
+      - name: Build the registry package on macOS
+        run: |
+          cargo package --locked --no-verify
+          tar -xzf target/package/cratebook-*.crate -C "$RUNNER_TEMP"
+          export CARGO_TARGET_DIR="$GITHUB_WORKSPACE/target"
+          cargo build --locked --release --bin cratebook --manifest-path "$RUNNER_TEMP/cratebook-$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -1)/Cargo.toml"
       - name: Archive the tested native binary
         run: tar -czf "$RUNNER_TEMP/cratebook-macos.tar.gz" -C target/release cratebook
       - uses: actions/upload-artifact@v7.0.2
