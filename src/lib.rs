@@ -78,9 +78,16 @@ fn open_gallery(cx: &mut App) {
 }
 #[cfg(not(target_family = "wasm"))]
 pub fn run_native() {
-    gpui_platform::application()
-        .with_assets(ui::icons::Icons)
-        .run(open_gallery);
+    let application = gpui_platform::application().with_assets(ui::icons::Icons);
+    #[cfg(target_os = "macos")]
+    application.on_reopen(|cx| {
+        if cx.windows().is_empty() {
+            open_gallery(cx);
+        } else {
+            cx.activate(true);
+        }
+    });
+    application.run(open_gallery);
 }
 
 #[cfg(target_family = "wasm")]
