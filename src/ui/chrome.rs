@@ -4,6 +4,7 @@ use gpui::{prelude::*, *};
 /// Workspace colors and dimensions follow the Commonleaf desktop shell.
 #[derive(Clone, Copy, PartialEq)]
 pub struct Palette {
+    pub corners: gpui_jig::corners::Corners,
     pub canvas: u32,
     pub sidebar: u32,
     pub border: u32,
@@ -14,6 +15,7 @@ pub struct Palette {
 impl Global for Palette {}
 impl Palette {
     pub const LIGHT: Self = Self {
+        corners: gpui_jig::corners::Corners::STANDARD,
         canvas: 0xffffff,
         sidebar: 0xf6f5f3,
         border: 0xdedddb,
@@ -22,6 +24,7 @@ impl Palette {
         selected: 0xe7e5e2,
     };
     pub const DARK: Self = Self {
+        corners: gpui_jig::corners::Corners::STANDARD,
         canvas: 0x202024,
         sidebar: 0x27272b,
         border: 0x3d3d43,
@@ -54,6 +57,7 @@ impl Theme {
             Self::Editor => {
                 return if p == Palette::LIGHT {
                     Palette {
+                        corners: p.corners,
                         canvas: 0xfafafa,
                         sidebar: 0xf0f0f1,
                         border: 0xd6d6d8,
@@ -63,6 +67,7 @@ impl Theme {
                     }
                 } else {
                     Palette {
+                        corners: p.corners,
                         canvas: 0x202023,
                         sidebar: 0x28282b,
                         border: 0x404045,
@@ -75,6 +80,7 @@ impl Theme {
             Self::Tahoe => {
                 return if p == Palette::LIGHT {
                     Palette {
+                        corners: p.corners,
                         canvas: 0xf8fbff,
                         sidebar: 0xe5effb,
                         border: 0xbacde3,
@@ -84,6 +90,7 @@ impl Theme {
                     }
                 } else {
                     Palette {
+                        corners: p.corners,
                         canvas: 0x152133,
                         sidebar: 0x1e3047,
                         border: 0x425972,
@@ -117,7 +124,9 @@ impl Theme {
     }
 }
 pub(crate) fn preview_palette(cx: &App) -> Palette {
-    cx.global::<Theme>().palette(*cx.global::<Palette>())
+    let mut palette = cx.global::<Theme>().palette(*cx.global::<Palette>());
+    palette.corners = cx.global::<CornerStyle>().tokens();
+    palette
 }
 pub(crate) fn pane_header(p: Palette) -> Stateful<Div> {
     gpui_jig::toolbar::root("gallery-toolbar", "Gallery controls")
@@ -147,9 +156,9 @@ pub(crate) fn action<V: 'static>(
         .px(px(10.))
         .border_1()
         .border_color(rgb(palette.border))
-        .rounded_md()
+        .rounded(px(palette.corners.control as f32))
         .when(*cx.global::<Theme>() == Theme::Tahoe, |s| {
-            s.rounded_full().bg(rgb(palette.sidebar))
+            s.bg(rgb(palette.sidebar))
         })
         .hover(move |s| s.bg(rgb(palette.selected)))
         .focus_visible(|s| s.underline())
@@ -158,4 +167,37 @@ pub(crate) fn action<V: 'static>(
             cx.notify();
         }))
         .child(label)
+}
+
+#[derive(Clone, Copy, Default)]
+pub(crate) enum CornerStyle {
+    Square,
+    #[default]
+    Standard,
+    Round,
+}
+impl Global for CornerStyle {}
+impl CornerStyle {
+    pub fn label(self) -> &'static str {
+        match self {
+            Self::Square => "Corners: Square",
+            Self::Standard => "Corners: Standard",
+            Self::Round => "Corners: Round",
+        }
+    }
+    pub fn next(self) -> Self {
+        match self {
+            Self::Square => Self::Standard,
+            Self::Standard => Self::Round,
+            Self::Round => Self::Square,
+        }
+    }
+    fn tokens(self) -> gpui_jig::corners::Corners {
+        use gpui_jig::corners::Corners;
+        match self {
+            Self::Square => Corners::SQUARE,
+            Self::Standard => Corners::STANDARD,
+            Self::Round => Corners::ROUND,
+        }
+    }
 }

@@ -36,7 +36,9 @@ impl Render for Feed {
                         checkbox::indicator()
                             .size(px(14.))
                             .border_1()
-                            .rounded_sm()
+                            .rounded(px(
+                                gpui_jig::corners::Corners::inset(p.corners.control, 3) as f32
+                            ))
                             .border_color(rgb(p.muted))
                             .flex()
                             .items_center()
@@ -70,7 +72,10 @@ impl Render for Feed {
                             .child(
                                 checkbox::indicator()
                                     .size(px(14.))
-                                    .rounded_sm()
+                                    .rounded(px(gpui_jig::corners::Corners::inset(
+                                        p.corners.control,
+                                        3,
+                                    ) as f32))
                                     .border_1()
                                     .border_color(rgb(p.muted))
                                     .when(self.0[i], |s| {

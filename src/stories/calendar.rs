@@ -50,7 +50,7 @@ impl Render for Calendar {
             ))
             .child(
                 card::root("agenda", "Day agenda")
-                    .rounded_lg()
+                    .rounded(px(p.corners.card as f32))
                     .bg(rgb(p.sidebar))
                     .p_3()
                     .child(

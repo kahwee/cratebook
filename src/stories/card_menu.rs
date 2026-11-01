@@ -143,7 +143,7 @@ impl Project {
         )
         .w(px(132.))
         .p_1()
-        .rounded_md()
+        .rounded(px(p.corners.control as f32))
         .border_1()
         .border_color(rgb(p.border))
         .bg(rgb(p.canvas))
@@ -160,7 +160,9 @@ impl Project {
                 .tab_stop(false)
                 .px_2()
                 .h(px(32.))
-                .rounded_sm()
+                .rounded(px(
+                    gpui_jig::corners::Corners::inset(p.corners.control, 3) as f32
+                ))
                 .flex()
                 .items_center()
                 .gap_2()
@@ -189,7 +191,7 @@ impl Render for Project {
             .aria_expanded(self.position.is_some())
             .min_h(ui::control_height(window))
             .px_2()
-            .rounded_md()
+            .rounded(px(p.corners.control as f32))
             .bg(rgb(p.sidebar))
             .flex()
             .items_center()
@@ -208,7 +210,7 @@ impl Render for Project {
             card::root("project", "Field notes")
                 .border_1()
                 .border_color(rgb(p.border))
-                .rounded_lg()
+                .rounded(px(p.corners.card as f32))
                 .p_4()
                 .child(
                     card::title("project-title", "Field notes")

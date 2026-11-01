@@ -30,7 +30,7 @@ impl Render for Project {
                 .px_2()
                 .flex()
                 .items_center()
-                .rounded_md()
+                .rounded(px(p.corners.control as f32))
                 .border_1()
                 .border_color(rgb(p.border))
                 .focus_visible(move |s| s.border_color(rgb(p.text)))

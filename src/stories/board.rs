@@ -68,7 +68,7 @@ impl Render for Board {
                             .flex()
                             .flex_col()
                             .gap_2()
-                            .rounded_lg()
+                            .rounded(px(p.corners.card as f32))
                             .bg(rgb(p.sidebar))
                             .child(
                                 card::title("heading", name)
@@ -84,7 +84,7 @@ impl Render for Board {
                                         button::root(("task", i), title)
                                             .min_h(h)
                                             .p_2()
-                                            .rounded_md()
+                                            .rounded(px(p.corners.control as f32))
                                             .bg(rgb(p.canvas))
                                             .border_1()
                                             .border_color(rgb(if self.selected == Some(i) {
@@ -114,7 +114,7 @@ impl Render for Board {
                         .p_3()
                         .border_1()
                         .border_color(rgb(p.border))
-                        .rounded_md()
+                        .rounded(px(p.corners.card as f32))
                         .child(
                             card::title("task-title", TASKS[i].0)
                                 .font_weight(FontWeight::SEMIBOLD)
@@ -133,7 +133,7 @@ impl Render for Board {
                                         .flex()
                                         .items_center()
                                         .px_2()
-                                        .rounded_md()
+                                        .rounded(px(p.corners.control as f32))
                                         .when(active, |s| s.bg(rgb(p.selected)))
                                         .focus_visible(|s| s.underline())
                                         .child(label)

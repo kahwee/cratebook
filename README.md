@@ -83,3 +83,11 @@ In Calendar, a selected date opens its agenda. In Project board, select a task
 and choose its due date. Tab into the grid once, then use arrow keys to move by
 day or week, Home and End for week boundaries, and Page Up or Page Down for
 months. The Previous and Next controls also work with pointer and touch input.
+
+Use **Corners** beside the theme selector to cycle through Standard, Round and
+Square. The setting applies across the current session. Standard uses logical
+pixel radii of 6 for controls, 10 for cards, 14 for dialogs and 10 for toasts.
+Switch thumbs, event dots and other circular indicators keep their shape.
+For custom GPUI themes, override individual fields of
+`gpui_jig::corners::Corners::STANDARD`. Aligned nested controls can use
+`Corners::inset(parent_radius, padding)` to keep their corners concentric.

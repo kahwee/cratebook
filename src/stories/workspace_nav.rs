@@ -77,7 +77,7 @@ impl Render for Preview {
                                 .flex()
                                 .items_center()
                                 .px(if self.dense { px(5.) } else { px(12.) })
-                                .rounded_md()
+                                .rounded(px(p.corners.control as f32))
                                 .when(self.section == i, |s| s.bg(rgb(p.selected)))
                                 .focus_visible(|s| s.underline())
                                 .child(title)

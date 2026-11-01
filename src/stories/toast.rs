@@ -37,7 +37,7 @@ impl Render for Draft {
                 toast::viewport("notifications", "Notifications").when(self.visible, |s| {
                     s.child(
                         toast::root("saved", "Draft saved")
-                            .rounded_lg()
+                            .rounded(px(p.corners.toast as f32))
                             .border_1()
                             .border_color(rgb(p.border))
                             .p_3()

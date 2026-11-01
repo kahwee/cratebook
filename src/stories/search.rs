@@ -51,7 +51,7 @@ impl Render for Search {
             .px_2()
             .border_1()
             .border_color(rgb(p.border))
-            .rounded_md()
+            .rounded(px(p.corners.control as f32))
             .focus_visible(move |s| s.border_color(rgb(p.text)));
         let edit = if self.free {
             autocomplete::input(edit, "Project tag", self.open)

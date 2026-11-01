@@ -32,7 +32,7 @@ impl Render for Button {
                     .px(px(10.))
                     .flex()
                     .items_center()
-                    .rounded_md()
+                    .rounded(px(theme.corners.control as f32))
                     .border_1()
                     .border_color(rgb(theme.border))
                     .bg(rgb(theme.selected))

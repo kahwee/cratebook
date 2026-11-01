@@ -28,6 +28,7 @@ fn open_gallery(cx: &mut App) {
     }
     cx.set_global(palette);
     cx.set_global(theme);
+    cx.set_global(ui::CornerStyle::default());
     let bounds = Bounds::centered(None, size(px(1120.), px(720.)), cx);
     cx.open_window(
         WindowOptions {

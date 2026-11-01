@@ -35,7 +35,7 @@ impl Render for Preview {
                     .flex()
                     .items_center()
                     .px_2()
-                    .rounded_md()
+                    .rounded(px(p.corners.control as f32))
                     .bg(rgb(p.sidebar))
                     .focus_visible(|s| s.underline())
                     .on_hover(cx.listener(|s, hovered: &bool, _, cx| {
@@ -56,7 +56,7 @@ impl Render for Preview {
                 s.child(
                     tooltip::popup("hint", "Sync hint")
                         .p_2()
-                        .rounded_md()
+                        .rounded(px(p.corners.control as f32))
                         .bg(rgb(p.selected))
                         .child("Refresh local project metadata."),
                 )

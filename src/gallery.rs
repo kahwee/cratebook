@@ -61,7 +61,7 @@ impl Gallery {
                 );
         }
         div()
-            .rounded_xl()
+            .rounded(px(p.corners.card as f32))
             .bg(rgb(p.sidebar))
             .text_color(rgb(p.text))
             .p(if compact { px(20.) } else { px(30.) })
@@ -104,7 +104,7 @@ impl Gallery {
             )
     }
 
-    fn brand() -> Div {
+    fn brand(p: Palette) -> Div {
         div()
             .flex()
             .items_center()
@@ -112,14 +112,20 @@ impl Gallery {
             .child(
                 div()
                     .size(px(22.))
-                    .rounded_md()
+                    .rounded(px(p.corners.control as f32))
                     .flex()
                     .items_center()
                     .justify_center()
                     .gap(px(2.))
                     .bg(rgb(0x173c34))
                     .children([10., 16., 12.].map(|height| {
-                        div().w(px(3.)).h(px(height)).rounded_sm().bg(rgb(0xbce6a3))
+                        div()
+                            .w(px(3.))
+                            .h(px(height))
+                            .rounded(px(
+                                gpui_jig::corners::Corners::inset(p.corners.control, 3) as f32
+                            ))
+                            .bg(rgb(0xbce6a3))
                     })),
             )
             .child(
@@ -140,7 +146,7 @@ impl Gallery {
                 } else {
                     32.
                 }))
-                .rounded_md()
+                .rounded(px(p.corners.control as f32))
                 .gap(px(8.))
                 .flex()
                 .items_center()
@@ -242,7 +248,7 @@ impl Gallery {
                         .items_center()
                         .justify_center()
                         .text_size(px(14.))
-                        .rounded_md()
+                        .rounded(px(p.corners.control as f32))
                         .when(current, |s| {
                             s.bg(rgb(p.selected))
                                 .text_color(rgb(p.text))
@@ -292,7 +298,7 @@ impl Gallery {
         .w(px(32.))
         .h(px(32.))
         .mr(px(4.))
-        .rounded_md()
+        .rounded(px(p.corners.control as f32))
         .flex()
         .items_center()
         .justify_center()
@@ -306,7 +312,9 @@ impl Gallery {
             div()
                 .w(px(17.))
                 .h(px(13.))
-                .rounded_sm()
+                .rounded(px(
+                    gpui_jig::corners::Corners::inset(p.corners.control, 3) as f32
+                ))
                 .border_1()
                 .border_color(rgb(p.muted))
                 .child(div().ml(px(10.)).w(px(1.)).h_full().bg(rgb(p.muted))),
@@ -328,7 +336,7 @@ impl Gallery {
                 })
             })
             .when(!compact, |s| {
-                s.child(Self::brand())
+                s.child(Self::brand(p))
                     .child(div().w(px(1.)).h(px(18.)).bg(rgb(p.border)))
             })
             .child(
@@ -353,7 +361,7 @@ impl Gallery {
                     )
                     .px_2()
                     .py_1()
-                    .rounded_md()
+                    .rounded(px(p.corners.control as f32))
                     .when(self.split_titlebar, |s| s.bg(rgb(p.selected)))
                     .focus_visible(|s| s.underline())
                     .on_click(cx.listener(|this, _, _, cx| {
@@ -366,7 +374,7 @@ impl Gallery {
             })
             .child(
                 toggle
-                    .rounded_md()
+                    .rounded(px(p.corners.control as f32))
                     .hover(move |s| s.bg(rgb(p.selected)))
                     .min_h(px(if compact { 44. } else { 28. }))
                     .flex()
@@ -408,9 +416,8 @@ impl Render for Gallery {
             .bg(rgb(p.canvas))
             .text_color(rgb(p.text))
             .min_w_0()
-            .rounded_lg()
-            .when(tahoe, |s| s.rounded_xl().shadow_sm())
-            .when(editor, |s| s.rounded_sm())
+            .rounded(px(p.corners.card as f32))
+            .when(tahoe, |s| s.shadow_sm())
             .overflow_hidden()
             .border_1()
             .border_color(rgb(p.border))
@@ -449,7 +456,7 @@ impl Render for Gallery {
                             s.child(
                                 gpui_jig::toggle_group::root("story-view", "Story view")
                                     .flex()
-                                    .rounded_lg()
+                                    .rounded(px(p.corners.card as f32))
                                     .bg(rgb(p.sidebar))
                                     .p(px(2.))
                                     .children(views.into_iter().map(|(panel, label)| {
@@ -465,7 +472,7 @@ impl Render for Gallery {
                                         )
                                         .min_h(ui::control_height(window))
                                         .px_2()
-                                        .rounded_md()
+                                        .rounded(px(p.corners.control as f32))
                                         .flex()
                                         .items_center()
                                         .when(current, |s| {
@@ -486,7 +493,7 @@ impl Render for Gallery {
                                     .root("theme-picker", "Gallery theme")
                                     .flex()
                                     .items_center()
-                                    .rounded_lg()
+                                    .rounded(px(p.corners.card as f32))
                                     .border_1()
                                     .border_color(rgb(p.border))
                                     .p(px(2.))
@@ -507,7 +514,11 @@ impl Render for Gallery {
                                                 .flex()
                                                 .items_center()
                                                 .px_2()
-                                                .rounded_md()
+                                                .rounded(px(gpui_jig::corners::Corners::inset(
+                                                    p.corners.card,
+                                                    2,
+                                                )
+                                                    as f32))
                                                 .when(selected_theme == option, |s| {
                                                     s.bg(rgb(p.selected))
                                                         .font_weight(FontWeight::SEMIBOLD)
@@ -517,13 +528,30 @@ impl Render for Gallery {
                                         },
                                     )),
                             )
+                            .child({
+                                let style = *cx.global::<ui::CornerStyle>();
+                                ui::button("corner-style", style.label())
+                                    .min_h(ui::control_height(window))
+                                    .px_2()
+                                    .rounded(px(p.corners.control as f32))
+                                    .border_1()
+                                    .border_color(rgb(p.border))
+                                    .flex()
+                                    .items_center()
+                                    .focus_visible(|s| s.underline())
+                                    .on_click(move |_, _, cx| {
+                                        cx.set_global(style.next());
+                                        cx.refresh_windows();
+                                    })
+                                    .child(style.label())
+                            })
                         }),
                 )
                 .when(self.panel != Panel::Source, |s| s.child(preview))
                 .when(self.panel == Panel::Source, |s| {
                     s.child(
                         div()
-                            .rounded_lg()
+                            .rounded(px(p.corners.card as f32))
                             .p_4()
                             .bg(rgb(p.sidebar))
                             .text_color(rgb(p.text))

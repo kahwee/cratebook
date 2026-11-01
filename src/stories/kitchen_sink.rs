@@ -49,7 +49,7 @@ impl Render for Desk {
             .flex_col()
             .gap_2()
             .p_4()
-            .rounded_lg()
+            .rounded(px(p.corners.card as f32))
             .bg(rgb(p.sidebar))
             .child(
                 div()
@@ -91,7 +91,7 @@ impl Render for Desk {
                         toggle_group::item(label, label, active)
                             .min_h(height)
                             .px_2()
-                            .rounded_md()
+                            .rounded(px(p.corners.control as f32))
                             .flex()
                             .items_center()
                             .when(active, |s| s.bg(rgb(p.selected)))
@@ -123,7 +123,10 @@ impl Render for Desk {
                             .child(
                                 checkbox::indicator()
                                     .size(px(12.))
-                                    .rounded_sm()
+                                    .rounded(px(gpui_jig::corners::Corners::inset(
+                                        p.corners.control,
+                                        3,
+                                    ) as f32))
                                     .border_1()
                                     .border_color(rgb(p.muted))
                                     .when(checked, |s| {
@@ -151,7 +154,7 @@ impl Render for Desk {
                         .flex()
                         .items_center()
                         .px_2()
-                        .rounded_md()
+                        .rounded(px(p.corners.control as f32))
                         .bg(rgb(p.selected))
                         .focus_visible(|s| s.underline())
                         .child("Review candidate")
@@ -170,7 +173,7 @@ impl Render for Desk {
                         .p_3()
                         .border_1()
                         .border_color(rgb(p.border))
-                        .rounded_md()
+                        .rounded(px(p.corners.dialog as f32))
                         .child("Candidate review")
                         .child(if done == total {
                             "All checks passed. Ready to sign off.".to_owned()

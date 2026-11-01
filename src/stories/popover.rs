@@ -35,7 +35,7 @@ impl Render for Preview {
                     .flex()
                     .items_center()
                     .px_2()
-                    .rounded_md()
+                    .rounded(px(p.corners.control as f32))
                     .bg(rgb(p.sidebar))
                     .focus_visible(|s| s.underline())
                     .on_click(cx.listener(|s, _, _, cx| {
@@ -48,7 +48,7 @@ impl Render for Preview {
                 s.child(
                     popover::popup("panel", "Popover")
                         .p_3()
-                        .rounded_lg()
+                        .rounded(px(p.corners.card as f32))
                         .border_1()
                         .border_color(rgb(p.border))
                         .bg(rgb(p.canvas))
@@ -61,7 +61,7 @@ impl Render for Preview {
                                 popover::close("confirm", "Got it")
                                     .min_h(ui::control_height(w))
                                     .px_2()
-                                    .rounded_md()
+                                    .rounded(px(p.corners.control as f32))
                                     .bg(rgb(p.selected))
                                     .flex()
                                     .items_center()
