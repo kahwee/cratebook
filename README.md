@@ -92,7 +92,7 @@ Contributions are welcome as GitHub issues or pull requests. For a new story, in
 
 ## Browser gallery
 
-The browser runs the same Rust stories in a GPUI canvas. The renderer tries WebGPU and can fall back to WebGL2. The native app uses the system font. The web gallery embeds Noto Sans under the license in `assets/OFL.txt`.
+The browser runs the same Rust stories in a GPUI canvas. The renderer tries WebGPU and can fall back to WebGL2. The native app uses the system font. The web gallery embeds Noto Sans for the interface and JetBrains Mono for source code; their licenses are in `assets/`.
 
 Both builds use stable Rust 1.99.1, pinned in `rust-toolchain.toml`. From the checkout, install the browser target with `rustup target add wasm32-unknown-unknown`. Install the bindings generator with `cargo install --locked wasm-bindgen-cli --version 0.2.130`. Then run:
 

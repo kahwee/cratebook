@@ -664,6 +664,9 @@ impl Render for Gallery {
                                         s.font_family("Consolas")
                                     })
                                     .when(cfg!(target_os = "macos"), |s| s.font_family("Menlo"))
+                                    .when(cfg!(target_family = "wasm"), |s| {
+                                        s.font_family("JetBrains Mono")
+                                    })
                                     .text_size(px(13.))
                                     .child(source_view.expect("source panel has styled text")),
                             ),

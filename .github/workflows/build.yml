@@ -121,7 +121,7 @@ jobs:
       - name: Include license notices
         run: |
           mkdir -p web/licenses
-          cp LICENSE assets/OFL.txt vendor/gpui-pre-web/LICENSE-APACHE web/licenses/
+          cp LICENSE assets/OFL.txt assets/JetBrainsMono-OFL.txt vendor/gpui-pre-web/LICENSE-APACHE web/licenses/
           cp assets/phosphor/LICENSE web/licenses/Phosphor-MIT.txt
       - uses: actions/upload-pages-artifact@v5.0.0
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'

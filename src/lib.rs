@@ -25,10 +25,11 @@ fn open_gallery(cx: &mut App) {
     .detach();
     #[cfg(target_family = "wasm")]
     cx.text_system()
-        .add_fonts(vec![std::borrow::Cow::Borrowed(include_bytes!(
-            "../assets/NotoSans.ttf"
-        ))])
-        .expect("embedded gallery font");
+        .add_fonts(vec![
+            std::borrow::Cow::Borrowed(&include_bytes!("../assets/NotoSans.ttf")[..]),
+            std::borrow::Cow::Borrowed(&include_bytes!("../assets/JetBrainsMono-Regular.ttf")[..]),
+        ])
+        .expect("embedded gallery fonts");
     let (mut theme, mut palette) = (ui::Theme::Editor, ui::Palette::LIGHT);
     if !cfg!(target_family = "wasm") {
         for arg in std::env::args().skip(1) {
