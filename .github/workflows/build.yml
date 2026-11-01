@@ -2,7 +2,15 @@ name: Build Cratebook
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'docs/visual-comparison/**'
+      - 'docs/visual-specifications.md'
+      - 'AGENTS.md'
   pull_request:
+    paths-ignore:
+      - 'docs/visual-comparison/**'
+      - 'docs/visual-specifications.md'
+      - 'AGENTS.md'
   workflow_dispatch:
 
 permissions:
@@ -13,6 +21,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  quick:
+    name: Quick format and manifest checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - run: cargo fmt --all --check
+      - run: cargo metadata --locked --no-deps --format-version 1 > /dev/null
+
   native:
     name: Native tests (${{ matrix.os }})
     strategy:
@@ -21,14 +37,25 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7.0.1
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          shared-key: desktop-release
+          cache-workspace-crates: true
+          cache-bin: false
+          save-if: ${{ github.ref == 'refs/heads/main' }}
       - run: rustc --version --verbose
-      - run: cargo fmt --check
       - run: cargo test --locked --release
   windows:
     name: Packaged Windows executable
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v7.0.1
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          shared-key: windows-static-release
+          cache-workspace-crates: true
+          cache-bin: false
+          save-if: ${{ github.ref == 'refs/heads/main' }}
       - name: Build portable Windows distribution
         shell: pwsh
         run: ./scripts/package-windows.ps1
@@ -44,6 +71,12 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v7.0.1
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          shared-key: desktop-release
+          cache-workspace-crates: true
+          cache-bin: false
+          save-if: false
       - name: Build the registry package on macOS
         run: |
           cargo package --locked --no-verify
@@ -63,6 +96,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
       - run: rustup target add wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          shared-key: wasm-release
+          cache-workspace-crates: true
+          cache-bin: false
+          save-if: ${{ github.ref == 'refs/heads/main' }}
       - name: Install matching wasm-bindgen CLI
         run: |
           archive=wasm-bindgen-0.2.130-x86_64-unknown-linux-musl.tar.gz
@@ -98,7 +137,7 @@ jobs:
   deploy:
     name: Publish gallery
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    needs: [native, windows, package, web]
+    needs: [quick, native, windows, package, web]
     runs-on: ubuntu-latest
     permissions:
       pages: write
