@@ -1,4 +1,4 @@
-use super::Story;
+use super::{Story, workbench};
 use crate::ui;
 use gpui::{prelude::*, *};
 use gpui_jig::{autocomplete, combobox};
@@ -70,6 +70,13 @@ impl Render for Search {
                 cx.notify();
             }))
             .on_key_down(cx.listener(move |s, e: &KeyDownEvent, w, cx| {
+                if let Some(text) = workbench::pasted_text(e, cx) {
+                    s.query.push_str(&text);
+                    s.open = true;
+                    w.prevent_default();
+                    cx.notify();
+                    return;
+                }
                 if e.keystroke.modifiers.control || e.keystroke.modifiers.platform {
                     return;
                 }

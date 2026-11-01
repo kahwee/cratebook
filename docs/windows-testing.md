@@ -1,5 +1,21 @@
 # Windows interactive checks
 
+## Live Windows checks after 0.1.4 update
+
+Native Computer Use through `node_repl` and `@oai/sky` now captures and operates the gallery on an unlocked desktop. The earlier browser-only runtime and locked-desktop limitations are no longer blocking this pass.
+
+Verified in the native gallery:
+
+- Checkbox input updates the release checklist progress from 2/4 to 3/4.
+- Document tabs switch using the Right arrow. Light/dark appearance, the monospace source panel and hiding/restoring the sidebar work.
+- Editing the sales worksheet from 32 to 325 and choosing Apply updates the cell, regional total (267 to 560), sparkline and monthly chart.
+- Calendar Next changes October 2026 to November 2026 and updates the selected-day agenda.
+- Right-clicking the project card opens its menu. Move to opens the submenu; Archive updates the card and dismisses both menus.
+- Closing the test app with the native close button removes its window and releases the executable for rebuilding.
+- Clipboard entry originally did nothing in fixture editors. The fix handles the platform paste shortcut in shared entries, project forms and search stories. In the final build, pasting `Café 東京` displays the full name, `a12b3456` produces the four demo digits `1234`, and Create project displays the successful result.
+
+The entries remain append-only demo editors. Cursor positioning, selection and full IME editing are not established by these checks. A window-border drag did not establish a compact viewport, so compact resizing remains unverified. This pass also does not establish frame timing, exhaustive keyboard/accessibility behavior or coverage of all 30 stories. Continue the checklist below.
+
 Use the extracted release executable on an unlocked Windows desktop. Record the Windows version, display scale, theme, appearance and reproduction steps. Build and unit-test results do not replace these checks.
 
 - Open `cratebook.exe` from Explorer. Confirm the gallery appears without a console window.

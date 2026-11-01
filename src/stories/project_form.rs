@@ -1,4 +1,4 @@
-use super::Story;
+use super::{Story, workbench};
 use crate::ui;
 use gpui::{prelude::*, *};
 use gpui_jig::{form, input, otp_field};
@@ -42,6 +42,13 @@ impl Render for Project {
                 self.name.clone()
             })
             .on_key_down(cx.listener(|s, e: &KeyDownEvent, w, cx| {
+                if let Some(text) = workbench::pasted_text(e, cx) {
+                    s.name.push_str(&text);
+                    s.message.clear();
+                    w.prevent_default();
+                    cx.notify();
+                    return;
+                }
                 if e.keystroke.modifiers.control || e.keystroke.modifiers.platform {
                     return;
                 }
@@ -71,6 +78,15 @@ impl Render for Project {
                 )
             }))
             .on_key_down(cx.listener(|s, e: &KeyDownEvent, w, cx| {
+                if let Some(text) = workbench::pasted_text(e, cx) {
+                    let remaining = 4usize.saturating_sub(s.code.len());
+                    s.code
+                        .extend(text.chars().filter(char::is_ascii_digit).take(remaining));
+                    s.message.clear();
+                    w.prevent_default();
+                    cx.notify();
+                    return;
+                }
                 if e.keystroke.modifiers.modified() {
                     return;
                 }

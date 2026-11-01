@@ -53,6 +53,13 @@ pub(super) fn entry<V: 'static>(
             value.to_owned()
         })
         .on_key_down(cx.listener(move |s, e: &KeyDownEvent, w, cx| {
+            if let Some(text) = pasted_text(e, cx) {
+                edit(s).push_str(&text);
+                w.prevent_default();
+                cx.stop_propagation();
+                cx.notify();
+                return;
+            }
             if e.keystroke.modifiers.platform || e.keystroke.modifiers.control {
                 return;
             }
@@ -72,4 +79,16 @@ pub(super) fn entry<V: 'static>(
             cx.stop_propagation();
             cx.notify();
         }))
+}
+
+/// Single-line clipboard text for the gallery's append-only fixture editors.
+pub(super) fn pasted_text(event: &KeyDownEvent, cx: &App) -> Option<String> {
+    if !(event.keystroke.modifiers.control || event.keystroke.modifiers.platform)
+        || event.keystroke.key != "v"
+    {
+        return None;
+    }
+    cx.read_from_clipboard()
+        .and_then(|item| item.text())
+        .map(|text| text.chars().filter(|ch| !ch.is_control()).collect())
 }
