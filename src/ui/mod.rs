@@ -5,7 +5,8 @@ pub use gpui_jig::{
 };
 
 /// Document tab surface shared by the workspace and the component gallery.
-/// The owner supplies the title, close action and navigation behavior.
+/// Only the active tab is in the tab order. The owner supplies the title,
+/// close action and arrow-key navigation behavior.
 pub fn document_tab(
     id: impl Into<ElementId>,
     label: impl Into<SharedString>,
@@ -16,7 +17,6 @@ pub fn document_tab(
     focus: u32,
 ) -> Stateful<Div> {
     gpui_jig::tabs::tab(id, label, active)
-        .tab_stop(true)
         .focus_visible(move |style| style.bg(gpui::rgb(focus)))
         .flex()
         .items_center()
