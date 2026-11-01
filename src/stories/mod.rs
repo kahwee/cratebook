@@ -1,7 +1,9 @@
 //! Each module constructs a named example and owns its live preview state.
 mod accordion;
 mod alert_dialog;
+mod board;
 mod button;
+mod calendar;
 mod card_menu;
 mod checkbox;
 mod dialog;
@@ -38,6 +40,8 @@ pub(crate) fn catalog(cx: &mut App) -> Vec<Story> {
     let [combobox, autocomplete] = search::stories(cx);
     vec![
         kitchen_sink::story(cx),
+        board::story(cx),
+        calendar::story(cx),
         card_menu::story(cx),
         settings::story(cx),
         tabs::story(cx),
