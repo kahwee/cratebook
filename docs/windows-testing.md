@@ -25,3 +25,11 @@ The packaging script targets x86-64 MSVC. ARM64 and signing are not part of this
 - The PowerShell package script produced a ZIP with the executable, documentation and license notices. ZIP integrity, SHA-256, the x86-64 PE header and GUI subsystem were checked.
 - The executable extracted into a separate directory launched with `--theme=tahoe --dark`. Windows reported a responding `Cratebook` window, and the launch log was empty.
 - Interactive checks above remain pending. The available Computer Use runtime exposed no native app-control API, so rendering, resizing, keyboard input, clipboard and close behavior were not visually verified. Treat this release as a Windows preview.
+
+## Windows preview 0.1.3 validation, 2026-10-31
+
+- The portable package now tests and builds the explicit x86-64 MSVC target with a static C runtime. The existing table test passed with those settings.
+- PE import inspection confirmed that the packaged executable has no `VCRUNTIME`, `MSVCP` or dynamic Universal CRT imports. It still uses native Windows system DLLs, including Direct3D, DirectWrite and ICU. This is dependency inspection, not a test on a clean Windows installation.
+- ZIP integrity, SHA-256, required documentation and license files, architecture and GUI subsystem passed verification. The extracted executable launched with `--theme=tahoe --dark`; Windows reported a responding window and no launch log output.
+- The preview incorporates GPUI Jig 0.1.5, document-tab keyboard navigation, embedded Phosphor icons and the sales worksheet story. GPUI Jig's 15 tests and documentation examples passed locally and its Windows CI job passed.
+- Interactive checks remain pending because native app-control APIs are unavailable in this session, even with Computer Use enabled.
