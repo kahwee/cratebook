@@ -244,8 +244,8 @@ impl Render for Tabs {
                     .gap_2()
                     .child(
                         div()
-                            .flex_1()
-                            .min_w(px(100.))
+                            .when(ui::compact_layout(w), |s| s.w_full())
+                            .when(!ui::compact_layout(w), |s| s.flex_1().min_w(px(100.)))
                             .text_size(px(12.))
                             .text_color(rgb(p.muted))
                             .child(format!("{} open", self.tabs.len())),
