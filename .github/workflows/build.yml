@@ -14,13 +14,31 @@ concurrency:
 
 jobs:
   native:
-    name: Native macOS tests
-    runs-on: macos-latest
+    name: Native tests (${{ matrix.os }})
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7.0.1
       - run: rustc --version --verbose
       - run: cargo fmt --check
       - run: cargo test --locked --release
+  windows:
+    name: Packaged Windows executable
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Build portable Windows distribution
+        shell: pwsh
+        run: ./scripts/package-windows.ps1
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: cratebook-windows-x86_64
+          path: |
+            dist/*.zip
+            dist/*.sha256
+          if-no-files-found: error
   package:
     name: Packaged macOS executable
     runs-on: macos-latest
@@ -79,7 +97,7 @@ jobs:
   deploy:
     name: Publish gallery
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    needs: [native, package, web]
+    needs: [native, windows, package, web]
     runs-on: ubuntu-latest
     permissions:
       pages: write

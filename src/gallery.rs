@@ -216,6 +216,7 @@ impl Gallery {
             })
             .child(
                 scroll_area::viewport("library-list")
+                    .flex_1()
                     .overflow_x_hidden()
                     .min_h_0()
                     .overflow_y_scroll()
@@ -579,7 +580,10 @@ impl Render for Gallery {
                             )
                             .child(
                                 div()
-                                    .when(!cfg!(target_family = "wasm"), |s| s.font_family("Menlo"))
+                                    .when(cfg!(target_os = "windows"), |s| {
+                                        s.font_family("Consolas")
+                                    })
+                                    .when(cfg!(target_os = "macos"), |s| s.font_family("Menlo"))
                                     .text_size(px(13.))
                                     .child(source),
                             ),
@@ -630,6 +634,7 @@ impl Render for Gallery {
             });
         div()
             .size_full()
+            .when(cfg!(target_os = "windows"), |s| s.font_family("Segoe UI"))
             .flex()
             .flex_col()
             .bg(rgb(p.sidebar))

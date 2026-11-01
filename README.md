@@ -1,6 +1,6 @@
 # Cratebook
 
-Cratebook is a component workshop for Rust. Build an interactive control with GPUI, try it in a native macOS window, and share the same Rust view in a browser through WebAssembly.
+Cratebook is a component workshop for Rust. Build an interactive control with GPUI, try it in a native Windows or macOS window, and share the same Rust view in a browser through WebAssembly.
 
 On phones, use the bottom bar to browse **Stories**, try the selected example in **Canvas**, or inspect **Rust source**. **Rust source** shows the actual story module and **Copy code** copies it. Choose **Editor**, **Base**, **Mint**, or **Tahoe** directly in the theme selector (or use its arrow keys) without resetting the live story. Editor is the default, with neutral graphite surfaces, quiet dividers and a compact source pane inspired by Zed. Tahoe extends a cool blue palette across the window, with rounded controls and raised previews inspired by macOS Tahoe. The surfaces are drawn in GPUI on both native and web. The light/dark control works independently in all four themes.
 
@@ -10,7 +10,20 @@ Start with **Card & context menu**. Right-click the project card, open **Move to
 
 The gallery also includes settings, document tabs, sortable tables, buttons, radio groups, collapsibles, checkboxes, accordions, batch progress and a scrollable contributor list. Each story has a Rust source view.
 
-On macOS, install from [crates.io](https://crates.io/crates/cratebook) with `cargo install --locked cratebook`, then launch `cratebook`. Use `cargo run --locked --release` during development, or `scripts/install.sh` for a Finder app in `~/Applications`.
+On Windows or macOS, install from [crates.io](https://crates.io/crates/cratebook) with `cargo install --locked cratebook`, then launch `cratebook`. Use `cargo run --locked --release --bin cratebook` during development. On macOS, `scripts/install.sh` creates a Finder app in `~/Applications`.
+
+## Windows desktop
+
+Download the Windows x86-64 ZIP from [GitHub Releases](https://github.com/kahwee/cratebook/releases), extract it, and open `cratebook.exe`. The portable app does not require Rust or Node.js. It uses the native Windows title bar, Segoe UI for controls and Consolas for Rust source. Closing the last window exits the app. The executable is unsigned.
+
+To build from source, install Rust 1.99.1 for `x86_64-pc-windows-msvc` and Visual Studio Build Tools with Desktop development with C++ and the Windows SDK. In PowerShell, run:
+
+```powershell
+cargo test --locked --release
+./scripts/package-windows.ps1
+```
+
+The script creates `dist/cratebook-VERSION-windows-x86_64.zip` and a `.zip.sha256` checksum. Compare the checksum with `Get-FileHash -Algorithm SHA256` before distributing a downloaded archive. Windows CI runs native tests and uploads the ZIP on each build. Follow [the interactive checklist](docs/windows-testing.md) to validate rendering and input; automated tests do not cover every story.
 
 For the browser, run `pnpm install --frozen-lockfile`, `pnpm build`, then `pnpm start` (Rust/WASM prerequisites below). Choose a different port with `pnpm start --port 4174`. To distribute a ready-to-run browser gallery locally, run `pnpm pack`. In another project run `pnpm add /path/to/cratebook-0.1.0.tgz` and `pnpm exec cratebook`. The tarball includes the compiled gallery and requires only Node.js at runtime.
 

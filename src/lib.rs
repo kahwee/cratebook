@@ -5,6 +5,14 @@ pub mod ui;
 use gallery::Gallery;
 use gpui::{prelude::*, *};
 fn open_gallery(cx: &mut App) {
+    // A standalone Windows gallery should exit when its last window closes.
+    #[cfg(target_os = "windows")]
+    cx.on_window_closed(|cx, _| {
+        if cx.windows().is_empty() {
+            cx.quit();
+        }
+    })
+    .detach();
     #[cfg(target_family = "wasm")]
     cx.text_system()
         .add_fonts(vec![std::borrow::Cow::Borrowed(include_bytes!(
@@ -32,6 +40,7 @@ fn open_gallery(cx: &mut App) {
     let bounds = Bounds::centered(None, size(px(1120.), px(720.)), cx);
     cx.open_window(
         WindowOptions {
+            window_min_size: Some(size(px(360.), px(480.))),
             window_bounds: Some(WindowBounds::Windowed(bounds)),
             app_owns_titlebar_drag: cfg!(target_os = "macos"),
             titlebar: Some(TitlebarOptions {
