@@ -1,0 +1,56 @@
+Cratebook native Windows / macOS screenshot comparison
+
+Capture source: 0817caf62a34bda55ed2dbeb6921eedd7b59aa30
+Editor, light, Standard corners, initial Preview, sidebar visible.
+macOS: 26.6.2 (25G83), native macos-26 GitHub runner.
+macOS run: https://github.com/kahwee/cratebook/actions/runs/41263152827
+Windows: local native MSVC release build, captured after desktop unlock.
+
+Coverage: 30/30 original screenshots per platform, 60 total. All were
+inspected during capture or on five paired review sheets. Every pair shows
+the expected story and fixture. No black or lock-screen images were accepted.
+These are initial views, not every popup, theme or interaction state.
+
+Observed comparison:
+- Both show the same story order, initial fixture data, light neutral
+  surfaces, right sidebar, Preview controls and source status strip.
+- Windows has a separate dark native title bar. macOS integrates traffic
+  lights into the toolbar. This intentionally shifts outer-image content.
+- Glyph shape, weight and spacing differ. Source requests Segoe UI on
+  Windows and the GPUI system default on macOS; source fonts are Consolas
+  and Menlo. Font family was not inferred from the images alone.
+- Worksheet values, selected cell and charts agree. macOS ends nearer the
+  chart bottom; Windows shows more vertical space. This does not establish
+  that macOS offscreen content is missing.
+- Board columns, calendar dates, contacts and forms are populated on both.
+  No unintended overlap was observed in these initial views.
+- Windows stories 24-30 have a scrolled sidebar to reveal the active row;
+  macOS launches each story independently with the sidebar at the top.
+  Sidebar scroll position is therefore not a product parity defect.
+- Windows originals include the cursor and blue pointer halo. This is
+  capture-environment decoration, not the gallery's rendered UI.
+
+Dimensions:
+- Requested default: 1120 x 720 logical pixels on both platforms.
+- Actual Windows PNGs: 1122 x 749 pixels, all 30 files.
+- Actual macOS PNGs: 1024 x 674 (story 1), 1024 x 677 (stories 2-30).
+  The runner constrained the requested size. Native frames and display
+  scale also affect image dimensions. These are not size-matched pixel
+  regression baselines; a raw image diff cannot establish product failure.
+- Source sidebar 218, toolbar 44, content maximum 800 including padding,
+  horizontal padding 28 desktop / 16 compact per side, minimum window
+  360 x 480, compact breakpoint below 680, action heights 28 / 44,
+  body 13 / 16, heading 24, Standard control/card/dialog/toast radii
+  6 / 10 / 14 / 10. These are logical source values, not PNG measurements.
+
+Result: initial views have consistent content and overall structure across
+platforms. No new product fix was justified by these images. A future
+pixel regression baseline should normalize actual content viewport size,
+display scale, pointer and sidebar scroll position. Screenshots alone do
+not validate accessibility, IME, offscreen behavior, all keyboard actions,
+contrast compliance, smoothness or frame rate.
+
+Files: comparison.html has all paired views, original-pixel mode and specs.
+windows/ and macos/ preserve originals. manifest.json records actual PNG
+dimensions; specs.json records source values. review-1.png through review-5.png
+are scaled overview sheets.

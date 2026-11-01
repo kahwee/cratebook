@@ -1,0 +1,3 @@
+theme=editor
+appearance=light
+requested_bounds=1120x720 logical pixels

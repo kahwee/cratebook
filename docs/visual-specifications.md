@@ -1,5 +1,7 @@
 # Native gallery visual specifications
 
+The [captured comparison](visual-comparison/comparison.html) contains all 30 initial views from each platform, with [findings](visual-comparison/findings.txt), original PNGs and per-image dimensions. Download this directory and open the HTML locally for the interactive paired view. The images use source commit `0817caf`; later documentation commits do not change the pictured UI. Windows originals measure 1122 × 749 pixels; macOS originals measure 1024 × 674–677 because the runner constrained its windows. This set compares appearance at those recorded sizes and is not a size-matched pixel regression baseline.
+
 Use the same source commit, initial story state, theme and requested logical window bounds when comparing Windows with macOS. The reference capture set uses all 30 stories, Editor/light, Standard corners, Preview, the visible sidebar and the split title bar. Native builds accept `--story=1` through `--story=30` to select a fresh story at launch. The existing `--theme=editor` and `--dark` flags select appearance.
 
 The `Capture macOS gallery comparison` workflow builds and captures the selected commit on `macos-26`. It records the commit and `sw_vers` output with the images. A browser screenshot is not a substitute for a native macOS capture.
