@@ -3,6 +3,7 @@ use crate::{
     ui::{self, Palette},
 };
 use gpui::{prelude::*, *};
+use gpui_jig::{card, navigation_menu, scroll_area, toggle};
 
 #[derive(Clone, Copy, PartialEq)]
 enum Panel {
@@ -128,7 +129,7 @@ impl Gallery {
                     .child("Cratebook"),
             )
     }
-    fn library(&self, compact: bool, p: Palette, cx: &Context<Self>) -> Div {
+    fn library(&self, compact: bool, p: Palette, cx: &Context<Self>) -> Stateful<Div> {
         let editor = *cx.global::<ui::Theme>() == ui::Theme::Editor;
         let rows = self.stories.iter().enumerate().map(|(index, story)| {
             ui::button(story.title, story.title)
@@ -168,7 +169,7 @@ impl Gallery {
             .py(px(6.))
             .gap(px(if editor && !compact { 1. } else { 4. }))
             .children(rows);
-        div()
+        navigation_menu::root("component-navigation", "Components")
             .flex()
             .flex_col()
             .flex_shrink_0()
@@ -208,14 +209,14 @@ impl Gallery {
                 )
             })
             .child(
-                div()
-                    .id("library-list")
+                scroll_area::viewport("library-list")
+                    .overflow_x_hidden()
                     .min_h_0()
                     .overflow_y_scroll()
                     .child(list),
             )
     }
-    fn phone_navigation(&self, p: Palette, cx: &Context<Self>) -> Div {
+    fn phone_navigation(&self, p: Palette, cx: &Context<Self>) -> Stateful<Div> {
         let active = if matches!(
             *cx.global::<ui::Theme>(),
             ui::Theme::Tahoe | ui::Theme::Editor
@@ -226,7 +227,7 @@ impl Gallery {
         } else {
             0xc6eeb9
         };
-        div()
+        navigation_menu::root("phone-navigation", "Gallery views")
             .flex()
             .flex_shrink_0()
             .border_t_1()
@@ -244,8 +245,7 @@ impl Gallery {
                 .into_iter()
                 .map(|(panel, label)| {
                     let current = panel == self.panel;
-                    ui::button(label, label)
-                        .aria_toggled(current.into())
+                    toggle::root(label, label, current)
                         .flex_1()
                         .h(px(44.))
                         .flex()
@@ -267,7 +267,13 @@ impl Gallery {
                 }),
             )
     }
-    fn toolbar(&self, compact: bool, fullscreen: bool, p: Palette, cx: &Context<Self>) -> Div {
+    fn toolbar(
+        &self,
+        compact: bool,
+        fullscreen: bool,
+        p: Palette,
+        cx: &Context<Self>,
+    ) -> Stateful<Div> {
         let light = *cx.global::<Palette>() == Palette::LIGHT;
         let label = if light { "Dark mode" } else { "Light mode" };
         let toggle = ui::button("appearance", label)
@@ -414,7 +420,7 @@ impl Render for Gallery {
         let story = &self.stories[self.selected];
         let theme = ui::preview_palette(cx);
         let source = story.source;
-        let preview = div()
+        let preview = card::root("story-preview", "Live preview")
             .bg(rgb(theme.canvas))
             .text_color(rgb(theme.text))
             .min_w_0()
@@ -425,125 +431,129 @@ impl Render for Gallery {
             .border_1()
             .border_color(rgb(theme.border))
             .child(story.preview.clone());
-        let content = div()
-            .id((story.title, usize::from(self.panel == Panel::Source)))
-            .flex_1()
-            .overflow_y_scroll()
-            .w_full()
-            .when(!compact, |s| s.max_w(px(800.)).mx_auto())
-            .px(px(if compact { 16. } else { 28. }))
-            .pt(px(if compact { 18. } else { 24. }))
-            .pb(px(if compact { 16. } else { 28. }))
-            .flex()
-            .flex_col()
-            .gap(px(10.))
-            .child(self.story_cover(compact, p, tahoe, editor))
-            .child(
-                div()
-                    .flex()
-                    .gap_2()
-                    .flex_wrap()
-                    .when(self.panel != Panel::Source, |s| {
-                        s.items_center().child(
-                            div()
-                                .flex_1()
-                                .text_size(px(14.))
-                                .font_weight(FontWeight::SEMIBOLD)
-                                .child("Live preview"),
-                        )
-                    })
-                    .when(!compact, |s| {
-                        s.child(ui::action(
-                            if self.panel == Panel::Source {
-                                "Show preview"
-                            } else {
-                                "Rust source"
-                            },
-                            window,
-                            cx,
-                            |s: &mut Gallery| {
-                                s.panel = if s.panel == Panel::Source {
-                                    Panel::Canvas
-                                } else {
-                                    Panel::Source
-                                }
-                            },
-                        ))
-                    })
-                    .when(!compact || self.panel == Panel::Canvas, |s| {
-                        s.child(
-                            self.theme_picker
-                                .root("theme-picker", "Preview theme")
-                                .flex()
-                                .items_center()
-                                .rounded_lg()
-                                .border_1()
-                                .border_color(rgb(p.border))
-                                .p(px(2.))
-                                .children(ui::Theme::ALL.iter().enumerate().map(|(i, &option)| {
-                                    self.theme_picker
-                                        .item(
-                                            ("theme", i),
-                                            option.name(),
-                                            i,
-                                            selected_theme == option,
-                                            |index, _, cx| {
-                                                cx.set_global(ui::Theme::ALL[*index]);
-                                                cx.refresh_windows();
-                                            },
-                                        )
-                                        .min_h(ui::control_height(window))
-                                        .flex()
-                                        .items_center()
-                                        .px_2()
-                                        .rounded_md()
-                                        .when(selected_theme == option, |s| {
-                                            s.bg(rgb(p.selected)).font_weight(FontWeight::SEMIBOLD)
-                                        })
-                                        .focus_visible(|s| s.underline())
-                                        .child(option.name())
-                                })),
-                        )
-                    }),
-            )
-            .when(self.panel != Panel::Source, |s| s.child(preview))
-            .when(self.panel == Panel::Source, |s| {
-                s.child(
+        let content =
+            scroll_area::viewport((story.title, usize::from(self.panel == Panel::Source)))
+                .overflow_x_hidden()
+                .flex_1()
+                .overflow_y_scroll()
+                .w_full()
+                .when(!compact, |s| s.max_w(px(800.)).mx_auto())
+                .px(px(if compact { 16. } else { 28. }))
+                .pt(px(if compact { 18. } else { 24. }))
+                .pb(px(if compact { 16. } else { 28. }))
+                .flex()
+                .flex_col()
+                .gap(px(10.))
+                .child(self.story_cover(compact, p, tahoe, editor))
+                .child(
                     div()
-                        .rounded_lg()
-                        .p_4()
-                        .bg(rgb(if editor { 0x232326 } else { 0x192722 }))
-                        .text_color(rgb(if editor { 0xe4e4e6 } else { 0xe0eee4 }))
-                        .child(
-                            div()
-                                .flex()
-                                .flex_wrap()
-                                .items_center()
-                                .justify_between()
-                                .child(story.path)
-                                .child(
-                                    ui::button("copy-source", "Copy Rust source")
-                                        .min_h(ui::control_height(window))
-                                        .flex()
-                                        .items_center()
-                                        .px_2()
-                                        .focus_visible(|s| s.underline())
-                                        .on_click(move |_, _, cx| {
-                                            cx.write_to_clipboard(ClipboardItem::new_string(
-                                                source.to_owned(),
-                                            ))
-                                        })
-                                        .child("Copy code"),
-                                ),
-                        )
-                        .child(
-                            div()
-                                .when(!cfg!(target_family = "wasm"), |s| s.font_family("Menlo"))
-                                .text_size(px(13.))
-                                .child(source),
-                        ),
+                        .flex()
+                        .gap_2()
+                        .flex_wrap()
+                        .when(self.panel != Panel::Source, |s| {
+                            s.items_center().child(
+                                div()
+                                    .flex_1()
+                                    .text_size(px(14.))
+                                    .font_weight(FontWeight::SEMIBOLD)
+                                    .child("Live preview"),
+                            )
+                        })
+                        .when(!compact, |s| {
+                            s.child(ui::action(
+                                if self.panel == Panel::Source {
+                                    "Show preview"
+                                } else {
+                                    "Rust source"
+                                },
+                                window,
+                                cx,
+                                |s: &mut Gallery| {
+                                    s.panel = if s.panel == Panel::Source {
+                                        Panel::Canvas
+                                    } else {
+                                        Panel::Source
+                                    }
+                                },
+                            ))
+                        })
+                        .when(!compact || self.panel == Panel::Canvas, |s| {
+                            s.child(
+                                self.theme_picker
+                                    .root("theme-picker", "Preview theme")
+                                    .flex()
+                                    .items_center()
+                                    .rounded_lg()
+                                    .border_1()
+                                    .border_color(rgb(p.border))
+                                    .p(px(2.))
+                                    .children(ui::Theme::ALL.iter().enumerate().map(
+                                        |(i, &option)| {
+                                            self.theme_picker
+                                                .item(
+                                                    ("theme", i),
+                                                    option.name(),
+                                                    i,
+                                                    selected_theme == option,
+                                                    |index, _, cx| {
+                                                        cx.set_global(ui::Theme::ALL[*index]);
+                                                        cx.refresh_windows();
+                                                    },
+                                                )
+                                                .min_h(ui::control_height(window))
+                                                .flex()
+                                                .items_center()
+                                                .px_2()
+                                                .rounded_md()
+                                                .when(selected_theme == option, |s| {
+                                                    s.bg(rgb(p.selected))
+                                                        .font_weight(FontWeight::SEMIBOLD)
+                                                })
+                                                .focus_visible(|s| s.underline())
+                                                .child(option.name())
+                                        },
+                                    )),
+                            )
+                        }),
                 )
-            });
+                .when(self.panel != Panel::Source, |s| s.child(preview))
+                .when(self.panel == Panel::Source, |s| {
+                    s.child(
+                        div()
+                            .rounded_lg()
+                            .p_4()
+                            .bg(rgb(if editor { 0x232326 } else { 0x192722 }))
+                            .text_color(rgb(if editor { 0xe4e4e6 } else { 0xe0eee4 }))
+                            .child(
+                                div()
+                                    .flex()
+                                    .flex_wrap()
+                                    .items_center()
+                                    .justify_between()
+                                    .child(story.path)
+                                    .child(
+                                        ui::button("copy-source", "Copy Rust source")
+                                            .min_h(ui::control_height(window))
+                                            .flex()
+                                            .items_center()
+                                            .px_2()
+                                            .focus_visible(|s| s.underline())
+                                            .on_click(move |_, _, cx| {
+                                                cx.write_to_clipboard(ClipboardItem::new_string(
+                                                    source.to_owned(),
+                                                ))
+                                            })
+                                            .child("Copy code"),
+                                    ),
+                            )
+                            .child(
+                                div()
+                                    .when(!cfg!(target_family = "wasm"), |s| s.font_family("Menlo"))
+                                    .text_size(px(13.))
+                                    .child(source),
+                            ),
+                    )
+                });
         let workspace = div()
             .flex_1()
             .min_w_0()

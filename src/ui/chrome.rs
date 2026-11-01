@@ -119,8 +119,8 @@ impl Theme {
 pub(crate) fn preview_palette(cx: &App) -> Palette {
     cx.global::<Theme>().palette(*cx.global::<Palette>())
 }
-pub(crate) fn pane_header(p: Palette) -> Div {
-    div()
+pub(crate) fn pane_header(p: Palette) -> Stateful<Div> {
+    gpui_jig::toolbar::root("gallery-toolbar", "Gallery controls")
         .flex()
         .items_center()
         .justify_between()
