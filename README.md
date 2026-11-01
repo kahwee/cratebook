@@ -37,7 +37,7 @@ Add a variant to `ui::Theme`, list it in `Theme::ALL`, and implement its name an
 
 ## Headless tables
 
-Open **Stories → Data table** and select **Builds** to cycle through numeric ascending order, descending order, and the original order. The [table model](src/table.rs) works with borrowed rows. Define each column once with `ColumnDef::accessor`, then use `format_cell` when the displayed text should differ from the underlying sort value. The [GPUI example](src/stories/table.rs) owns the header controls, accessible roles, spacing, and colors.
+Open **Stories → Data table** and select **Builds** to cycle through numeric ascending order, descending order, and the original order. The [GPUI Jig table model](https://kahwee.github.io/gpui-jig/api/gpui_jig/table/) works with borrowed rows and is imported directly by the gallery. Define each column once with `ColumnDef::accessor`, then use `format_cell` when the displayed text should differ from the underlying sort value. The [GPUI example](src/stories/table.rs) owns the header controls, accessible roles, spacing, and colors.
 
 ## Desktop patterns and component coverage
 

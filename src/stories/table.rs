@@ -1,9 +1,7 @@
 use super::Story;
-use crate::{
-    table::{ColumnDef, Direction, Sorting},
-    ui,
-};
+use crate::ui;
 use gpui::{prelude::*, *};
+use gpui_jig::table::{self, ColumnDef, Direction, Sorting};
 
 struct Package {
     name: &'static str,
@@ -62,35 +60,26 @@ impl Render for Packages {
                 None => "",
             };
             let label = format!("{}{order}", column.header);
-            div()
-                .id(("head", index))
-                .role(Role::ColumnHeader)
-                .flex_1()
-                .child(
-                    ui::button(("sort", index), format!("Sort by {label}"))
-                        .w_full()
-                        .h(ui::control_height(window))
-                        .px_3()
-                        .flex()
-                        .items_center()
-                        .font_weight(FontWeight::SEMIBOLD)
-                        .focus_visible(|s| s.underline())
-                        .on_click(cx.listener(move |this, _, _, cx| {
-                            this.sorting.toggle(index);
-                            cx.notify();
-                        }))
-                        .child(label),
-                )
+            table::column_header(("head", index)).flex_1().child(
+                ui::button(("sort", index), format!("Sort by {label}"))
+                    .w_full()
+                    .h(ui::control_height(window))
+                    .px_3()
+                    .flex()
+                    .items_center()
+                    .font_weight(FontWeight::SEMIBOLD)
+                    .focus_visible(|s| s.underline())
+                    .on_click(cx.listener(move |this, _, _, cx| {
+                        this.sorting.toggle(index);
+                        cx.notify();
+                    }))
+                    .child(label),
+            )
         });
-        div()
-            .id("packages")
-            .role(Role::Table)
-            .aria_label("Package builds")
+        table::root("packages", "Package builds")
             .text_size(px(14.))
             .child(
-                div()
-                    .id("headers")
-                    .role(Role::Row)
+                table::row("headers")
                     .flex()
                     .bg(rgb(palette.sidebar))
                     .children(headers),
@@ -100,18 +89,13 @@ impl Render for Packages {
                     .rows(&self.rows, &self.columns)
                     .into_iter()
                     .map(|row| {
-                        div()
-                            .id(row.name)
-                            .role(Role::Row)
+                        table::row(row.name)
                             .flex()
                             .border_t_1()
                             .border_color(rgb(palette.border))
                             .children(self.columns.iter().map(|column| {
                                 let value = column.cell(row);
-                                div()
-                                    .id(column.header)
-                                    .role(Role::Cell)
-                                    .aria_label(value.clone())
+                                table::cell(column.header, value.clone())
                                     .flex_1()
                                     .px_3()
                                     .py_2()
