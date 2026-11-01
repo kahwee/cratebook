@@ -41,7 +41,7 @@ Open **Stories → Data table** and select **Builds** to cycle through numeric a
 
 ## Desktop patterns and component coverage
 
-The gallery covers all 37 Base UI families across 24 stories. Open **Rust source** for the currently displayed implementation.
+The gallery demonstrates desktop component families across 30 stories. Open **Rust source** for the currently displayed implementation. The [Windows/macOS Markdown comparison](docs/visual-comparison/README.md) shows every story side by side at the same **960 × 640** viewport, with expanded component examples and a coverage index. The [capture standard](AGENTS.md#native-screenshot-comparison-standard) defines dimensions, framing and validation.
 
 | Desktop task | Component families |
 | --- | --- |

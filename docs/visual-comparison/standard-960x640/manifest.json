@@ -1,0 +1,1453 @@
+{
+  "source_commit": "2930b2a76aadabdd078939ff62be826a0052d989",
+  "client_logical_px": [
+    960,
+    640
+  ],
+  "comparison_png_px": [
+    960,
+    640
+  ],
+  "scale": 1,
+  "profile": "Editor/light/Standard/expanded examples/sidebar top/Preview",
+  "normalization": "Native frame removal only. No resizing, padding or app-content cropping.",
+  "captures": [
+    {
+      "id": "01",
+      "story": "Kitchen sink",
+      "example": "Release checklist with 2 of 4 checks complete",
+      "components": "card, checkbox, progress, toggle_group, toolbar",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/01.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/01.png",
+        "native_sha256": "14b500cbdafd89cd058697a42c65760bc599775ba101d0ff0fe50674ab1ad4cd",
+        "sha256": "dd53262c658af4c3dd168631edf2c651692b1c2383f0cc6f044610b902632066"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/01.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/01.png",
+        "native_sha256": "3925b880ad6d3aa92c114307ee605a7197548fbeb5a80d5f17733061627ac25d",
+        "sha256": "6d32420b739439f745d898f4e1dc51d87f77ce27aaa9635a86ba7ec7c8c54d71"
+      }
+    },
+    {
+      "id": "02",
+      "story": "Sales worksheet",
+      "example": "Jan-Jun sales, B2 selected, populated charts; lower view below",
+      "components": "card, button, scroll_area, toolbar",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/02.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/02.png",
+        "native_sha256": "7dad91ad5ef1c93e27dfd3c265a6c2f852640919b538dcbd7956ef3ee036224c",
+        "sha256": "4e70bbc4809fbb4b162c363194ddcc6d738f1276002645a04729cdb2c92fc75e"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/02.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/02.png",
+        "native_sha256": "e0d84741d6c491567bd335ab10d933efa543f86ca23f1ac9d08cb199f6e0b85a",
+        "sha256": "46a07726ad3c8c8a30e17042c7697756708f873382fcc43c3ca33d6117e8f348"
+      }
+    },
+    {
+      "id": "02-lower",
+      "story": "Sales worksheet",
+      "example": "Jan-Jun sales, B2 selected, populated charts; lower view below",
+      "components": "card, button, scroll_area, toolbar",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/02-lower.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/02-lower.png",
+        "native_sha256": "22079c7f24876468d4177c17a0ff2792fc08e5584aa35e14d86f3124f26aa903",
+        "sha256": "8da3c79ffb717e9bfef29b8a0f8a2547296521f7760d803c5e8b9116551a2b16"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/02-lower.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/02-lower.png",
+        "native_sha256": "8e7f80cbc71e4d54b9b8d728447fdb8680be43fd464d0f9f1cb36e18f38465fe",
+        "sha256": "69269a54c7ae93681b794f8fa789f25fbb8aaaaf1e22902ff6b9a045139f5c1a"
+      }
+    },
+    {
+      "id": "03",
+      "story": "Contacts",
+      "example": "Ada Chen contact card and favorites",
+      "components": "avatar, button, card, toggle, input",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/03.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/03.png",
+        "native_sha256": "5cae800a2d0bd4b52feb053cbf843f1df369960c68202fd8b753f91a7803ca7b",
+        "sha256": "b236cce5e1eddf4d09e89c4957f9bd7d955d23809abd2276fd0ac7be12020081"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/03.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/03.png",
+        "native_sha256": "f6691fc3630f7f287483f7be617b2df61fac8841328666e9320ea42b145ceed0",
+        "sha256": "c80e8e5cf0ba1c79f04eed40eda7e152b4853b7711c2309115bbe4d40101e9c1"
+      }
+    },
+    {
+      "id": "04",
+      "story": "Task planner",
+      "example": "Inbox with scheduled action and list counts",
+      "components": "checkbox, toggle_group, button",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/04.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/04.png",
+        "native_sha256": "ab3e589793e3a891dc107dd9c945b9eb3ede6ca6bfadfb5835c0f4a5df17122d",
+        "sha256": "748dd96944e95eb89b2ef868b94b309954b60de6d75c64fdb0d000a0983d7854"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/04.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/04.png",
+        "native_sha256": "0b746467559d255c419d1a7eb64ad29080c83d9c45d22c81759b1ecb17442930",
+        "sha256": "95a4639f2219c83fc709f0bf5c0dd180a204356482c9e0be6035d72e9049d568"
+      }
+    },
+    {
+      "id": "05",
+      "story": "Project board",
+      "example": "Five cards in three populated lanes",
+      "components": "card, button, toggle_group, toolbar",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/05.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/05.png",
+        "native_sha256": "a3ea953a1ded387b9b0af72b93cb39176fd7287dd70ef1dcd6a4a8ad5a0a82e0",
+        "sha256": "f12df5d2274edfc98337b9cb62c7947e05b93182295bcfbbe668a8813945661f"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/05.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/05.png",
+        "native_sha256": "7373c058fd052c2bc59cb115f969c9cde3894675b41d3cb1dcaa0c8d471dd1ab",
+        "sha256": "0d054b7826860cd9b8963e41fafee866af641faafd98141328c8d67ab0b6fc25"
+      }
+    },
+    {
+      "id": "06",
+      "story": "Calendar",
+      "example": "October 2026, October 12 selected with focus block",
+      "components": "date_grid, card, button, toolbar",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/06.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/06.png",
+        "native_sha256": "2b93f9ba15dee7ba1d0fb957ba2014165d0a6d5f3cce7d56a3213810d02f4d97",
+        "sha256": "a72c2e8197358b88944a3cdab884ff8be45fc756fcfdea49fea7a700a996fe88"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/06.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/06.png",
+        "native_sha256": "351653ae4fcced77899ca6fc904b8d3fd80d75cdd0ee0efffa254b91c6d6875f",
+        "sha256": "6cf38c1d4c8242d6c73d2ced13ef69b97e57911567c70713fec5ac63f6685ee2"
+      }
+    },
+    {
+      "id": "07",
+      "story": "Card & context menu",
+      "example": "Open actions menu and destination submenu",
+      "components": "context_menu, card",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/07.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/07.png",
+        "native_sha256": "6f8c29a5fae956ab99fcfa41191afdc1971a8e88850b80b2d53658574ecb8718",
+        "sha256": "022d1ff61108929d09115db4982a16c5ef42be46b3fc89e0af63846456465247"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/07.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/07.png",
+        "native_sha256": "d26133b64534664b9bb62cdff956a8d3e96397ea6803bdb4acc0fbb0eb47231d",
+        "sha256": "55f0f3d4267f9c9c28e3959f95da18711e847f77d35e708184fbd8aafbca8f52"
+      }
+    },
+    {
+      "id": "08",
+      "story": "Settings",
+      "example": "Language, switch and terminal-position preferences",
+      "components": "field, fieldset, select, switch, toggle, toggle_group",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/08.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/08.png",
+        "native_sha256": "652f2b4f1b74dd3458fcc703e84735818e5119aba20d87c470a2e57aff650ea6",
+        "sha256": "6f79c573aed44edca4707c6681424ebc3b532bee6db7478466469cad8c0552bf"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/08.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/08.png",
+        "native_sha256": "01aac23e2a3064397236e88151dd397c54597a09b0b858b9dac89e59df9d06e1",
+        "sha256": "614f61e9092c7cbfbaf615787de49d287cb6a69eb433cef7b140e167bf951751"
+      }
+    },
+    {
+      "id": "09",
+      "story": "Document tabs",
+      "example": "Selected document with long and closable tabs",
+      "components": "tabs",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/09.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/09.png",
+        "native_sha256": "8c4508de9dfdd8ceff7e38150c487d15fa71ddcc72ba521177e363cae9aa0fb9",
+        "sha256": "7798b7ab1a47b02728936ccd0ed725061602ae64373f17ed7ef59d2082751158"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/09.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/09.png",
+        "native_sha256": "39971aa7f4d60823de064750aae099d2d8ac3d2bc5bb869edd7d2bf394b70e7b",
+        "sha256": "ad33af9c053b1f76a862b69964da310a9e8bfd9c00564fef1b39d7645bd36ae2"
+      }
+    },
+    {
+      "id": "10",
+      "story": "Data table",
+      "example": "Package/build columns with numeric sort controls",
+      "components": "table",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/10.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/10.png",
+        "native_sha256": "3435290a9b230a140ac60472799349918fd447ad6dd4e11e0a52fbcd1cf5bec6",
+        "sha256": "2b79365a567e12a0ba520e5ad3e92122bcfd263dfaf36e3609d7f09484104ddd"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/10.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/10.png",
+        "native_sha256": "c4ec1c18f45bbcee2a1adc32eabcfd793d513789010a7bcc4f085e5b83220ed3",
+        "sha256": "b0ca60428033bd6d387ca82b0dfb123cd4c1907fa323ae81f14b5435dd6cfe94"
+      }
+    },
+    {
+      "id": "11",
+      "story": "Button",
+      "example": "Run action, zero activations (plain GPUI example)",
+      "components": "plain GPUI button; Jig button in Contacts and Board",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/11.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/11.png",
+        "native_sha256": "146ee158cf2df214fd530f20ae8d3b23168c66e10cb6211d09df5071d222892e",
+        "sha256": "bf3daef565b41b48394fee725fc8db67c3414eb6374179cb0ad8513f58d21a3b"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/11.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/11.png",
+        "native_sha256": "ac2cfc617f8e34fb55ef9096ed0d2b2ccf8495bea726b5c78314696a9b19b55e",
+        "sha256": "a224614c0a1d10f44cd155d2ca308d288eb5c7fbba63b30db805406913713620"
+      }
+    },
+    {
+      "id": "12",
+      "story": "Radio group",
+      "example": "Read selected, Write and Source options",
+      "components": "radio_group",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/12.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/12.png",
+        "native_sha256": "b823c1bed6667406e10314178df31d7b3b1e3a8bb4e1f563a720638a073ad8ec",
+        "sha256": "319d2404890e13b7138a9a3a7235532ec20ebe659bfd8857d2b68ccaffcc0134"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/12.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/12.png",
+        "native_sha256": "e0a47a7b793445b7b514300427009fd468e62a0ae1da8f937ef81c3219b6a831",
+        "sha256": "8b6d536a019bb6c420f99cbde6e4a1fa2414e77d3cc0bb5c5304dd8a30e4626f"
+      }
+    },
+    {
+      "id": "13",
+      "story": "Collapsible",
+      "example": "Expanded page references",
+      "components": "collapsible",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/13.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/13.png",
+        "native_sha256": "b5b974d647bde3fa4b1304cb3b6e97bd877bf107f1b5064b1873f59682ea9867",
+        "sha256": "a9d0679aa039dc34509939e98ae5eb33304797908c14f45406c2196ab607b1a6"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/13.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/13.png",
+        "native_sha256": "deaf4af72bc6dcabfee03614f60c63ddbfb351d2b40b95c6bbd06378d2e135b1",
+        "sha256": "833f376dd8b1cc5060eb04eb1e10466c15202aabd9f9263d57ad2603b4fe3572"
+      }
+    },
+    {
+      "id": "14",
+      "story": "Accordion",
+      "example": "Components section expanded",
+      "components": "accordion",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/14.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/14.png",
+        "native_sha256": "b7b746400045ad9eba65d49654f7808683d9fe43f78c18e973f03e5462408b8f",
+        "sha256": "c2127a673715cbf6a6a038217bd85e7f68b33515547046b2aabb139ebb41db41"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/14.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/14.png",
+        "native_sha256": "408ada07315f9f94f71ab1cdadc007785ffd87f1c15e79c6060e7f7630b46b45",
+        "sha256": "5cd1938fa908392b95d5aecb86d85d4ea3ed2a847b5459ffa66be5fe0f566fd9"
+      }
+    },
+    {
+      "id": "15",
+      "story": "Checkbox",
+      "example": "Mixed parent and checked/unchecked children",
+      "components": "checkbox, checkbox_group",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/15.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/15.png",
+        "native_sha256": "7c66a62624f40912b5b4c65e5cf5e2dd6c797795c47b66ec0a6e7131274c684e",
+        "sha256": "e430b7ed38c2504271bcc0769e6ee913ca3e46eeaa8908a9059172bc653057ed"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/15.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/15.png",
+        "native_sha256": "d61d954b357319bf518402e0f11e38bca2e9aac0fb1058278cfba73945e5bb4a",
+        "sha256": "63930fa569412c5055cb710ac86aee2822b38ec932015f96f4913e8540a80b5a"
+      }
+    },
+    {
+      "id": "16",
+      "story": "Progress",
+      "example": "2 of 4 files processed",
+      "components": "progress",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/16.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/16.png",
+        "native_sha256": "87b0a55af0dd2221911dc22a95bb690ebb887e003c0974db0886b500e24c43e9",
+        "sha256": "7437f7f0cfba897b884bbb457c5619918e6cbd0c88333a8189722b2f537cd76e"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/16.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/16.png",
+        "native_sha256": "dac7d4d792bfcae4c48a76747fd858c9d2d57916863283ba50a265f80de2ec93",
+        "sha256": "4a8dbc65f6b30fdb2f5a6dbd71364dd58ebc3ef581cb1f7e6fa41b7c9ab45253"
+      }
+    },
+    {
+      "id": "17",
+      "story": "Scroll area",
+      "example": "Bounded contributor list with avatar fallbacks",
+      "components": "scroll_area, avatar",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/17.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/17.png",
+        "native_sha256": "8b18e95362ec378320e1f85c8c55b1e05b704e026a523c70302decb1dfc43b10",
+        "sha256": "d1907a4048d8ec6e77fdf768abb92c568252c829911c8205730f65ebc7ac0564"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/17.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/17.png",
+        "native_sha256": "70acb598c227ba78b2e83d5c87b6738da37982f5230e3fcd42a3bbada802d2b7",
+        "sha256": "53d2bd73c0af4853b2f13c8b4786a9400b8fefd2a55500a16319bad1941a1787"
+      }
+    },
+    {
+      "id": "18",
+      "story": "Meter",
+      "example": "4 GB of 10 GB used",
+      "components": "meter",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/18.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/18.png",
+        "native_sha256": "3984fe20806dbbc9922b256a4d30d0a7d6e378ddd2df03ff46e9900f2707d815",
+        "sha256": "35bbc6ca57f17be6a6447add2f459e1c12160849fa4cf00ec4a94fbea1cd9823"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/18.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/18.png",
+        "native_sha256": "27d081a84e0928da46c8f08cedd6067fe6b82b3baa23809c659091ac1b1134fd",
+        "sha256": "d3ccec1ecbd55dbaee926c1d9d7725bdd5972d576db1b670aaf5cb50b7426214"
+      }
+    },
+    {
+      "id": "19",
+      "story": "Toast",
+      "example": "Draft saved, revision 1, dismiss control visible",
+      "components": "toast",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/19.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/19.png",
+        "native_sha256": "f95f64111bede4a64c42972d5e63e826e9ad059418fb4a6da9beca2317ee7c56",
+        "sha256": "b61e313bb0baab5877f5d3aa556b6611be79f75515f24e294a488672696293cd"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/19.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/19.png",
+        "native_sha256": "90e37ce1168f18e27affd649b5e1a16936130ace485dca288b3c48bd73e39fcc",
+        "sha256": "2e55fd35df3dce195fa10ead57f5010a8b720878391bd70cb62b178da8c83760"
+      }
+    },
+    {
+      "id": "20",
+      "story": "Workspace navigation",
+      "example": "View menu open, sections and divider visible",
+      "components": "menu, menubar, navigation_menu, separator, toolbar",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/20.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/20.png",
+        "native_sha256": "256b23821f39df24b0829363d7606e630bd0b7c6a2dbfa3f903f6486b1be8a6c",
+        "sha256": "4d1e41d468ef6fccf1c34b4c143ebb806492fe9bb83fa040a626f97126cd8277"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/20.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/20.png",
+        "native_sha256": "ee030081c760a07252101aaf8fbac37d843c1e6dde2162bc76a37197bc7ed36d",
+        "sha256": "c2d5ef442df5e2b11384a17f4d4522f449f5ce6c524abe115f102b38f401faf1"
+      }
+    },
+    {
+      "id": "21",
+      "story": "Project form",
+      "example": "Desktop workspace and four-digit demo code 1234",
+      "components": "form, input, otp_field",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/21.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/21.png",
+        "native_sha256": "ecad2e7419824ce8684f8108f521fe2c4ae723b1df927cf563776e3d5e18d382",
+        "sha256": "a0dfdc61c4086fccd403da74d4499c6e1dff76f8a5ef2527bf3c1537eeb81186"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/21.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/21.png",
+        "native_sha256": "7a83cb3de3cf008b89e613130f082cbd76ec0e9229d35588cb602861da974bb2",
+        "sha256": "d8fec5404ede3219f47b229b445287d1e90078a6bdf6fbde5515072f3b7fb3cf"
+      }
+    },
+    {
+      "id": "22",
+      "story": "Zoom controls",
+      "example": "100 percent with stepper and slider",
+      "components": "number_field, slider",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/22.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/22.png",
+        "native_sha256": "442a07b047d817830453d991a05a12cefa2e642de047d2d786817abbb93ac544",
+        "sha256": "9e713bf325120cdfcc0b74d4346399f43771fe7c77cf6962c23853a7dc396862"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/22.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/22.png",
+        "native_sha256": "a8f0d9eb174d043dbfee66d34598f731720265cfeeb58936f9be5106b0861fad",
+        "sha256": "08de0306fa661fb7c54eb57899a429179d877180148dc125f309de93acf1612d"
+      }
+    },
+    {
+      "id": "23",
+      "story": "Dialog",
+      "example": "Export settings open with PDF/Markdown/CSV options",
+      "components": "dialog, toggle_group",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/23.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/23.png",
+        "native_sha256": "323049f988ee75ded0cde7e92561ea8165dfdffb56686ac69790be1b4ffd8330",
+        "sha256": "9a180096a2931794df961b5856a324d19528f634b6ae545e4ebd3cf84aacda9e"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/23.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/23.png",
+        "native_sha256": "72c8fb14c5ef1c8d46a6f3c47a231758c409bc53d5e17bf3df7dbd95f5a5dc9b",
+        "sha256": "b1deb884defff8f65c45fb8d50cbfd6033e68a31f9604d7a70d01ff0ef98a068"
+      }
+    },
+    {
+      "id": "24",
+      "story": "Alert dialog",
+      "example": "Confirmation open with Remove draft and Cancel",
+      "components": "alert_dialog",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/24.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/24.png",
+        "native_sha256": "fd221e89bd3fb4827baa00f4d5809023d0ccca652998853131d1506dcccc8e37",
+        "sha256": "0f64be9d35436e482158e3423758dd9db15b168746b9206364107e567b76fa52"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/24.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/24.png",
+        "native_sha256": "4805b452d3a871bfb81ce52e967611e77e357cb048ce09d828bdf2696165d303",
+        "sha256": "dfc17ee05178b801b18f5ccd580b132b6598e599c7f3396c17a0bd5d5631e888"
+      }
+    },
+    {
+      "id": "25",
+      "story": "Drawer",
+      "example": "Inspector open with document metadata",
+      "components": "drawer",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/25.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/25.png",
+        "native_sha256": "29b020d86a6cdf554cb794221c337781d5a532b48251f3806ccf25d0ab0bd069",
+        "sha256": "6a25ee2b8eb393b7be80d074ab3a0fb26f28b59426a2673c96cce723d2d71648"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/25.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/25.png",
+        "native_sha256": "da4fdd8f58b69cfe676587107c158cfdffe06e796740f58f04c41f71b0d23920",
+        "sha256": "fed1d7cbe6894a56365f5b665391e4eb8299c2fd77c0bf42ec0cdc5e5c7f14ef"
+      }
+    },
+    {
+      "id": "26",
+      "story": "Popover",
+      "example": "Details popup open",
+      "components": "popover",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/26.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/26.png",
+        "native_sha256": "621affce4a6e823b825764733b6d6dc0b703eb08f4184498bda835a02e40a6a8",
+        "sha256": "ade078de7b07330fedc794b0c94cbf8b12c4939eb5edb821fbf9a62729160f8e"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/26.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/26.png",
+        "native_sha256": "24edc5451fa70b8e21bbabb9311f7c5d26c1c79028cd33d71ff59f8096482619",
+        "sha256": "5670ba257623d7d949c7ec25f1e39be7bb7eaf4d71197ebc45d338969359097e"
+      }
+    },
+    {
+      "id": "27",
+      "story": "Preview card",
+      "example": "Document preview open with research summary",
+      "components": "preview_card",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/27.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/27.png",
+        "native_sha256": "2c0996d890d889ef56dbc1e1280da698ac18cbe8e0c632ba729ab2cf4e74df72",
+        "sha256": "05cb78cab61993e822f2065f8d948a915717755a36931d8af3e67708d3ee43a6"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/27.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/27.png",
+        "native_sha256": "16c0c8443a1d55b8cd27f58dff221bbf856c612b29ec8aa4360ebb7c013e0379",
+        "sha256": "07498759dc9969908ee6ca0bf0b8d71a4affa47bafb00ebe092e1a5cb52982c9"
+      }
+    },
+    {
+      "id": "28",
+      "story": "Tooltip",
+      "example": "Sync hint visible alongside trigger",
+      "components": "tooltip",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/28.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/28.png",
+        "native_sha256": "28067d990a85a78d15dba8dc62da938c14e00e9aa85fee41020a7cc348a6c290",
+        "sha256": "d4073ddac5ce297826dba6403660995050f5b3ec9239f8e85fe49d4e0a3e8943"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/28.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/28.png",
+        "native_sha256": "0b16ad0d716247e75b67e462d29296988998e9a5e23955b08e03062e5a51c7ee",
+        "sha256": "c250c785e91c79067b666a5046ea66b0f36b7b46df08729ecf2f28956dd3a916"
+      }
+    },
+    {
+      "id": "29",
+      "story": "Combobox",
+      "example": "Workspace suggestions visible",
+      "components": "combobox",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/29.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/29.png",
+        "native_sha256": "7fca839c7e314a05e80385e84d8b4a2e3e6636bfd5698c7d7ece72db6864a0cc",
+        "sha256": "4417a94f21dea4dc8dcf87007b90b9499828860e0ba7a4173b8a894670839555"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/29.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/29.png",
+        "native_sha256": "39ce598379404b1dfb5fe715b7527db62a3d5ae21661f056c3b6319bd595935e",
+        "sha256": "bd70ae1137583b03be93df327c43a2df056b734dd9bf91020f20a3fedc5e6dbb"
+      }
+    },
+    {
+      "id": "30",
+      "story": "Autocomplete",
+      "example": "Project-tag suggestions visible",
+      "components": "autocomplete",
+      "windows": {
+        "native_size_px": [
+          962,
+          672
+        ],
+        "client_crop_ltrb": [
+          1,
+          31,
+          961,
+          671
+        ],
+        "native_file": "windows/native/30.jpg",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "windows/30.png",
+        "native_sha256": "12fcc90e16b5c18c974fec86b8573733e0d183557de1e491b936ae12409923cb",
+        "sha256": "c858bf220fbcd30c00a914481161752d2138e6f830fa67766e6f9f7fef3730af"
+      },
+      "macos": {
+        "native_size_px": [
+          960,
+          640
+        ],
+        "client_crop_ltrb": [
+          0,
+          0,
+          960,
+          640
+        ],
+        "native_file": "macos/native/30.png",
+        "png_size_px": [
+          960,
+          640
+        ],
+        "file": "macos/30.png",
+        "native_sha256": "64f1883959c14d4f35804ef993498f4d71309cdcf54200e5ce7fe745c55b6d5b",
+        "sha256": "c2145d6cceaaf20c5199ebb44922309278bc7962008ee5b70f3e91ed7612f831"
+      }
+    }
+  ],
+  "platform_metadata": {
+    "windows": {
+      "commit.txt": "2930b2a76aadabdd078939ff62be826a0052d989",
+      "capture.txt": "Native Windows MSVC release; Computer Use sky; Editor/light/Standard; 960x640 client; native 962x672; crop 1,31,961,671; integer origin 32,32; expanded examples; sidebar top. Native tool payloads are JPEG; retain originals."
+    },
+    "macos": {
+      "commit.txt": "2930b2a76aadabdd078939ff62be826a0052d989",
+      "system.txt": "ProductName:\t\tmacOS\nProductVersion:\t\t26.6.2\nBuildVersion:\t\t25G83",
+      "capture.txt": "theme=editor\nappearance=light\nviewport=960x640 logical pixels\nprofile=expanded examples"
+    }
+  }
+}

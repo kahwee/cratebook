@@ -1,0 +1,4 @@
+theme=editor
+appearance=light
+viewport=960x640 logical pixels
+profile=expanded examples

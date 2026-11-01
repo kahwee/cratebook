@@ -106,7 +106,7 @@ for number, (title, state, components) in enumerate(examples, 1):
                 'native_sha256': hashlib.sha256(original.read_bytes()).hexdigest(),
                 'sha256': hashlib.sha256(out.read_bytes()).hexdigest()}
             relative = f'standard-960x640/{platform}/{key}.png'
-            cells.append(f'<a href="{relative}"><img src="{relative}" width="480" height="320" alt="{platform}: {html.escape(title)} {key}"></a>')
+            cells.append(f'<a href="{relative}"><img src="{relative}" width="480" alt="{platform}: {html.escape(title)} {key}"></a>')
         manifest['captures'].append(entry)
         label = f'{number:02} {title}' + (' — lower viewport' if key.endswith('lower') else '')
         rows.append(f'| **{label}**<br>{state}<br><code>{components}</code> | {cells[0]} | {cells[1]} |')
@@ -121,7 +121,7 @@ Source revision: `{revision}` on both platforms. Editor · light · Standard cor
 
 Windows native frames measure 962 × 672; extracting `(1, 31, 961, 671)` preserves the entire 960 × 640 client area. macOS captures already measure 960 × 640, including its transparent title bar. Native fonts, traffic lights and toolbar insets intentionally differ. Windows may include a cursor halo from the host. These are appearance examples, not a claim of identical rasterization, interaction correctness, accessibility or frame-rate performance.
 
-The worksheet has a separately labeled lower viewport so its charts are visible without stretching the first view. [Manifest and hashes](standard-960x640/manifest.json) record every original size and extraction rectangle. [Earlier unmatched captures](comparison.html) are historical evidence and do not meet this standard.
+The worksheet has a separately labeled lower viewport so its charts are visible without stretching the first view. [Manifest and hashes](standard-960x640/manifest.json) record every original size and extraction rectangle. [Capture findings](standard-960x640/findings.md) summarize the inspected pairs. [Earlier unmatched captures](comparison.html) are historical evidence and do not meet this standard.
 
 | Component example / pictured state | Windows — 960 × 640 | macOS — 960 × 640 |
 | --- | --- | --- |
@@ -139,11 +139,11 @@ with (destination.parent / 'README.md').open('a', encoding='utf-8') as stream:
 # Scaled sheets are review aids, never canonical evidence.
 font = ImageFont.load_default(size=16)
 for start in range(0,31,6):
-    sheet = Image.new('RGB',(1000,6*370),'#eeeeef')
+    sheet = Image.new('RGB',(1000,min(6,31-start)*370),'#eeeeef')
     draw = ImageDraw.Draw(sheet)
     for offset, entry in enumerate(manifest['captures'][start:start+6]):
         y = offset*370
-        draw.text((10,y+5),f'{entry["id"]} {entry["story"]} — Windows / macOS',font=font,fill='black')
+        draw.text((10,y+5),f'{entry["id"]} {entry["story"]} | Windows / macOS',font=font,fill='black')
         for col, platform in enumerate(('windows','macos')):
             with Image.open(destination / entry[platform]['file']) as im:
                 im.thumbnail((480,320))

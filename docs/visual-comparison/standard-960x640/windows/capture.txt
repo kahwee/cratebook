@@ -1,0 +1,1 @@
+Native Windows MSVC release; Computer Use sky; Editor/light/Standard; 960x640 client; native 962x672; crop 1,31,961,671; integer origin 32,32; expanded examples; sidebar top. Native tool payloads are JPEG; retain originals.
