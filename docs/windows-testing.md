@@ -14,7 +14,39 @@ Verified in the native gallery:
 - Closing the test app with the native close button removes its window and releases the executable for rebuilding.
 - Clipboard entry originally did nothing in fixture editors. The fix handles the platform paste shortcut in shared entries, project forms and search stories. In the final build, pasting `Café 東京` displays the full name, `a12b3456` produces the four demo digits `1234`, and Create project displays the successful result.
 
-The entries remain append-only demo editors. Cursor positioning, selection and full IME editing are not established by these checks. A window-border drag did not establish a compact viewport, so compact resizing remains unverified. This pass also does not establish frame timing, exhaustive keyboard/accessibility behavior or coverage of all 30 stories. Continue the checklist below.
+Further checks found and fixed two issues: Enter accepted an autocomplete value but its synthetic keyboard click reopened suggestions; tall previews were flex-shrunk and clipped at minimum window width. After the fixes, Enter leaves suggestions closed, the minimum-width worksheet scrolls vertically to both charts, the sheet scrolls horizontally to its final column, and Rust source scrolls to its last lines. Stories, Canvas and Rust source remain reachable in compact mode. The fixes were rebuilt after integrating GPUI Jig 0.1.6 and the current Cratebook 0.1.5 changes.
+
+Additional native checks passed:
+
+| Story or control | Observed result |
+| --- | --- |
+| Contacts | Pasted Mira filters to Mira Shah and updates the detail card. |
+| Task planner | Completing an Inbox task decreases Inbox to 0 and increases Logbook to 2. |
+| Project board | Moving a planned item to Done updates both lane counts and completion to 2/5. |
+| Settings | Selecting Español updates the language label and closes its list. |
+| Data table | Builds sorts numerically as 3, 8, 12, 24. |
+| Button | Click increments the count; Space on the focused button increments it again. |
+| Radio group | Right arrow changes Read to Write. |
+| Collapsible | Page references expands and reveals its reference list. |
+| Accordion | Keyboard section opens and displays its content. |
+| Checkbox | Select all checks every notification option. |
+| Progress | Processing a file advances to 1/4 and updates the track. |
+| Scroll area | Wheel scrolling reveals the final contributors inside the bounded list. |
+| Meter | Add 1 GB updates usage from 4 to 5 GB and updates the track. |
+| Toast | Save shows a revision notification; Dismiss removes it. |
+| Workspace navigation | Documents changes the selected section and displayed content. |
+| Zoom controls | Increase changes 100% to 110% and updates the slider track. |
+| Dialog | Opening export settings, selecting Markdown and saving updates the report preset and closes the panel. |
+| Alert dialog | Removal confirmation opens and Cancel closes it; destructive confirmation was not exercised. |
+| Drawer | Inspector opens and its close control dismisses it. |
+| Popover | Details opens; Got it dismisses it. |
+| Preview card | Activating the file trigger displays its preview. |
+| Tooltip | Activating Sync workspace shows the synced state and help text. |
+| Combobox | Pasting Doc filters to Documentation; choosing it displays the selection and closes the list. |
+| Autocomplete | Pasting a custom value and pressing Return accepts it without reopening the list after the fix. |
+| Themes and corners | Editor, Tahoe, Mint and Base render in native checks; dark/light and corner changes retain story state. Not every story was tested in every combination. |
+
+The entries remain append-only demo editors. Cursor positioning, selection and full IME editing are not established by these checks. This pass does not establish frame timing, exhaustive keyboard/accessibility behavior, every confirmation/cancellation path, or worksheet drag-reordering. Continue the checklist below for those cases.
 
 Use the extracted release executable on an unlocked Windows desktop. Record the Windows version, display scale, theme, appearance and reproduction steps. Build and unit-test results do not replace these checks.
 
