@@ -44,9 +44,11 @@ Additional native checks passed:
 | Tooltip | Activating Sync workspace shows the synced state and help text. |
 | Combobox | Pasting Doc filters to Documentation; choosing it displays the selection and closes the list. |
 | Autocomplete | Pasting a custom value and pressing Return accepts it without reopening the list after the fix. |
+| Worksheet drag-reordering | Dragging Jan onto Mar changes the order to Feb, Mar, Jan; values, the selected cell address and chart labels follow the moved columns. |
+| Native sizing | Maximize switches back to desktop layout; native Size plus an edge drag reaches the minimum-width compact layout. |
 | Themes and corners | Editor, Tahoe, Mint and Base render in native checks; dark/light and corner changes retain story state. Not every story was tested in every combination. |
 
-The entries remain append-only demo editors. Cursor positioning, selection and full IME editing are not established by these checks. This pass does not establish frame timing, exhaustive keyboard/accessibility behavior, every confirmation/cancellation path, or worksheet drag-reordering. Continue the checklist below for those cases.
+The entries remain append-only demo editors. Cursor positioning, selection and full IME editing are not established by these checks. This pass does not establish frame timing, exhaustive keyboard/accessibility behavior or every confirmation/cancellation path. Continue the checklist below for those cases.
 
 Use the extracted release executable on an unlocked Windows desktop. Record the Windows version, display scale, theme, appearance and reproduction steps. Build and unit-test results do not replace these checks.
 
