@@ -168,6 +168,9 @@ impl Render for Tabs {
             .px_1()
             .gap(px(3.))
             .bg(rgb(p.sidebar))
+            .rounded_t(px(
+                gpui_jig::corners::Corners::inset(p.corners.card, 1) as f32
+            ))
             .text_size(px(13.))
             .children(
                 self.tabs
@@ -232,6 +235,9 @@ impl Render for Tabs {
                     .border_t_1()
                     .border_color(rgb(p.border))
                     .bg(rgb(p.sidebar))
+                    .rounded_b(px(
+                        gpui_jig::corners::Corners::inset(p.corners.card, 1) as f32
+                    ))
                     .flex()
                     .items_center()
                     .flex_wrap()
