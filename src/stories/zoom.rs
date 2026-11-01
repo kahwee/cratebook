@@ -48,38 +48,51 @@ impl Preview {
 impl Render for Preview {
     fn render(&mut self, w: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let p = ui::preview_palette(cx);
-        // Keep dragging when the pointer leaves the track, and release anywhere.
-        if self.dragging {
-            let entity = cx.entity().downgrade();
-            w.on_mouse_event(move |event: &MouseMoveEvent, phase, _, cx| {
-                if phase != DispatchPhase::Capture {
-                    return;
-                }
-                entity
-                    .update(cx, |s, cx| {
-                        if event.dragging() {
+        // Register during paint, before a drag starts. A fast drag can deliver
+        // its release before another render, and can leave the track's hitbox.
+        let entity = cx.entity().downgrade();
+        let drag_handlers = canvas(
+            |_, _, _| (),
+            move |_, _, w, _| {
+                let moving = entity.clone();
+                w.on_mouse_event(move |event: &MouseMoveEvent, phase, _, cx| {
+                    if phase != DispatchPhase::Capture {
+                        return;
+                    }
+                    moving
+                        .update(cx, |s, cx| {
+                            if !s.dragging {
+                                return;
+                            }
+                            if event.dragging() {
+                                s.seek(event.position, cx);
+                            } else {
+                                s.dragging = false;
+                                cx.notify();
+                            }
+                        })
+                        .ok();
+                });
+                let releasing = entity.clone();
+                w.on_mouse_event(move |event: &MouseUpEvent, phase, _, cx| {
+                    if phase != DispatchPhase::Capture || event.button != MouseButton::Left {
+                        return;
+                    }
+                    releasing
+                        .update(cx, |s, cx| {
+                            if !s.dragging {
+                                return;
+                            }
                             s.seek(event.position, cx);
-                        } else {
                             s.dragging = false;
                             cx.notify();
-                        }
-                    })
-                    .ok();
-            });
-            let entity = cx.entity().downgrade();
-            w.on_mouse_event(move |event: &MouseUpEvent, phase, _, cx| {
-                if phase != DispatchPhase::Capture || event.button != MouseButton::Left {
-                    return;
-                }
-                entity
-                    .update(cx, |s, cx| {
-                        s.seek(event.position, cx);
-                        s.dragging = false;
-                        cx.notify();
-                    })
-                    .ok();
-            });
-        }
+                        })
+                        .ok();
+                });
+            },
+        )
+        .absolute()
+        .size_full();
         let track_bounds = self.track_bounds.clone();
         let fraction = ((self.zoom.value() - 50.) / 150.) as f32;
         let adjust = |id, label, delta| {
@@ -101,10 +114,12 @@ impl Render for Preview {
                 }))
         };
         div()
+            .relative()
             .p_4()
             .flex()
             .flex_col()
             .gap_3()
+            .child(drag_handlers)
             .child(
                 number_field::root("zoom", "Document zoom")
                     .flex()
