@@ -146,9 +146,10 @@ pub(super) fn tokenize(source: &str) -> Vec<Token> {
         } else if bytes[i].is_ascii_digit() {
             i += 1;
             while i < bytes.len() {
-                if bytes[i].is_ascii_alphanumeric() || bytes[i] == b'_' {
-                    i += 1;
-                } else if bytes[i] == b'.' && bytes.get(i + 1).is_some_and(u8::is_ascii_digit) {
+                if bytes[i].is_ascii_alphanumeric()
+                    || bytes[i] == b'_'
+                    || (bytes[i] == b'.' && bytes.get(i + 1).is_some_and(u8::is_ascii_digit))
+                {
                     i += 1;
                 } else {
                     break;

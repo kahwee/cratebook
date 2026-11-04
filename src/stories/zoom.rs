@@ -37,11 +37,11 @@ struct Preview {
 }
 impl Preview {
     fn seek(&mut self, position: Point<Pixels>, cx: &mut Context<Self>) {
-        if let Some(value) = zoom_at_pointer(position.x, self.track_bounds.get()) {
-            if self.zoom.value() != value {
-                self.zoom.set(value);
-                cx.notify();
-            }
+        if let Some(value) = zoom_at_pointer(position.x, self.track_bounds.get())
+            && self.zoom.value() != value
+        {
+            self.zoom.set(value);
+            cx.notify();
         }
     }
 }
