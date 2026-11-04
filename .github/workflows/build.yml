@@ -150,6 +150,9 @@ jobs:
           tar -xzf "$archive"
           install -m755 "${archive%.tar.gz}/wasm-bindgen" "$HOME/.cargo/bin/wasm-bindgen"
       - run: scripts/build-web.sh
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: .node-version
       - name: Package and test the npm CLI
         run: |
           npm pack --pack-destination "$RUNNER_TEMP"
