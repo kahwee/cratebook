@@ -18,7 +18,7 @@ jobs:
   capture:
     runs-on: macos-26
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - run: cargo build --locked --release --bin cratebook
       - name: Capture every story in its initial state
         shell: bash
@@ -65,7 +65,7 @@ jobs:
           screencapture -x -o -l "$id" screenshots/02-lower.png
           kill "$pid"
           wait "$pid" || true
-      - uses: actions/upload-artifact@v7.0.2
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
           name: macos-gallery-${{ inputs.theme }}-${{ inputs.appearance }}
